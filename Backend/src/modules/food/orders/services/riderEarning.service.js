@@ -1,0 +1,226 @@
+import { FoodRestaurant } from '../../restaurant/models/restaurant.model.js';
+import { FoodTransaction } from '../models/foodTransaction.model.js';
+import { logger } from '../../../../utils/logger.js';
+import {
+  resolveOrderDistanceKm,
+  toGeoJsonPoint,
+} from '../utils/googleMaps.js';
+import { resolveCommissionRulesForZone } from '../../admin/services/zoneScopedSettings.service.js';
+
+const COMMISSION_CACHE_MS = 10 * 1000;
+/** @type {Map<string, { rules: any[], loadedAt: number }>} */
+const commissionRulesCacheByZone = new Map();
+
+function cacheKeyForZone(zoneId) {
+  return zoneId ? String(zoneId) : '__fallback__';
+}
+
+async function getActiveCommissionRules(zoneId) {
+  const key = cacheKeyForZone(zoneId);
+  const now = Date.now();
+  const cached = commissionRulesCacheByZone.get(key);
+  if (cached && now - cached.loadedAt < COMMISSION_CACHE_MS) {
+    return cached.rules;
+  }
+  const list = await resolveCommissionRulesForZone(zoneId);
+  commissionRulesCacheByZone.set(key, { rules: list || [], loadedAt: now });
+  return list || [];
+}
+
+export function invalidateCommissionRulesCache(zoneId) {
+  if (zoneId) {
+    commissionRulesCacheByZone.delete(cacheKeyForZone(zoneId));
+  } else {
+    commissionRulesCacheByZone.clear();
+  }
+}
+
+/** Base payout when distance cannot be resolved (minDistance === 0 slab). */
+export async function getBaseRiderPayoutFallback(zoneId) {
+  const rules = await getActiveCommissionRules(zoneId);
+  if (!rules.length) return 0;
+  const baseRule =
+    [...rules]
+      .sort((a, b) => (a.minDistance || 0) - (b.minDistance || 0))
+      .find((r) => Number(r.minDistance || 0) === 0) || null;
+  const payout = Number(baseRule?.basePayout || 0);
+  return Number.isFinite(payout) && payout > 0 ? Math.round(payout) : 0;
+}
+
+export async function getRiderEarning(distanceKm, zoneId) {
+  const d = Number(distanceKm);
+  if (!Number.isFinite(d) || d <= 0) return 0;
+  const rules = await getActiveCommissionRules(zoneId);
+  if (!rules.length) return 0;
+
+  const sorted = [...rules].sort(
+    (a, b) => (a.minDistance || 0) - (b.minDistance || 0),
+  );
+  const baseRule = sorted.find((r) => Number(r.minDistance || 0) === 0) || null;
+  if (!baseRule) return 0;
+
+  // Base payout + the flat amount of the ONE slab the distance falls in (e.g. 8.5 km → base ₹28 +
+  // 8-9 km slab ₹48 = ₹76). Lower slabs are not added up, and the amount is not multiplied by km.
+  // Beyond the last slab, the last slab's amount applies.
+  let earning = Number(baseRule.basePayout || 0);
+  const inSlab = (r) => {
+    const min = Number(r.minDistance || 0);
+    const max = r.maxDistance == null ? null : Number(r.maxDistance);
+    return (min === 0 ? d >= 0 : d > min) && (max == null || d <= max);
+  };
+  const slab =
+    sorted.find(inSlab) ||
+    [...sorted].reverse().find((r) => d > Number(r.minDistance || 0)) ||
+    null;
+  const slabAmount = Number(slab?.commissionPerKm || 0);
+  if (Number.isFinite(slabAmount) && slabAmount > 0) {
+    earning += slabAmount;
+  }
+
+  if (!Number.isFinite(earning) || earning <= 0) return 0;
+  return Math.round(earning);
+}
+
+/**
+ * Resolve coords (geocode if missing) + compute rider earning.
+ * Falls back to base commission payout if distance still cannot be computed.
+ */
+export async function resolveRiderEarningForDelivery({
+  restaurant,
+  deliveryAddress,
+  orderType = 'delivery',
+  zoneId = null,
+}) {
+  if (orderType === 'takeaway') {
+    return {
+      riderEarning: 0,
+      distanceKm: null,
+      deliveryPoint: null,
+      restaurantPoint: null,
+      restaurantGeocoded: false,
+      deliveryGeocoded: false,
+    };
+  }
+
+  const resolvedZoneId =
+    zoneId ||
+    restaurant?.zoneId?._id ||
+    restaurant?.zoneId ||
+    null;
+
+  const resolved = await resolveOrderDistanceKm(restaurant, deliveryAddress);
+  let riderEarning = await getRiderEarning(resolved.distanceKm, resolvedZoneId);
+
+  if (!riderEarning) {
+    riderEarning = await getBaseRiderPayoutFallback(resolvedZoneId);
+    if (riderEarning > 0) {
+      logger.warn(
+        `Rider earning fell back to base payout ₹${riderEarning} (zone=${resolvedZoneId || 'n/a'}, distanceKm=${resolved.distanceKm ?? 'n/a'}, geocoded restaurant=${resolved.restaurantGeocoded}, delivery=${resolved.deliveryGeocoded})`,
+      );
+    } else {
+      logger.error(
+        `CRITICAL: riderEarning still 0 — check Delivery Boy Commission for zone ${resolvedZoneId || 'n/a'} (need active minDistance=0 base slab) and Geocoding API. distanceKm=${resolved.distanceKm ?? 'n/a'}`,
+      );
+    }
+  }
+
+  return {
+    riderEarning,
+    distanceKm: resolved.distanceKm,
+    // 'driving' | 'air_fallback' from the distance lookup; 'base_fallback' when no distance was
+    // found and the base payout was used.
+    distanceMode: resolved.distanceMode || (riderEarning > 0 ? 'base_fallback' : null),
+    deliveryPoint: resolved.deliveryPoint,
+    restaurantPoint: resolved.restaurantPoint,
+    restaurantGeocoded: resolved.restaurantGeocoded,
+    deliveryGeocoded: resolved.deliveryGeocoded,
+  };
+}
+
+/**
+ * If delivered order still has riderEarning <= 0, geocode + recalculate and patch order fields.
+ * Call before finalizing delivery complete.
+ */
+export async function ensureRiderEarningOnOrder(order) {
+  if (!order || String(order.orderType || 'delivery') === 'takeaway') {
+    return order;
+  }
+
+  const current = Number(order.riderEarning || 0);
+  if (Number.isFinite(current) && current > 0) return order;
+
+  let restaurant = order.restaurantId;
+  if (!restaurant || !restaurant.location) {
+    const restaurantId = restaurant?._id || restaurant;
+    if (restaurantId) {
+      restaurant = await FoodRestaurant.findById(restaurantId)
+        .select(
+          'restaurantName location zoneId addressLine1 addressLine2 area city state pincode',
+        )
+        .lean();
+    }
+  }
+
+  const deliveryAddress = order.deliveryAddress || {};
+  const earningResolved = await resolveRiderEarningForDelivery({
+    restaurant,
+    deliveryAddress,
+    orderType: order.orderType || 'delivery',
+    zoneId: order.zoneId || restaurant?.zoneId || null,
+  });
+
+  if (!earningResolved.riderEarning) return order;
+
+  order.riderEarning = earningResolved.riderEarning;
+  order.markModified?.('riderEarning');
+  order.distanceKm = earningResolved.distanceKm ?? null;
+  order.distanceMode = earningResolved.distanceMode || null;
+
+  if (earningResolved.deliveryGeocoded && earningResolved.deliveryPoint) {
+    const geo = toGeoJsonPoint(earningResolved.deliveryPoint);
+    if (geo) {
+      order.deliveryAddress = {
+        ...(order.deliveryAddress?.toObject?.() || order.deliveryAddress || {}),
+        location: geo,
+      };
+      order.markModified?.('deliveryAddress');
+    }
+  }
+
+  // Keep platformProfit consistent with order creation and the ledger
+  // (fees + markup + commission - platform-funded coupon discount - rider)
+  const deliveryFee = Number(order.pricing?.deliveryFee || 0);
+  const platformFee = Number(order.pricing?.platformFee || 0);
+  const markupTotal = Number(order.pricing?.markupTotal || 0);
+  const restaurantCommission = Number(order.pricing?.restaurantCommission || 0);
+  const couponDiscount = Math.max(0, Number(order.pricing?.discount || 0) || 0);
+  if (Number.isFinite(deliveryFee) || Number.isFinite(platformFee)) {
+    order.platformProfit = Math.max(
+      0,
+      deliveryFee + platformFee + markupTotal + restaurantCommission - couponDiscount - earningResolved.riderEarning,
+    );
+    order.markModified?.('platformProfit');
+
+    // The ledger row was created when the rider earning was still 0. Keep its rider share and
+    // platform net in step with the order (otherwise the ledger keeps the rider-less profit).
+    try {
+      await FoodTransaction.updateOne(
+        { orderId: order._id },
+        {
+          $set: {
+            'amounts.riderShare': Number(earningResolved.riderEarning || 0),
+            'amounts.platformNetProfit': order.platformProfit,
+          },
+        },
+      );
+    } catch (err) {
+      logger.warn(`Ledger sync after rider earning backfill failed for ${order._id}: ${err?.message || err}`);
+    }
+  }
+
+  logger.info(
+    `Backfilled riderEarning=₹${earningResolved.riderEarning} for order ${order._id} (distanceKm=${earningResolved.distanceKm ?? 'n/a'}, mode=${earningResolved.distanceMode || 'n/a'})`,
+  );
+
+  return order;
+}
