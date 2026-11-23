@@ -47,7 +47,7 @@ router.get('/wallet', getUserWalletController);
 router.post('/wallet/topup/order', createWalletTopupOrderController);
 router.post('/wallet/topup/verify', verifyWalletTopupPaymentController);
 
-// Foodie Diamond membership (Bearer USER)
+// Ariston Cafe Diamond membership (Bearer USER)
 router.get('/diamond', getUserDiamondController);
 router.get('/diamond/terms', getDiamondTermsController);
 router.post('/diamond/order', createDiamondOrderController);

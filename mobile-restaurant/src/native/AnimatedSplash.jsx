@@ -1,4 +1,4 @@
-// Prince (18 Nov): the small "Foodie" stayed on screen too long (up to 1.2 s waiting for smooth frames) and the whole
+// Prince (18 Nov): the small "Ariston Cafe" stayed on screen too long (up to 1.2 s waiting for smooth frames) and the whole
 // splash felt slow. Timings cut: start delay 450 -> 300 ms, smooth-frame wait max 1200 -> 350, lift 900 -> 550,
 // entrance 1000 -> 600, exit delay 250 -> 80, cloche exit 1100 -> 750.
 // Brand splash shown right after the native splash (the restaurant header's dark crimson + the Restaurant Partner
@@ -17,7 +17,7 @@ import { Animated, Easing, Image, StyleSheet, Text, View, useWindowDimensions } 
 import { StatusBar } from 'expo-status-bar';
 import Svg, { Circle, Ellipse, Path, Rect } from 'react-native-svg';
 
-// the white Foodie wordmark (letters + green leaf + smile, from mobile-user assets/splash-word.png + splash-smile.png)
+// the white Ariston Cafe wordmark (letters + green leaf + smile, from mobile-user assets/splash-word.png + splash-smile.png)
 // made for the crimson background (assets/splash-wordmark-light.png; splash-icon-light.png is the same mark 635/1024 wide)
 const WORDMARK = require('../../assets/splash-wordmark-light.png'); // 900 x 421
 // The native splash (assets/splash-icon-light.png, app.json imageWidth 240) draws this wordmark 635/1024 of 240 dp wide

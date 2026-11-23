@@ -173,7 +173,7 @@ export const ProfileV2 = () => {
             <span className="mt-0.5 block text-xs text-gray-500">
               {referralStats?.enabled && referralStats?.maxEarning > 0
                 ? `Earn up to ₹${Number(referralStats.maxEarning).toLocaleString("en-IN")} when friends join as delivery partners`
-                : "Invite friends to deliver with Foodie"}
+                : "Invite friends to deliver with Ariston Cafe"}
             </span>
             <span className="mt-2 inline-flex items-center gap-0.5 text-xs font-bold text-[#0E4B9C]">
               Invite friends <ChevronRight className="h-3.5 w-3.5" />

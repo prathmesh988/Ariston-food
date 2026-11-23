@@ -397,7 +397,7 @@ const RecommendedHighlightCarousel = React.memo(({ restaurant }) => {
       {
         key: "pick",
         icon: <Sparkles className="h-3.5 w-3.5 text-[#DC2626]" strokeWidth={2.5} />,
-        text: "Foodie Pick",
+        text: "Ariston Cafe Pick",
         textClass: "text-[#DC2626]",
       },
     ];

@@ -65,7 +65,7 @@ const pricingSchema = new mongoose.Schema(
         discount: { type: Number, default: 0, min: 0 },
         /** What the customer saved through Buy 1 Get 1 free lines (not deducted from any total). */
         bogoSavings: { type: Number, default: 0, min: 0 },
-        /** Foodie Diamond savings on this order. `discount` already includes `diamondSavings.discount`. */
+        /** Ariston Cafe Diamond savings on this order. `discount` already includes `diamondSavings.discount`. */
         diamondSavings: {
             type: new mongoose.Schema(
                 {

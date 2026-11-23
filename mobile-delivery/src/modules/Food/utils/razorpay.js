@@ -8,7 +8,7 @@
  */
 import { Razorpay, isRazorpayAvailable, loadRazorpayScript as loadNativeCheckout } from '@/lib/razorpay';
 
-const SITE_ORIGIN = String(globalThis.__ENV__?.VITE_PUBLIC_APP_URL || 'https://foodie.org.in').replace(/\/$/, '');
+const SITE_ORIGIN = String(globalThis.__ENV__?.VITE_PUBLIC_APP_URL || 'https://ariston.org.in').replace(/\/$/, '');
 
 let razorpayLoaded = false;
 
@@ -46,7 +46,7 @@ export const preloadRazorpayScript = () => {
 
 const absoluteImage = (src) => {
   const s = String(src || '');
-  if (!s) return `${SITE_ORIGIN}/foodie-icon.webp`;
+  if (!s) return `${SITE_ORIGIN}/ariston-icon.webp`;
   if (/^(https?:|data:)/i.test(s)) return s;
   return `${SITE_ORIGIN}${s.startsWith('/') ? '' : '/'}${s}`;
 };
@@ -102,9 +102,9 @@ export const initRazorpayPayment = async (options) => {
       amount: options.amount,
       currency: options.currency || 'INR',
       order_id: options.order_id,
-      name: options.name || 'Foodie',
+      name: options.name || 'Ariston Cafe',
       description: options.description || 'Order Payment',
-      image: absoluteImage(options.image || '/foodie-icon.webp'),
+      image: absoluteImage(options.image || '/ariston-icon.webp'),
       prefill: {
         name: options.prefill?.name || '',
         email: options.prefill?.email || '',

@@ -104,7 +104,7 @@ export default function TableCancellationPolicy() {
               <Text style={s.primaryText}>I Understand</Text>
             </Pressable>
             <Text style={s.footnote}>
-              By using Foodie dining, you agree to our {"\n"}
+              By using Ariston Cafe dining, you agree to our {"\n"}
               <Text style={s.footLink}>Terms of Service</Text>
             </Text>
           </View>

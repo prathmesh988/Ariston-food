@@ -1,4 +1,4 @@
-﻿<!doctype html>
+<!doctype html>
 <html lang="en">
 
 <head>
@@ -13,11 +13,11 @@
           // Cooldown of 10 seconds to avoid infinite reload loops (e.g., if offline or asset is truly missing)
           if (!lastReload || (now - parseInt(lastReload, 10)) > 10000) {
             sessionStorage.setItem('chunk_reload_timestamp', String(now));
-            console.warn('Foodie: Chunk/Module load failure caught (' + reason + '). Reloading application...');
+            console.warn('Ariston Cafe: Chunk/Module load failure caught (' + reason + '). Reloading application...');
             window.location.reload();
           }
         } catch (e) {
-          console.error('Foodie: Failed to handle reload', e);
+          console.error('Ariston Cafe: Failed to handle reload', e);
         }
       }
 
@@ -83,7 +83,7 @@
       } catch (e) {}
     })();
   </script>
-  <link rel="icon" type="image/webp" href="/favicon.webp?v=2" />
+  <link rel="icon" type="image/webp" href="/logo-icon.webp" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
   <meta name="theme-color" content="#D91F3A" />
   <style>
@@ -116,7 +116,7 @@
   <link
     href="https://fonts.googleapis.com/css2?family=Figtree:wght@400;500;600;700&family=Lexend:wght@400;500;600&family=Inter:wght@400;500;600;700&family=Outfit:wght@400;500;600;700;800;900&display=swap"
     rel="stylesheet">
-  <title>Foodie</title>
+  <title>Ariston Cafe</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link

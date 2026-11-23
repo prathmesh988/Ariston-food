@@ -1,8 +1,8 @@
 {
-  "name": "foodie-backend",
+  "name": "ariston-backend",
   "version": "1.0.0",
   "type": "module",
-  "description": "Foodie Master Product Backend",
+  "description": "Ariston Cafe Master Product Backend",
   "main": "server.js",
   "scripts": {
     "start": "node server.js",
@@ -18,8 +18,8 @@
     "migrate:uploads": "node scripts/migrate-cloudinary-to-local.js",
     "migrate:uploads:apply": "node scripts/migrate-cloudinary-to-local.js --apply --clean-empty",
     "seed:admin": "node scripts/seed-admin.js",
-    "migrate:redgo": "node scripts/migrate-from-redgo.js",
-    "migrate:redgo:apply": "node scripts/migrate-from-redgo.js --apply",
+    "migrate:old": "node scripts/migrate-from-redgo.js",
+    "migrate:old:apply": "node scripts/migrate-from-redgo.js --apply",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "keywords": [],

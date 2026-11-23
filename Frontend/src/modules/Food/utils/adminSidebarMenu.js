@@ -140,7 +140,7 @@ export const adminSidebarMenu = [
       },
       {
         type: "link",
-        label: "Foodie Diamond Member",
+        label: "Ariston Cafe Diamond Member",
         path: "/admin/food/diamond",
         icon: "Gem",
       },

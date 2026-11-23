@@ -329,7 +329,7 @@ export default function Profile() {
     };
   }, []);
 
-  // Foodie Diamond strip on the profile card. The profile tab stays mounted, so refresh
+  // Ariston Cafe Diamond strip on the profile card. The profile tab stays mounted, so refresh
   // whenever it is shown again (e.g. right after buying Diamond).
   const [diamond, setDiamond] = useState(() => getCachedDiamond());
   const isProfileTab = /\/profile\/?$/.test(location.pathname);
@@ -608,7 +608,7 @@ export default function Profile() {
             </div>
           </CardContent>
 
-          {/* Foodie Diamond strip, like Zomato's "Gold member · saved ₹53" */}
+          {/* Ariston Cafe Diamond strip, like Zomato's "Gold member · saved ₹53" */}
           {diamondCard && (
             <Link
               to="/food/user/diamond"

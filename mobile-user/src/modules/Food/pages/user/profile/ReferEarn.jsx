@@ -1,6 +1,6 @@
 // Web: modules/Food/pages/user/profile/ReferEarn.jsx — GET referral details, share invite link.
 // navigator.clipboard / navigator.share / window.open come from src/lib/webCompat (system clipboard, share sheet,
-// Linking); window.location.origin is https://foodie.org.in there, so the invite link is the same as on the web.
+// Linking); window.location.origin is https://ariston.org.in there, so the invite link is the same as on the web.
 import { useEffect, useMemo, useState } from "react";
 import { ScrollView, View } from "react-native";
 import { useSafeAreaInsets } from "react-native-safe-area-context";

@@ -3,7 +3,7 @@ import { API_BASE_URL } from "@food/api/config";
 const defaultBackendOrigin = (API_BASE_URL || "").replace(/\/api\/v1\/?$/i, "").replace(/\/api\/?$/i, "");
 const ASSET_BASE_URL = String(
   (true && globalThis.__ENV__?.VITE_ASSET_BASE_URL) ||
-    "https://foodie.org.in"
+    "https://ariston.org.in"
 ).replace(/\/$/, "");
 
 const rewriteUploadsUrl = (absoluteUrl) => {

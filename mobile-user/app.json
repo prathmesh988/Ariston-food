@@ -1,15 +1,15 @@
 {
   "expo": {
-    "name": "Foodie",
-    "slug": "foodie-user",
-    "scheme": "foodie",
+    "name": "Ariston Cafe",
+    "slug": "ariston-cafe-user",
+    "scheme": "ariston-cafe",
     "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./assets/icon.png",
     "userInterfaceStyle": "automatic",
     "backgroundColor": "#B80B3D",
     "android": {
-      "package": "com.user.foodie",
+      "package": "com.user.aristoncafe",
       "versionCode": 1,
       "googleServicesFile": "./google-services.json",
       "adaptiveIcon": {
@@ -98,7 +98,7 @@
       [
         "expo-audio",
         {
-          "microphonePermission": "Foodie uses the microphone for voice search.",
+          "microphonePermission": "Ariston Cafe uses the microphone for voice search.",
           "recordAudioAndroid": true,
           "enableBackgroundPlayback": false
         }
@@ -107,8 +107,8 @@
       [
         "expo-speech-recognition",
         {
-          "microphonePermission": "Foodie uses the microphone for voice search.",
-          "speechRecognitionPermission": "Foodie uses speech recognition for voice search."
+          "microphonePermission": "Ariston Cafe uses the microphone for voice search.",
+          "speechRecognitionPermission": "Ariston Cafe uses speech recognition for voice search."
         }
       ],
       [
@@ -127,15 +127,15 @@
       [
         "expo-location",
         {
-          "locationWhenInUsePermission": "Foodie uses your location to find nearby restaurants and your delivery address."
+          "locationWhenInUsePermission": "Ariston Cafe uses your location to find nearby restaurants and your delivery address."
         }
       ],
       [
         "expo-image-picker",
         {
-          "photosPermission": "Foodie needs your photos to upload a profile picture or attach images.",
-          "cameraPermission": "Foodie needs the camera to take a profile picture or attach images.",
-          "microphonePermission": "Foodie uses the microphone for voice search."
+          "photosPermission": "Ariston Cafe needs your photos to upload a profile picture or attach images.",
+          "cameraPermission": "Ariston Cafe needs the camera to take a profile picture or attach images.",
+          "microphonePermission": "Ariston Cafe uses the microphone for voice search."
         }
       ],
       [

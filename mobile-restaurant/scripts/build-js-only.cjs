@@ -3,7 +3,7 @@
 //   node scripts/build-js-only.cjs
 // No prebuild. Before Gradle it deletes the outputs an incremental build once got wrong (it dropped libworklets.so and the
 // app crashed at start); afterwards it checks that the APK still has every arm64 native library the native build made,
-// verifies the signature with apksigner and copies the APK to <repo>/releases/Foodie-Restaurant-<version>.apk.
+// verifies the signature with apksigner and copies the APK to <repo>/releases/Ariston Cafe-Restaurant-<version>.apk.
 const { execSync } = require('child_process');
 const fs = require('fs');
 const path = require('path');
@@ -38,6 +38,6 @@ verifyApk(apk);
 
 const outDir = path.resolve(ROOT, '..', 'releases');
 fs.mkdirSync(outDir, { recursive: true });
-const out = path.join(outDir, `Foodie-Restaurant-${app.version}.apk`);
+const out = path.join(outDir, `Ariston Cafe-Restaurant-${app.version}.apk`);
 fs.copyFileSync(apk, out);
 console.log(`\nAPK: ${out} (${(fs.statSync(out).size / 1048576).toFixed(1)} MB)`);

@@ -4,11 +4,11 @@ export const ENV = Object.freeze({
   DEV: __DEV__,
   PROD: !__DEV__,
   MODE: __DEV__ ? 'development' : 'production',
-  VITE_API_BASE_URL: process.env.EXPO_PUBLIC_API_BASE_URL || 'https://foodie.org.in/api/v1',
-  VITE_SOCKET_URL: process.env.EXPO_PUBLIC_SOCKET_URL || 'https://foodie.org.in',
-  VITE_BACKEND_ORIGIN: process.env.EXPO_PUBLIC_BACKEND_ORIGIN || 'https://foodie.org.in',
-  VITE_ASSET_BASE_URL: process.env.EXPO_PUBLIC_ASSET_BASE_URL || 'https://foodie.org.in',
-  VITE_PUBLIC_APP_URL: 'https://foodie.org.in',
+  VITE_API_BASE_URL: process.env.EXPO_PUBLIC_API_BASE_URL || 'https://ariston.org.in/api/v1',
+  VITE_SOCKET_URL: process.env.EXPO_PUBLIC_SOCKET_URL || 'https://ariston.org.in',
+  VITE_BACKEND_ORIGIN: process.env.EXPO_PUBLIC_BACKEND_ORIGIN || 'https://ariston.org.in',
+  VITE_ASSET_BASE_URL: process.env.EXPO_PUBLIC_ASSET_BASE_URL || 'https://ariston.org.in',
+  VITE_PUBLIC_APP_URL: 'https://ariston.org.in',
   VITE_GOOGLE_MAPS_API_KEY: process.env.EXPO_PUBLIC_GOOGLE_MAPS_API_KEY || '',
   VITE_RAZORPAY_KEY_ID: process.env.EXPO_PUBLIC_RAZORPAY_KEY_ID || '',
   VITE_FIREBASE_API_KEY: process.env.EXPO_PUBLIC_FIREBASE_API_KEY || '',
@@ -24,4 +24,4 @@ export const ENV = Object.freeze({
 export const API_BASE_URL = ENV.VITE_API_BASE_URL.replace(/\/$/, '');
 export const BACKEND_ORIGIN = ENV.VITE_BACKEND_ORIGIN.replace(/\/$/, '');
 export const GOOGLE_MAPS_API_KEY = ENV.VITE_GOOGLE_MAPS_API_KEY;
-export const ANDROID_PACKAGE = 'com.user.foodie';
+export const ANDROID_PACKAGE = 'com.user.aristoncafe';

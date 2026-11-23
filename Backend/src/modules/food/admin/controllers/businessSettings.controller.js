@@ -9,7 +9,7 @@ export async function getBusinessSettings(req, res, next) {
         if (!settings) {
             // Create default settings if none exist
             settings = await FoodBusinessSettings.create({
-                companyName: 'Foodie',
+                companyName: 'Ariston Cafe',
                 email: 'admin@appzeto.com'
             });
         }

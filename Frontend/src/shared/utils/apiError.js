@@ -297,7 +297,7 @@ export function installNativeApiErrorBridge() {
     }
   });
 
-  window.addEventListener("foodie:native-api-error", (event) => {
+  window.addEventListener("ariston:native-api-error", (event) => {
     handlePayload(event?.detail);
   });
 

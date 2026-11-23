@@ -1,4 +1,4 @@
-﻿/**
+/**
  * Business Settings Utility
  * Handles loading and updating business settings (favicon, title, logo)
  */
@@ -79,8 +79,8 @@ export const loadBusinessSettings = async () => {
 export const updateFavicon = (url) => {
   if (typeof document === 'undefined') return;
 
-  // Admin favicon when present; otherwise default Foodie crop favicon
-  const href = url || '/favicon.webp';
+  // Admin favicon when present; otherwise default Ariston Cafe crop favicon
+  const href = url || '/logo-icon.webp';
 
   // Remove existing favicons
   const existingFavicons = document.querySelectorAll("link[rel*='icon']");
@@ -101,7 +101,7 @@ export const updateFavicon = (url) => {
  */
 export const updateTitle = (companyName) => {
   if (typeof document !== 'undefined') {
-    document.title = (companyName && companyName !== "Foodelo") ? companyName : "Foodie";
+    document.title = (companyName && companyName !== "Foodelo") ? companyName : "Ariston Cafe";
   }
 };
 
@@ -139,23 +139,23 @@ export const getCachedSettings = () => {
 
 /**
  * Get company name from business settings with fallback
- * @returns {string} Company name or default "Foodie"
+ * @returns {string} Company name or default "Ariston Cafe"
  */
 export const getCompanyName = () => {
   const settings = getCachedSettings();
-  const name = settings?.companyName || "Foodie";
-  return name === "Foodelo" ? "Foodie" : name;
+  const name = settings?.companyName || "Ariston Cafe";
+  return name === "Foodelo" ? "Ariston Cafe" : name;
 };
 
 /**
  * Get company name asynchronously (loads if not cached)
- * @returns {Promise<string>} Company name or default "Foodie"
+ * @returns {Promise<string>} Company name or default "Ariston Cafe"
  */
 export const getCompanyNameAsync = async () => {
   try {
     const settings = await loadBusinessSettings();
-    return settings?.companyName || "Foodie";
+    return settings?.companyName || "Ariston Cafe";
   } catch (error) {
-    return "Foodie";
+    return "Ariston Cafe";
   }
 };

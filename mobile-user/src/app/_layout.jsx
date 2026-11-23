@@ -60,7 +60,7 @@ export default function RootLayout() {
   const ready = storageReady;
   const [splashDone, setSplashDone] = useState(false);
   // Prince (18 Nov): mounting the app in the same render as the splash kept the JS thread busy ~0.8 s before the splash's
-  // first frame (small native "Foodie" up ~2 s); mounting it right after the splash appeared made the wordmark wait for
+  // first frame (small native "Ariston Cafe" up ~2 s); mounting it right after the splash appeared made the wordmark wait for
   // smooth frames instead; mounting it during the burger build stalled the animation. Now the wordmark glides and the
   // burger is built on an idle thread, then the app mounts behind the finished burger and the splash leaves.
   const [appStart, setAppStart] = useState(false);

@@ -219,7 +219,7 @@ export default function FoodieDiamondSettings() {
       const next = fromServer(res?.data?.data?.settings)
       setForm(next)
       setSaved(next)
-      toast.success("Foodie Diamond saved")
+      toast.success("Ariston Cafe Diamond saved")
     } catch (e) {
       toast.error(e?.response?.data?.message || "Failed to save")
     } finally {
@@ -241,7 +241,7 @@ export default function FoodieDiamondSettings() {
       <div className="mx-auto max-w-7xl space-y-6">
         <div className="rounded-xl border border-slate-200 bg-white p-6 shadow-sm">
           <div>
-            <h1 className="text-lg font-semibold text-slate-900">Foodie Diamond Member</h1>
+            <h1 className="text-lg font-semibold text-slate-900">Ariston Cafe Diamond Member</h1>
             <p className="mt-1 text-sm text-slate-500">
               A paid membership. Set the price, how long it lasts and what members get. Benefits apply automatically at checkout.
             </p>
@@ -433,7 +433,7 @@ export default function FoodieDiamondSettings() {
                     value={form.terms}
                     onChange={(e) => set({ terms: e.target.value.slice(0, 20000) })}
                     rows={8}
-                    placeholder={"- Membership is valid for the selected period from the date of purchase.\n- Benefits apply to orders placed through the Foodie app.\n- Membership fee is non-refundable."}
+                    placeholder={"- Membership is valid for the selected period from the date of purchase.\n- Benefits apply to orders placed through the Ariston Cafe app.\n- Membership fee is non-refundable."}
                     className={`${inputClass} font-mono text-[13px]`}
                   />
                 </div>

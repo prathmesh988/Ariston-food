@@ -59,13 +59,13 @@ export default function DeliveryInvitePage() {
   }
 
   const heading = invite?.referrerName
-    ? `${invite.referrerName} invited you to deliver with Foodie`
-    : "Deliver with Foodie"
+    ? `${invite.referrerName} invited you to deliver with Ariston Cafe`
+    : "Deliver with Ariston Cafe"
 
   return (
     <div className="min-h-screen bg-gray-50 font-poppins text-gray-900">
       <div className="mx-auto flex min-h-screen max-w-md flex-col px-5 pb-8 pt-8">
-        <img src="/logo.webp" alt="Foodie" className="h-11 w-auto self-start rounded-xl" />
+        <img src="/logo.webp" alt="Ariston Cafe" className="h-11 w-auto self-start rounded-xl" />
 
         {loading ? (
           <div className="mt-10 space-y-4 animate-pulse">

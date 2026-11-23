@@ -31,7 +31,7 @@ export const createDiamondOrderController = wrap(async (req, res) =>
 );
 
 export const verifyDiamondPaymentController = wrap(async (req, res) =>
-    sendResponse(res, 200, 'Welcome to Foodie Diamond', await verifyDiamondPayment(req.user?.userId, req.body || {}))
+    sendResponse(res, 200, 'Welcome to Ariston Cafe Diamond', await verifyDiamondPayment(req.user?.userId, req.body || {}))
 );
 
 // ----- Admin -----

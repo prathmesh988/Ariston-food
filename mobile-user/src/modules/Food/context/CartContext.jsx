@@ -952,7 +952,7 @@ export function CartProvider({ children }) {
     () => ({
       _isProvider: true,
       cart: visibleCart,
-      // Foodie compatibility: delivery/takeaway share the same server cart when logged in;
+      // Ariston Cafe compatibility: delivery/takeaway share the same server cart when logged in;
       // it is exposed only to the tab it was started from (see cartMode).
       deliveryCart: cartMode === "takeaway" ? [] : normalizedCart,
       takeawayCart: cartMode === "takeaway" ? normalizedCart : [],

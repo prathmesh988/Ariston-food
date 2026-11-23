@@ -910,7 +910,7 @@ export default function DeliveryHomeV2({ tab = 'feed' }) {
         toast.error('Location permission is required to go Online', {
           id: 'online-location-permission',
           description: blocked
-            ? 'Allow location for Foodie Delivery Partner in the app settings.'
+            ? 'Allow location for Ariston Rider in the app settings.'
             : 'We need your location to send you nearby orders.',
           action: blocked ? { label: 'Open settings', onClick: () => Linking.openSettings().catch(() => {}) } : undefined,
           duration: blocked ? 7000 : 4000,

@@ -1,6 +1,6 @@
 // Web: modules/DeliveryV2/utils/deliveryReferral.js — keeps the referral code from an invite link (/join/CODE or
 // ?ref=CODE) until the partner finishes signup. Survives the login → OTP → details → documents flow and app reloads.
-// Native: localStorage is the app's persistent storage shim; an invite link that opens the app (foodie-delivery://…
+// Native: localStorage is the app's persistent storage shim; an invite link that opens the app (ariston-delivery://…
 // or the site link) is read with captureDeliveryReferralFromUrl.
 const STORAGE_KEY = "delivery_referral_code"
 

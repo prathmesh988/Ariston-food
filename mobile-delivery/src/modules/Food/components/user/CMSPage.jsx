@@ -208,12 +208,12 @@ export default function CMSPage({
 
   const moduleLabel =
     module === "DRIVER"
-      ? "Foodie Captain"
+      ? "Ariston Rider Captain"
       : module === "RESTAURANT"
-        ? "Foodie Restaurant Partner"
+        ? "Ariston Rider Restaurant Partner"
         : module === "DELIVERY"
-          ? "Foodie Delivery Partner"
-          : "Foodie"
+          ? "Ariston Rider"
+          : "Ariston Cafe"
 
   const ContactCard = ({ icon: Icon, title, text, link, linkLabel, onPress, breakAll }) => {
     const inner = (
@@ -344,7 +344,7 @@ export default function CMSPage({
 
           <Text style={s.footer}>
             Last updated: {now.toLocaleDateString("en-US", { year: "numeric", month: "long", day: "numeric" })}
-            {"\n"}© {now.getFullYear()} Foodie. All Rights Reserved.
+            {"\n"}© {now.getFullYear()} Ariston Rider. All Rights Reserved.
           </Text>
         </ScrollView>
       </AnimatedPage>

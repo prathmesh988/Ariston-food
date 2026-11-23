@@ -136,7 +136,7 @@ export function getCurrentUser(module) {
 }
 
 /**
- * Foodie is restaurant-only — there is no "My Store" (brand stores) feature.
+ * Ariston Cafe is restaurant-only — there is no "My Store" (brand stores) feature.
  * The logged-in partner is always a restaurant partner, so the helpers below
  * are fixed to "restaurant".
  */
@@ -160,7 +160,7 @@ export function readLastPartnerRole() {
 }
 
 export function rememberPartnerRole() {
-  // no-op: Foodie only has restaurant partners
+  // no-op: Ariston Cafe only has restaurant partners
 }
 
 /**

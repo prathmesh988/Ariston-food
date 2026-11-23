@@ -18,7 +18,7 @@ export default function GetAppPage() {
 
   return (
     <div className="min-h-screen flex flex-col items-center justify-center gap-6 px-6 bg-[#0B0B0B] text-white text-center">
-      <img src="/logo.webp" alt="Foodie" className="h-16 w-auto rounded-2xl" />
+      <img src="/logo.webp" alt="Ariston Cafe" className="h-16 w-auto rounded-2xl" />
       {url ? (
         <p className="text-gray-300">Opening the store…</p>
       ) : (
@@ -30,7 +30,7 @@ export default function GetAppPage() {
             </p>
           </div>
           <a href="/" className="rounded-xl bg-[#D32F2F] px-6 py-3 font-semibold hover:bg-[#B71C1C] transition-colors">
-            Visit Foodie
+            Visit Ariston Cafe
           </a>
         </>
       )}

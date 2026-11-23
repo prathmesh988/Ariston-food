@@ -149,7 +149,7 @@ export function FoodPolicyPage({ endpoint, defaultTitle, icon: EmptyIcon, useRet
 
           <Text style={s.footer}>
             Last updated: {new Date().toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' })}
-            {"\n"}© {new Date().getFullYear()} Foodie. All Rights Reserved.
+            {"\n"}© {new Date().getFullYear()} Ariston Cafe. All Rights Reserved.
           </Text>
         </View>
       </ScrollView>
@@ -172,7 +172,7 @@ export function FoodPolicyPage({ endpoint, defaultTitle, icon: EmptyIcon, useRet
             <Text style={s.title} numberOfLines={1}>
               {pageData.title || defaultTitle}
             </Text>
-            <Text style={s.subtitle}>Foodie Ecosystem</Text>
+            <Text style={s.subtitle}>Ariston Cafe Ecosystem</Text>
           </View>
         </View>
       </View>

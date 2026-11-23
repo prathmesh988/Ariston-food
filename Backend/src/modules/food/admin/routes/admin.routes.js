@@ -199,7 +199,7 @@ router.get('/delivery-referral/settings', deliveryReferralController.getDelivery
 router.put('/delivery-referral/settings', deliveryReferralController.saveDeliveryReferralSettingsController);
 router.get('/delivery-referral/referrals', deliveryReferralController.listDeliveryReferralsController);
 
-// ----- Foodie Diamond membership -----
+// ----- Ariston Cafe Diamond membership -----
 router.get('/diamond/settings', diamondController.getAdminDiamondSettingsController);
 router.put('/diamond/settings', diamondController.saveAdminDiamondSettingsController);
 router.get('/diamond/members', diamondController.listDiamondMembersController);

@@ -54,7 +54,7 @@ export function LocationDisclosureHost() {
           </View>
           <Text style={styles.title}>Allow location access</Text>
           <Text style={styles.body}>
-            Foodie Delivery Partner collects your precise location data to enable order assignment, navigation and live
+            Ariston Rider collects your precise location data to enable order assignment, navigation and live
             order tracking,{' '}
             <Text style={styles.strong}>even when the app is closed or not in use</Text>, while you are Online.
           </Text>

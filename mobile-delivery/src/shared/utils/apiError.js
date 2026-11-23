@@ -241,7 +241,7 @@ export function installNativeApiErrorBridge() {
   window.showApiErrorToast = handlePayload;
   window.__foodieHandleNativeApiError = handlePayload;
 
-  window.addEventListener("foodie:native-api-error", (event) => {
+  window.addEventListener("ariston:native-api-error", (event) => {
     handlePayload(event?.detail);
   });
 }

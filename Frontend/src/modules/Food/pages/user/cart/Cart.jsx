@@ -1370,7 +1370,7 @@ export default function Cart() {
   const packagingFee = pricing != null ? (pricing.packagingFee ?? 0) : (feeSettings.packagingFee ?? 0)
   const gstCharges = pricing != null ? (pricing.tax ?? 0) : Math.round(subtotal * ((feeSettings.gstRate ?? 0) / 100))
   const discount = pricing?.discount || (appliedCoupon ? Math.min(appliedCoupon.discount, subtotal * 0.5) : 0)
-  // Foodie Diamond: `discount` from the server already includes the Diamond extra off.
+  // Ariston Cafe Diamond: `discount` from the server already includes the Diamond extra off.
   const diamondSavings = pricing?.diamondSavings || null
   const diamondOffer = pricing?.diamondOffer || null
   const couponDiscount = Math.max(0, discount - Number(diamondSavings?.discount || 0))
@@ -2273,7 +2273,7 @@ export default function Cart() {
           typeof window !== "undefined" &&
           Boolean(window.flutter_inappwebview) &&
           /iPhone|iPad|iPod/i.test(window.navigator?.userAgent || "")
-            ? " | After paying in your UPI app, come back to the Foodie app to confirm your order."
+            ? " | After paying in your UPI app, come back to the Ariston Cafe app to confirm your order."
             : ""
         }`,
         callback_url: callbackUrl,
@@ -3212,7 +3212,7 @@ export default function Cart() {
                   </div>
                 )}
               </div>
-{/* Foodie Diamond: what a member saves here, or what joining would save */}
+{/* Ariston Cafe Diamond: what a member saves here, or what joining would save */}
               {!loadingPricing && (diamondSavings?.total > 0 || diamondOffer?.potentialSavings > 0) && (
                 <Link
                   to="/food/user/diamond"

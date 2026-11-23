@@ -215,7 +215,7 @@ export default function ViewOrderDialog({ isOpen, onOpenChange, order, onOrderUp
   const displayOrderStatus = resolveDisplayOrderStatus(order)
   const displayPaymentStatus = resolveDisplayPaymentStatus(order)
 
-  // Online order already refunded to the Foodie wallet: admin can still move it to the bank.
+  // Online order already refunded to the Ariston Cafe wallet: admin can still move it to the bank.
   const isWalletPaidOrder = order.paymentType === "Wallet" || order.payment?.method === "wallet"
   const refundDestination = order.refundDestination || order.payment?.refund?.destination || null
   const canMoveRefundToBank =
@@ -621,7 +621,7 @@ export default function ViewOrderDialog({ isOpen, onOpenChange, order, onOrderUp
                     <div className="flex items-start gap-2">
                       <Landmark className="mt-0.5 h-4 w-4 shrink-0 text-purple-600" />
                       <p className="text-xs text-purple-900">
-                        ₹{walletRefundAmount.toFixed(2)} was refunded to the customer's Foodie wallet.
+                        ₹{walletRefundAmount.toFixed(2)} was refunded to the customer's Ariston Cafe wallet.
                         Move it to their bank/original payment method via Razorpay.
                       </p>
                     </div>

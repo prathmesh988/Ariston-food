@@ -17,7 +17,7 @@ const shadowText = (radius = 3) => ({ textShadowColor: 'rgba(0,0,0,0.25)', textS
 
 const OutOfZoneScreen = ({ location, handleLocationClick }) => {
   const { userProfile } = useProfile();
-  const BRAND_NAME = 'Foodie'; // Change this for different projects
+  const BRAND_NAME = 'Ariston Cafe'; // Change this for different projects
   const insets = useSafeAreaInsets();
   const { height: vh } = useWindowDimensions();
 

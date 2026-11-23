@@ -1,5 +1,5 @@
 // node scripts/make-app-icons.cjs <logo-icon.png> <wordmark.png> <assetsDir>   (needs `sharp`, e.g. NODE_PATH=../Frontend/node_modules)
-// Foodie user app icons from the web's square "F" icon (Frontend/public/logo-icon.webp, transparent) and the
+// Ariston Cafe user app icons from the web's square "F" icon (Frontend/public/logo-icon.webp, transparent) and the
 // wordmark banner (Frontend/public/logo.webp):
 //   icon.png                     1024 white square, F icon 760 px
 //   android-icon-foreground.png  1024 transparent, F icon 600 px (adaptive icon safe zone; background #ffffff)

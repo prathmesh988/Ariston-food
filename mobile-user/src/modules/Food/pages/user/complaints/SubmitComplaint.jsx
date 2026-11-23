@@ -296,7 +296,7 @@ function SubmitComplaintContent() {
   )
 }
 
-// The Foodie web page has no dark: classes (always light), so the native page is light too.
+// The Ariston Cafe web page has no dark: classes (always light), so the native page is light too.
 export default function SubmitComplaint() {
   return (
     <ForceLight>

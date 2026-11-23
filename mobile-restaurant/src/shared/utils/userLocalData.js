@@ -10,14 +10,14 @@ const USER_KEYS = [
   'userAddresses', 'userDishFavorites', 'userFavorites', 'userOrders', 'userPaymentMethods', 'userOrderType',
   'userVegMode', 'userVegModeOption', 'cart',
   'userLocation', 'userZone', 'userZoneId', 'userZoneStatus', 'deliveryAddressMode',
-  'foodie:lastLocation', 'foodie:recentLocations',
+  'ariston:lastLocation', 'ariston:recentLocations',
   'taxi:user:notifications-last-seen', 'selectedVehicleType',
   'native_last_route',
   'fcm_web_registered_token_user', 'lastBrowserFcmRegistration',
   'food-under-250-filters', 'food-category-page-filters-v1',
 ]
-const USER_KEY_PREFIXES = ['taxi:popular:', 'taxi:user:', 'foodie:user']
-const SIGNED_IN_USER_KEY = 'foodie:signed-in-user-id'
+const USER_KEY_PREFIXES = ['taxi:popular:', 'taxi:user:', 'ariston:user']
+const SIGNED_IN_USER_KEY = 'ariston:signed-in-user-id'
 
 export function clearUserLocalData({ session = true } = {}) {
   if (typeof localStorage === 'undefined') return

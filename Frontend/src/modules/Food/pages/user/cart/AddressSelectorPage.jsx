@@ -87,7 +87,7 @@ const showAddressRemovedBrandedToast = () => {
         <div className="h-10 w-10 rounded-xl flex items-center justify-center shadow-md flex-shrink-0">
           <img
             src="/logo-icon.webp"
-            alt="Foodie"
+            alt="Ariston Cafe"
             className="w-full h-full object-contain"
           />
         </div>
@@ -1011,7 +1011,7 @@ export default function AddressSelectorPage() {
 
               <Label className="text-sm font-bold mb-2 block text-gray-700 dark:text-gray-300">Secondary Address (House No. / Flat / Floor)</Label>
               <Input 
-                placeholder="E.g. Flat 402, 4th Floor, Foodie Building" 
+                placeholder="E.g. Flat 402, 4th Floor, Ariston Cafe Building" 
                 value={addressFormData.additionalDetails} 
                 onChange={e => setAddressFormData({...addressFormData, additionalDetails: e.target.value})}
                 onFocus={() => scrollFieldIntoView("additionalDetails")}

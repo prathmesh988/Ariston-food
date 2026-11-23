@@ -1,4 +1,4 @@
-// /food/delivery/** — the Foodie Delivery Partner app (web: modules/DeliveryV2: index.jsx theme root +
+// /food/delivery/** — the Ariston Rider app (web: modules/DeliveryV2: index.jsx theme root +
 // DeliveryV2Router). DeliveryApp brings the theme root, the router's session listeners, the realtime shell, the
 // kept-alive bottom-bar screens and the bottom bar; the Stack holds every other page. No slide animation: the web
 // switches delivery screens instantly.

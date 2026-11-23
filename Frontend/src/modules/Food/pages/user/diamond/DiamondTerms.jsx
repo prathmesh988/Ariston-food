@@ -71,7 +71,7 @@ export default function DiamondTerms() {
       </div>
 
       <div className="mx-auto max-w-2xl px-5 py-6">
-        <h2 className="mb-4 text-[24px] font-bold text-gray-900">Foodie Diamond</h2>
+        <h2 className="mb-4 text-[24px] font-bold text-gray-900">Ariston Cafe Diamond</h2>
         {terms === null ? (
           <Loader2 className="mx-auto mt-10 h-6 w-6 animate-spin text-gray-400" />
         ) : terms.trim() ? (

@@ -324,7 +324,7 @@ function RestaurantScene({ step }) {
   }
   return (
     <div>
-      <SuccessBadge title="You're live on Foodie!" subtitle="Customers can now find your restaurant." />
+      <SuccessBadge title="You're live on Ariston Cafe!" subtitle="Customers can now find your restaurant." />
       <Toast icon={Bell} title="New order received" subtitle="2 items · Takeaway" />
     </div>
   )
@@ -348,7 +348,7 @@ export function RestaurantOnboardingSection() {
             <Store className="w-4 h-4" /> Become a Restaurant Partner
           </span>
           <h2 className="text-3xl md:text-[42px] font-black mb-3 leading-tight">
-            Grow your restaurant with <span className="text-[#D32F2F]">Foodie</span>
+            Grow your restaurant with <span className="text-[#D32F2F]">Ariston Cafe</span>
           </h2>
           <p className="text-gray-400 text-base md:text-lg mb-7 max-w-xl">
             Reach more customers for dine-in and takeaway. Register your restaurant online in four easy steps.
@@ -539,7 +539,7 @@ export function DeliveryOnboardingSection() {
             </span>
           </div>
           <h2 className="text-3xl md:text-[42px] font-black mb-3 leading-tight">
-            Ride with Foodie, <span className="text-[#D32F2F]">earn on your time</span>
+            Ride with Ariston Cafe, <span className="text-[#D32F2F]">earn on your time</span>
           </h2>
           <p className="text-gray-400 text-base md:text-lg mb-7 max-w-xl">
             Sign up from your phone, upload your documents and start delivering once you're approved.

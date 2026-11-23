@@ -4344,7 +4344,7 @@ async function sendDeliveryApprovalNotifications(partner, existing = {}, isChang
         ? 'Profile Changes Approved! ✅'
         : 'Welcome Aboard! 🛵';
     const pushBody = isChangesApproval
-        ? 'Your delivery profile changes have been approved. You can continue delivering with Foodie.'
+        ? 'Your delivery profile changes have been approved. You can continue delivering with Ariston Cafe.'
         : 'Your delivery partner application has been approved. You can now go online and start earning!';
     const targetUrl = isChangesApproval
         ? '/food/delivery'
@@ -6547,7 +6547,7 @@ export async function getSidebarBadges() {
 
 /**
  * Moves an already wallet-refunded Razorpay order's refund to the customer's bank:
- * debits the same amount from the Foodie wallet, then refunds it on Razorpay. If the wallet
+ * debits the same amount from the Ariston Cafe wallet, then refunds it on Razorpay. If the wallet
  * balance is too low, or Razorpay fails, the wallet is left exactly as it was.
  */
 async function moveWalletRefundToBank(order) {
@@ -6666,7 +6666,7 @@ export async function processRefund(orderId, refundAmount, destination = 'wallet
         throw new ValidationError('Order payment is not in a refundable paid state');
     }
     if (alreadyProcessed || status === 'refunded') {
-        // Refund already credited to the Foodie wallet, customer now wants it in the bank instead.
+        // Refund already credited to the Ariston Cafe wallet, customer now wants it in the bank instead.
         const refundedTo = String(order.payment?.refund?.destination || '').toLowerCase();
         if (String(destination || '').toLowerCase() === 'source' && refundedTo === 'wallet') {
             return moveWalletRefundToBank(order);
@@ -6685,7 +6685,7 @@ export async function processRefund(orderId, refundAmount, destination = 'wallet
 
     const toBank = String(destination || '').toLowerCase() === 'source';
     if (toBank && method !== 'razorpay') {
-        throw new ValidationError('Bank refund is only possible for orders paid via Razorpay. Use Foodie wallet instead.');
+        throw new ValidationError('Bank refund is only possible for orders paid via Razorpay. Use Ariston Cafe wallet instead.');
     }
 
     // Shared, race-safe refund logic (Razorpay or wallet). Imported lazily to avoid a circular import.

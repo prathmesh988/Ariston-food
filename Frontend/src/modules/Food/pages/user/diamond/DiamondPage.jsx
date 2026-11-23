@@ -116,7 +116,7 @@ export default function DiamondPage() {
       const fresh = await fetchDiamond()
       if (fresh) setData(fresh)
     } catch {
-      if (!getCachedDiamond()) toast.error("Could not load Foodie Diamond")
+      if (!getCachedDiamond()) toast.error("Could not load Ariston Cafe Diamond")
     } finally {
       setLoading(false)
     }
@@ -163,7 +163,7 @@ export default function DiamondPage() {
         currency: razorpay.currency || "INR",
         order_id: razorpay.orderId,
         name: companyName,
-        description: `Foodie Diamond · ${durationLabel || ""}`.trim(),
+        description: `Ariston Cafe Diamond · ${durationLabel || ""}`.trim(),
         prefill: {
           name: user.name || "",
           email: user.email || "",
@@ -181,7 +181,7 @@ export default function DiamondPage() {
             setCachedDiamond(next)
             setData(next)
             window.scrollTo({ top: 0, behavior: "smooth" })
-            toast.success(isMember ? "Diamond renewed" : "Welcome to Foodie Diamond")
+            toast.success(isMember ? "Diamond renewed" : "Welcome to Ariston Cafe Diamond")
           } catch (error) {
             toast.error(error?.response?.data?.message || "Payment verification failed. Please contact support.")
           } finally {
@@ -223,7 +223,7 @@ export default function DiamondPage() {
           <ArrowLeft className="h-6 w-6" strokeWidth={1.75} />
         </button>
         <span className={`text-[19px] font-semibold transition-opacity duration-200 ${scrolled ? "opacity-100" : "opacity-0"}`}>
-          Foodie Diamond
+          Ariston Cafe Diamond
         </span>
       </div>
 
@@ -231,7 +231,7 @@ export default function DiamondPage() {
         <DiamondSkeleton />
       ) : !data ? (
         <div className="flex min-h-screen flex-col items-center justify-center gap-3 px-6 text-center">
-          <p className="text-gray-300">Could not load Foodie Diamond.</p>
+          <p className="text-gray-300">Could not load Ariston Cafe Diamond.</p>
           <button type="button" onClick={load} className="font-semibold" style={{ color: DIAMOND_ICE }}>
             Try again
           </button>
@@ -269,7 +269,7 @@ export default function DiamondPage() {
                   </p>
                 </>
               ) : (
-                <p className="mt-6 text-[16px] text-gray-300">Foodie Diamond is coming soon.</p>
+                <p className="mt-6 text-[16px] text-gray-300">Ariston Cafe Diamond is coming soon.</p>
               )}
               </Reveal>
             </div>

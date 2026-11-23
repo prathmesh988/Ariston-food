@@ -178,7 +178,7 @@ export default function RestaurantSignup() {
         {/* Top logo and version */}
         <View style={styles.topRow}>
           <FadeIn from={-16} duration={700} style={styles.logoRow}>
-            <AppImage src={DEFAULT_BRAND_LOGO} style={styles.logo} contentFit="contain" accessibilityLabel="Foodie" />
+            <AppImage src={DEFAULT_BRAND_LOGO} style={styles.logo} contentFit="contain" accessibilityLabel="Ariston Cafe" />
             <View style={{ alignItems: "flex-start" }}>
               <Text style={styles.panelText}>Restaurant Panel</Text>
             </View>

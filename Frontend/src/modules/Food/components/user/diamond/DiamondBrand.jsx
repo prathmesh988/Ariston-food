@@ -1,9 +1,9 @@
 /**
- * Foodie Diamond visual language: dark base, icy-blue "diamond" metal for the
+ * Ariston Cafe Diamond visual language: dark base, icy-blue "diamond" metal for the
  * wordmark and accents (the counterpart of Zomato Gold's bronze).
  */
 
-import foodieWordmark from "@food/assets/diamond/foodie-wordmark-white.webp"
+import foodieWordmark from "@food/assets/diamond/ariston-wordmark-white.webp"
 
 export const DIAMOND_BG = "#0B0E13"
 export const DIAMOND_CARD = "#161B22"
@@ -55,17 +55,17 @@ export function DiamondGem({ className = "h-6 w-6", id = "gem" }) {
   )
 }
 
-/** "Foodie" over "DIAMOND", the O drawn as a gem in a ring (like the crown in GOLD). */
+/** "Ariston Cafe" over "DIAMOND", the O drawn as a gem in a ring (like the crown in GOLD). */
 export function DiamondWordmark({ size = "lg" }) {
   const big = size === "lg"
   const letters = big ? "text-[64px] min-[380px]:text-[72px]" : "text-[34px]"
   const ring = big ? "h-[50px] w-[50px] min-[380px]:h-[56px] min-[380px]:w-[56px] mx-0.5" : "h-[27px] w-[27px] mx-px"
   return (
     <div className="flex flex-col items-center select-none" style={{ fontFamily: DIAMOND_FONT }}>
-      {/* Foodie brand wordmark (from the logo, white, without the smile), like "zomato" above GOLD */}
+      {/* Ariston Cafe brand wordmark (from the logo, white, without the smile), like "zomato" above GOLD */}
       <img
         src={foodieWordmark}
-        alt="Foodie"
+        alt="Ariston Cafe"
         draggable={false}
         className={big ? "h-[52px] w-auto" : "h-[27px] w-auto"}
         width={720}

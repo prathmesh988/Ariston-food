@@ -255,7 +255,7 @@ export default function UserRouter() {
             <Route path="profile/logout" element={<Logout />} />
             <Route path="profile/refer-earn" element={<ReferEarn />} />
 
-            {/* Foodie Diamond membership */}
+            {/* Ariston Cafe Diamond membership */}
             <Route path="diamond" element={<DiamondPage />} />
             <Route path="diamond/terms" element={<DiamondTerms />} />
             <Route path="diamond/support" element={<DiamondSupport />} />

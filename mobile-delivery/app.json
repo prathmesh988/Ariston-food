@@ -1,15 +1,15 @@
 {
   "expo": {
-    "name": "Foodie Delivery Partner",
-    "slug": "foodie-delivery",
-    "scheme": "foodie-delivery",
+    "name": "Ariston Rider",
+    "slug": "ariston-rider",
+    "scheme": "ariston-rider",
     "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./assets/icon.png",
     "userInterfaceStyle": "automatic",
     "backgroundColor": "#15498B",
     "android": {
-      "package": "com.delivery.foodie",
+      "package": "com.delivery.aristonrider",
       "versionCode": 1,
       "googleServicesFile": "./google-services.json",
       "adaptiveIcon": {
@@ -121,8 +121,8 @@
       [
         "expo-location",
         {
-          "locationWhenInUsePermission": "Foodie Delivery Partner uses your location to show you nearby orders and to navigate to the restaurant and the customer.",
-          "locationAlwaysAndWhenInUsePermission": "Foodie Delivery Partner keeps sending your location while you are online, also when the app is in the background or the screen is off, so you keep getting orders and customers can track their delivery.",
+          "locationWhenInUsePermission": "Ariston Rider uses your location to show you nearby orders and to navigate to the restaurant and the customer.",
+          "locationAlwaysAndWhenInUsePermission": "Ariston Rider Delivery Partner keeps sending your location while you are online, also when the app is in the background or the screen is off, so you keep getting orders and customers can track their delivery.",
           "isAndroidBackgroundLocationEnabled": true,
           "isAndroidForegroundServiceEnabled": true
         }
@@ -130,8 +130,8 @@
       [
         "expo-image-picker",
         {
-          "photosPermission": "Foodie Delivery Partner needs your photos to upload your profile picture and documents.",
-          "cameraPermission": "Foodie Delivery Partner needs the camera to take photos of your documents, profile picture and orders.",
+          "photosPermission": "Ariston Rider Delivery Partner needs your photos to upload your profile picture and documents.",
+          "cameraPermission": "Ariston Rider Delivery Partner needs the camera to take photos of your documents, profile picture and orders.",
           "microphonePermission": false
         }
       ],

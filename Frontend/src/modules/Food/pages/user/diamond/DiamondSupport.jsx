@@ -144,7 +144,7 @@ export default function DiamondSupport() {
         <button type="button" onClick={() => navigate(-1)} aria-label="Back" className="rounded-full p-1.5 active:bg-gray-100">
           <ArrowLeft className="h-6 w-6 text-gray-900" strokeWidth={1.75} />
         </button>
-        <h1 className="text-[19px] font-medium text-gray-900">Foodie Support</h1>
+        <h1 className="text-[19px] font-medium text-gray-900">Ariston Cafe Support</h1>
       </div>
 
       <div className="mx-auto w-full max-w-md flex-1 space-y-2 px-4 pb-36 pt-2">
@@ -158,7 +158,7 @@ export default function DiamondSupport() {
                 id: "hi",
                 from: "support",
                 at: startedAt.current,
-                text: `Hi${name ? ` ${name}` : ""}, Welcome to Foodie Diamond chat support.`,
+                text: `Hi${name ? ` ${name}` : ""}, Welcome to Ariston Cafe Diamond chat support.`,
               },
               { id: "select", from: "support", at: startedAt.current, text: "Please select the issue for which you seek support" },
             ])}

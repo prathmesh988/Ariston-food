@@ -29,7 +29,7 @@ const getPublicWebUrl = () =>
         .trim()
         .replace(/\/+$/, '');
 
-/** Short invite link, e.g. https://foodie.in/join/DP-6E84A43B */
+/** Short invite link, e.g. https://ariston.in/join/DP-6E84A43B */
 export const buildDeliveryInviteLink = (code) => {
     const base = getPublicWebUrl();
     return base && code ? `${base}/join/${encodeURIComponent(code)}` : '';
@@ -37,7 +37,7 @@ export const buildDeliveryInviteLink = (code) => {
 
 export const buildDeliveryShareMessage = (code, link) =>
     [
-        'Hey! I deliver with Foodie and earn on my own schedule.',
+        'Hey! I deliver with Ariston Cafe and earn on my own schedule.',
         `Join as a delivery partner using my referral code ${code}.`,
         '',
         link ? `Sign up here: ${link}` : ''

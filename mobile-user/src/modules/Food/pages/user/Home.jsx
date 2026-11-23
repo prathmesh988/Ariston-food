@@ -448,7 +448,7 @@ const RecommendedHighlightCarousel = React.memo(({ restaurant, staggerIndex = 0 
   const t = useTheme();
   const highlights = React.useMemo(() => {
     const list = [
-      { key: "pick", icon: <Sparkles size={14} color="#DC2626" strokeWidth={2.5} />, text: "Foodie Pick", color: "#DC2626" },
+      { key: "pick", icon: <Sparkles size={14} color="#DC2626" strokeWidth={2.5} />, text: "Ariston Cafe Pick", color: "#DC2626" },
     ];
     if (restaurant?.pureVegRestaurant === true) {
       list.push({

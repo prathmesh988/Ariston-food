@@ -151,7 +151,7 @@ export const DEFAULT_FONT = fonts.poppins; // body font of global.css (Taxi scre
 
 // ------------------------------------------------------------------ light / dark
 export const USER_THEME_KEY = 'userTheme';
-export const THEME_CHANGE_EVENT = 'foodie:theme-change';
+export const THEME_CHANGE_EVENT = 'ariston:theme-change';
 const buildTheme = (scheme) => {
   const dark = scheme === 'dark';
   return {

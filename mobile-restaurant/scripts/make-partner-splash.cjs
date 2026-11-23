@@ -1,5 +1,5 @@
 // NODE_PATH=../Frontend/node_modules node scripts/make-partner-splash.cjs .   (from the app folder)
-// Native splash with the "DELIVERY / RESTAURANT PARTNER" label under the Foodie wordmark, taken from the app icon
+// Native splash with the "DELIVERY / RESTAURANT PARTNER" label under the Ariston Cafe wordmark, taken from the app icon
 // (assets/icon.png) so font and colours are exactly the icon's. Writes:
 //   assets/splash-partner-label.png   the label alone on transparent (for the animated splash's first frame)
 //   assets/splash-icon-light.png      1024 canvas: wordmark + label, block centred (app.json splash image)

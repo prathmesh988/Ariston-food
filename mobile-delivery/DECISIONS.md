@@ -3,15 +3,15 @@
 Where the prompt left a choice open, the safer option was taken and written down here.
 
 ## Identity / build
-1. **Package / name / scheme:** `com.foodie.delivery`, "Foodie Delivery Partner", `foodie-delivery`. Firebase
+1. **Package / name / scheme:** `com.ariston.delivery`, "Ariston Rider", `ariston-delivery`. Firebase
    `google-services.json` from Downloads (has the delivery client).
-2. **Icon:** `Downloads\Foodie\Delivery Partner Apk Logo.png` through `scripts/make-app-icons.cjs` (same sizes as the user and
+2. **Icon:** `Downloads\Ariston Cafe\Delivery Partner Apk Logo.png` through `scripts/make-app-icons.cjs` (same sizes as the user and
    Captain apps).
 3. **Splash:** header blue `#15498B` (the top of the delivery header gradient `#15498b -> #000000`, `--dv-primary`) for the native
-   splash, the window and the JS splash. Wordmark = the whole logo (Foodie + "Delivery Partner" line) with the navy letters
+   splash, the window and the JS splash. Wordmark = the whole logo (Ariston Cafe + "Delivery Partner" line) with the navy letters
    made white (`scripts/make-splash-wordmark.cjs`). A yellow scooter with a rider and an orange food box rides across once as the
    splash leaves; tagline "DELIVER · EARN · GROW".
-4. **Keystore:** new PKCS12 upload key `C:/Users/Prince/.foodie/foodie-delivery-upload.jks`, alias `foodie-delivery`,
+4. **Keystore:** new PKCS12 upload key `C:/Users/Prince/.ariston/ariston-delivery-upload.jks`, alias `ariston-delivery`,
    random password in `DELIVERY_KEYSTORE_README.txt` next to it, Gradle properties `FOODIE_DELIVERY_*`.
    SHA-1 `B3:E8:F4:AC:DD:60:9A:7F:21:3C:9C:00:14:CF:16:67:CC:4D:5C:9B`.
 5. **Packages:** the Captain app's package set unchanged (one `npm ci` from its lockfile); unused modules are harmless and

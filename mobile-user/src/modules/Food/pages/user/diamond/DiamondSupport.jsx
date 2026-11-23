@@ -171,7 +171,7 @@ function DiamondSupportContent() {
         <Pressable onPress={() => navigate(-1)} accessibilityLabel="Back" style={({ pressed }) => [{ borderRadius: 9999, padding: 6 }, pressed && { backgroundColor: colors.gray[100] }]}>
           <ArrowLeft size={24} color={colors.gray[900]} strokeWidth={1.75} />
         </Pressable>
-        <Text style={{ fontSize: 19, lineHeight: 24, fontWeight: "500", color: colors.gray[900] }}>Foodie Support</Text>
+        <Text style={{ fontSize: 19, lineHeight: 24, fontWeight: "500", color: colors.gray[900] }}>Ariston Cafe Support</Text>
       </View>
 
       <ScrollView
@@ -189,7 +189,7 @@ function DiamondSupportContent() {
           <>
             {renderWithDays(pastMessages)}
             {renderWithDays([
-              { id: "hi", from: "support", at: startedAt.current, text: `Hi${name ? ` ${name}` : ""}, Welcome to Foodie Diamond chat support.` },
+              { id: "hi", from: "support", at: startedAt.current, text: `Hi${name ? ` ${name}` : ""}, Welcome to Ariston Cafe Diamond chat support.` },
               { id: "select", from: "support", at: startedAt.current, text: "Please select the issue for which you seek support" },
             ])}
 

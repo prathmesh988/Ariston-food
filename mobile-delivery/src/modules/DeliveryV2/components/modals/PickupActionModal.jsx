@@ -4,7 +4,7 @@
 // rider must still open the Orders tab); here it is an absolute layer inside the Feed screen that DeliveryHomeV2 sizes
 // to end above the bottom bar (not a native Modal, which would cover the bar). The photo comes from the system camera /
 // gallery (@food/utils/imageUploadUtils openCamera / openGallery, same calls) and is uploaded with the same
-// uploadAPI.uploadMedia(file, { folder: 'foodie/delivery/bills' }). tel: / Google Maps links open with Linking.
+// uploadAPI.uploadMedia(file, { folder: 'ariston/delivery/bills' }). tel: / Google Maps links open with Linking.
 import React, { useState } from 'react';
 import { ActivityIndicator, Dimensions, Linking, Pressable, ScrollView, StyleSheet, View } from 'react-native';
 import {
@@ -60,7 +60,7 @@ export const PickupActionModal = ({
 
     setIsUploadingBill(true);
     try {
-      const res = await uploadAPI.uploadMedia(file, { folder: 'foodie/delivery/bills' });
+      const res = await uploadAPI.uploadMedia(file, { folder: 'ariston/delivery/bills' });
       if (res?.data?.success && res?.data?.data) {
         setBillImageUrl(res.data.data.url || res.data.data.secure_url);
         setBillImageUploaded(true);

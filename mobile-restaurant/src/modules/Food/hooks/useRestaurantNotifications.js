@@ -448,7 +448,7 @@ export const useRestaurantNotifications = () => {
     }
     backendUrl = backendUrl.replace(/^(https?):\/+/gi, '$1://').replace(/\/+$/, '');
     // web: a localhost backend in a production deployment was refused; the app is always the production shell
-    // (window.location is https://foodie.org.in), so the same rule applies to a localhost API URL.
+    // (window.location is https://ariston.org.in), so the same rule applies to a localhost API URL.
     const backendIsLocalhost = backendUrl.includes('localhost') || backendUrl.includes('127.0.0.1');
     if (backendIsLocalhost && !__DEV__) {
       updateGlobalState({ socketConnected: false });

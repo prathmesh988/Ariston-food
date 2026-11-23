@@ -4,7 +4,7 @@
  * backend has maintenance on. When the local UI talks to a local backend (VITE_API_BASE_URL on localhost) the
  * screen is shown, so the switches can be tested.
  *
- * Backend also bypasses API lock for localhost Origin / X-Foodie-Client: local-dev
+ * Backend also bypasses API lock for localhost Origin / X-Ariston-Client: local-dev
  * so local frontend + same live API keep working.
  *
  * Optional local preview: VITE_FORCE_MAINTENANCE=true or ?forceMaintenance=1

@@ -74,6 +74,6 @@ export function routeFromNotification(notification) {
   const raw = data.link || data.url || data.route || data.path || data.click_action || '';
   const value = String(raw || '');
   if (value.startsWith('/')) return value;
-  const m = /^https?:\/\/(?:www\.)?foodie\.org\.in(\/[^#]*)/i.exec(value);
+  const m = /^https?:\/\/(?:www\.)?ariston\.org\.in(\/[^#]*)/i.exec(value);
   return m ? m[1] : null;
 }

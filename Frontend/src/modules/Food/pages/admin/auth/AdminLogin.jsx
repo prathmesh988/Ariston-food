@@ -229,7 +229,7 @@ export default function AdminLogin() {
           <div className="w-[180px] md:w-[230px] mb-4 select-none flex justify-center items-center md:items-start">
              <img
               src="/logo.webp"
-              alt="FOODIE Logo"
+              alt="Ariston Cafe Logo"
               className="w-full object-contain rounded-xl shadow-lg border border-white/10 md:border-white/5"
             />
           </div>

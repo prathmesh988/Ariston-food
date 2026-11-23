@@ -1511,7 +1511,7 @@ export async function settleRefundOnCancel(
   );
   if (!claimed) return { status: "skipped" };
 
-  // Business rule: every cancel/refund is credited to the customer's Foodie wallet (never back to
+  // Business rule: every cancel/refund is credited to the customer's Ariston Cafe wallet (never back to
   // the bank/card). The only exception is an explicit admin choice ("source" = original payment
   // method via Razorpay) from the admin Refund button; destinationOverride is ignored otherwise.
   const destination = adminChoice && destinationOverride === "source" ? "source" : "wallet";
@@ -1689,7 +1689,7 @@ export async function cancelOrder(orderId, userId, reason, refundDestination = "
     finalPaymentMethod === "razorpay" &&
     (finalPaymentStatus === "paid" || finalPaymentStatus === "refunded");
   const refundDetail = isOnlinePaid
-    ? ` Your refund of ₹${order.pricing.total} has been credited to your Foodie wallet.`
+    ? ` Your refund of ₹${order.pricing.total} has been credited to your Ariston Cafe wallet.`
     : "";
   
   await notifyOwnersSafely(
@@ -2008,7 +2008,7 @@ export async function updateOrderStatusRestaurant(
     }
   } else if (String(orderStatus).includes("cancel")) {
     const isOnlinePaid = order.payment.method === "razorpay" && (order.payment.status === "paid" || order.payment.status === "refunded");
-    const refundDetail = isOnlinePaid ? ` Your refund of ₹${order.pricing.total} has been credited to your Foodie wallet.` : "";
+    const refundDetail = isOnlinePaid ? ` Your refund of ₹${order.pricing.total} has been credited to your Ariston Cafe wallet.` : "";
     
     title = "Order Cancelled";
     body = `Unfortunately, your order has been cancelled by the restaurant.${refundDetail}`;

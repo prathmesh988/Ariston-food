@@ -1,7 +1,7 @@
 // node scripts/make-splash-assets.cjs <logo-icon.png> <logo.png> <assetsDir>   (needs `sharp`, e.g. NODE_PATH=../Frontend/node_modules)
 // Layers of the animated splash, cut from the web's logos (Frontend/public/logo-icon.webp, logo.webp):
 //   splash-f.png      the red "F" badge with its three drops (transparent)
-//   splash-word.png   the "Foodie" letters in white + the green leaf, on transparent (for the red background)
+//   splash-word.png   the "Ariston Cafe" letters in white + the green leaf, on transparent (for the red background)
 //   splash-smile.png  the smile under the word, in white, same canvas as splash-word.png (drawn left -> right)
 //   splash-icon-light.png  native splash image: 1024 transparent square with the F badge 46 % wide
 const sharp = require('sharp');

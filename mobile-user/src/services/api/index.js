@@ -1044,7 +1044,7 @@ export const adminAPI = {
   getDeliveryReferrals: (params) =>
     apiClient.get("/food/admin/delivery-referral/referrals", { params, contextModule: "admin" }),
 
-  /** Foodie Diamond membership (admin) */
+  /** Ariston Cafe Diamond membership (admin) */
   getDiamondSettings: () =>
     apiClient.get("/food/admin/diamond/settings", { contextModule: "admin" }),
   saveDiamondSettings: (body) =>
@@ -2546,7 +2546,7 @@ export const userAPI = {
   /** GET /food/user/referrals/details (Bearer USER) */
   getReferralDetails: () =>
     apiClient.get("/food/user/referrals/details", { contextModule: "user" }),
-  /** Foodie Diamond membership (Bearer USER) */
+  /** Ariston Cafe Diamond membership (Bearer USER) */
   getDiamond: () => apiClient.get("/food/user/diamond", { contextModule: "user" }),
   getDiamondTerms: () => apiClient.get("/food/user/diamond/terms", { contextModule: "user" }),
   createDiamondOrder: () => apiClient.post("/food/user/diamond/order", {}, { contextModule: "user" }),

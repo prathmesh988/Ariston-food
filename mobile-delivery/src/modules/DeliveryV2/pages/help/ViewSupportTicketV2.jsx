@@ -139,7 +139,7 @@ export const ViewSupportTicketV2 = () => {
 
         <View style={styles.footer}>
           <Mail size={48} color={colors.gray[900]} />
-          <Text style={styles.footerText}>FOODIE SUPPORT FLEET</Text>
+          <Text style={styles.footerText}>ARISTON RIDER SUPPORT</Text>
         </View>
       </ScrollView>
     </Screen>

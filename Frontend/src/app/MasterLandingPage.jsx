@@ -89,7 +89,7 @@ const TESTIMONIALS = [
   {
     name: "Priya Sharma",
     image: "https://images.unsplash.com/photo-1494790108377-be9c29b29330?auto=format&fit=crop&q=80&w=200",
-    review: "Foodie completely changed how we dine out. Booking tables is seamless, and we never have to wait anymore!",
+    review: "Ariston Cafe completely changed how we dine out. Booking tables is seamless, and we never have to wait anymore!",
     rating: 5
   },
   {
@@ -101,7 +101,7 @@ const TESTIMONIALS = [
   {
     name: "Sneha Patel",
     image: "https://images.unsplash.com/photo-1438761681033-6461ffad8d80?auto=format&fit=crop&q=80&w=200",
-    review: "Premium restaurants and amazing UI. Foodie feels incredibly polished and works flawlessly.",
+    review: "Premium restaurants and amazing UI. Ariston Cafe feels incredibly polished and works flawlessly.",
     rating: 5
   }
 ]
@@ -181,7 +181,7 @@ export default function MasterLandingPage() {
             className="mb-2"
           >
             <h1 className="m-0">
-              <img src="/logo.webp" alt="Foodie" className="h-[80px] md:h-[120px] w-auto rounded-2xl md:rounded-3xl shadow-2xl" />
+              <img src="/logo.webp" alt="Ariston Cafe" className="h-[80px] md:h-[120px] w-auto rounded-2xl md:rounded-3xl shadow-2xl" />
             </h1>
           </motion.div>
 
@@ -202,7 +202,7 @@ export default function MasterLandingPage() {
             transition={{ duration: 0.8, delay: 0.4, ease: "easeOut" }}
             className="text-lg md:text-2xl text-gray-100 mb-10 max-w-2xl mx-auto font-medium drop-shadow-md"
           >
-            Experience fast & easy online ordering <br className="hidden md:block" /> on the Foodie app
+            Experience fast & easy online ordering <br className="hidden md:block" /> on the Ariston Cafe app
           </motion.p>
 
           {/* App Store Buttons */}
@@ -213,7 +213,7 @@ export default function MasterLandingPage() {
             className="flex flex-col sm:flex-row items-center gap-4 justify-center relative z-30"
           >
             <a
-              href="https://play.google.com/store/apps/details?id=com.user.foodie"
+              href="https://play.google.com/store/apps/details?id=com.user.aristoncafe"
               target="_blank"
               rel="noopener noreferrer"
               style={{ cursor: 'pointer' }}
@@ -226,7 +226,7 @@ export default function MasterLandingPage() {
               </div>
             </a>
             <a
-              href="https://apps.apple.com/in/app/foodie-food-delivery-takeaway/id6746978568"
+              href="https://apps.apple.com/in/app/ariston-food-delivery-takeaway/id6746978568"
               target="_blank"
               rel="noopener noreferrer"
               style={{ cursor: 'pointer' }}
@@ -442,7 +442,7 @@ export default function MasterLandingPage() {
         </div>
       </section>
 
-      {/* 4. How Foodie Works */}
+      {/* 4. How Ariston Cafe Works */}
       <section className="pt-6 md:pt-8 pb-6 md:pb-8 px-6 bg-[#111] relative overflow-hidden">
         <div className="max-w-7xl mx-auto relative z-10">
           <div className="text-center mb-12 md:mb-14">
@@ -490,7 +490,7 @@ export default function MasterLandingPage() {
 
       <PatternDivider from="#111111" to="#ffffff" />
 
-      {/* 6. Foodie Experience */}
+      {/* 6. Ariston Cafe Experience */}
       <section className="pt-8 md:pt-10 pb-16 md:pb-20 px-6 bg-white">
         <div className="max-w-7xl mx-auto flex flex-col lg:flex-row items-center gap-16">
           <motion.div
@@ -592,7 +592,7 @@ export default function MasterLandingPage() {
           <div className="relative z-10 flex flex-col md:flex-row items-center justify-between gap-12">
             <div className="w-full md:w-1/2 text-center md:text-left md:pb-20">
               <h2 className="text-4xl md:text-5xl lg:text-6xl font-black mb-6 leading-tight text-white">
-                Get the <span className="relative inline-block px-[0.22em] text-white"><span aria-hidden="true" className="absolute inset-y-[0.06em] inset-x-0 -skew-x-12 rounded-[0.14em] bg-[#E53935] shadow-[0_0.08em_0.35em_rgba(0,0,0,0.5)]" /><span className="relative">Foodie</span></span> App
+                Get the <span className="relative inline-block px-[0.22em] text-white"><span aria-hidden="true" className="absolute inset-y-[0.06em] inset-x-0 -skew-x-12 rounded-[0.14em] bg-[#E53935] shadow-[0_0.08em_0.35em_rgba(0,0,0,0.5)]" /><span className="relative">Ariston Cafe</span></span> App
               </h2>
               <p className="text-gray-400 text-lg mb-10 max-w-md mx-auto md:mx-0">
                 Book tables, order takeaway and track every order live, plus offers you only get in the app.
@@ -600,7 +600,7 @@ export default function MasterLandingPage() {
 
               <div className="flex flex-col sm:flex-row items-center gap-4 justify-center md:justify-start relative z-30">
                 <a
-                  href="https://play.google.com/store/apps/details?id=com.user.foodie"
+                  href="https://play.google.com/store/apps/details?id=com.user.aristoncafe"
                   target="_blank"
                   rel="noopener noreferrer"
                   style={{ cursor: 'pointer' }}
@@ -615,7 +615,7 @@ export default function MasterLandingPage() {
                   </div>
                 </a>
                 <a
-                  href="https://apps.apple.com/in/app/foodie-food-delivery-takeaway/id6746978568"
+                  href="https://apps.apple.com/in/app/ariston-food-delivery-takeaway/id6746978568"
                   target="_blank"
                   rel="noopener noreferrer"
                   style={{ cursor: 'pointer' }}
@@ -658,9 +658,9 @@ export default function MasterLandingPage() {
                     Scan the QR code to<br />download the app
                   </p>
                   <div className="p-3 rounded-2xl border-2 border-[#D32F2F]/20 bg-white shadow-sm">
-                    <img src="/landing/app-qr.webp" alt="QR code to download the Foodie app" loading="eager" decoding="async" width={208} height={208} className="w-48 h-48 md:w-52 md:h-52 block" />
+                    <img src="/landing/app-qr.webp" alt="QR code to download the Ariston Cafe app" loading="eager" decoding="async" width={208} height={208} className="w-48 h-48 md:w-52 md:h-52 block" />
                   </div>
-                  <img src="/logo.webp" alt="Foodie" loading="eager" decoding="async" className="mt-5 h-10 w-auto rounded-lg" />
+                  <img src="/logo.webp" alt="Ariston Cafe" loading="eager" decoding="async" className="mt-5 h-10 w-auto rounded-lg" />
                 </div>
               </motion.div>
             </motion.div>
@@ -681,7 +681,7 @@ export default function MasterLandingPage() {
           <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-x-8 gap-y-10 mb-10">
             {[
               {
-                title: "Foodie",
+                title: "Ariston Cafe",
                 logo: true,
                 links: [
                   { name: "Home", href: "#home" },
@@ -715,7 +715,7 @@ export default function MasterLandingPage() {
               <div key={column.title}>
                 {column.logo ? (
                   <div className="h-10 flex items-center mb-5">
-                    <img src="/logo.webp" alt="Foodie" className="h-10 w-auto rounded-lg" />
+                    <img src="/logo.webp" alt="Ariston Cafe" className="h-10 w-auto rounded-lg" />
                   </div>
                 ) : (
                   <h4 className="h-10 flex items-center font-semibold text-white text-lg mb-5">{column.title}</h4>
@@ -744,7 +744,7 @@ export default function MasterLandingPage() {
               <ul className="space-y-3.5 text-gray-400 mb-6">
                 <li>Satish Singh</li>
                 <li>
-                  <a href="mailto:support@foodie.in" className="hover:text-white transition-colors">support@foodie.in</a>
+                  <a href="mailto:support@ariston.in" className="hover:text-white transition-colors">support@ariston.in</a>
                 </li>
                 <li>
                   <a href="tel:01764511721" className="hover:text-white transition-colors">01764 511721</a>
@@ -752,7 +752,7 @@ export default function MasterLandingPage() {
               </ul>
               <div className="flex flex-col gap-3 relative z-30">
                 <a
-                  href="https://apps.apple.com/in/app/foodie-food-delivery-takeaway/id6746978568"
+                  href="https://apps.apple.com/in/app/ariston-food-delivery-takeaway/id6746978568"
                   target="_blank"
                   rel="noopener noreferrer"
                   className="flex items-center gap-3 w-[190px] rounded-xl border border-white/30 px-4 py-2 text-white hover:border-white hover:bg-white/5 transition-all"
@@ -766,7 +766,7 @@ export default function MasterLandingPage() {
                   </span>
                 </a>
                 <a
-                  href="https://play.google.com/store/apps/details?id=com.user.foodie"
+                  href="https://play.google.com/store/apps/details?id=com.user.aristoncafe"
                   target="_blank"
                   rel="noopener noreferrer"
                   className="flex items-center gap-3 w-[190px] rounded-xl border border-white/30 px-4 py-2 text-white hover:border-white hover:bg-white/5 transition-all"
@@ -788,7 +788,7 @@ export default function MasterLandingPage() {
               <a href="/user/profile/privacy" className="hover:text-white transition-colors">Privacy Policy</a>.
             </p>
             <p className="mt-1">
-              &copy; {new Date().getFullYear()} Foodie Technologies. All rights reserved. Made with ❤️ in India
+              &copy; {new Date().getFullYear()} Ariston Cafe Technologies. All rights reserved. Made with ❤️ in India
             </p>
           </div>
         </div>

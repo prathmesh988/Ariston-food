@@ -48,7 +48,7 @@ export function alpha(hex, opacity) {
 
 // App brand / CSS-variable colors (global.css, index.html, project decisions)
 export const brand = {
-  // Foodie Frontend/src/shared/styles/global.css :root variables
+  // Ariston Cafe Frontend/src/shared/styles/global.css :root variables
   primaryOrange: '#B80B3D', // --color-primary-orange
   pageBg: '#F9F9FB', // --color-page-bg
   bootBg: '#ffffff',
@@ -172,9 +172,9 @@ export const fonts = {
 export const DEFAULT_FONT = fonts.poppins; // body font of global.css (Taxi screens set Outfit, see Taxi/index.css)
 
 // ------------------------------------------------------------------ light / dark
-// Foodie web: Profile > Appearance saves 'appTheme' (light | dark) and toggles the html.dark class
+// Ariston Cafe web: Profile > Appearance saves 'appTheme' (light | dark) and toggles the html.dark class
 export const USER_THEME_KEY = 'appTheme';
-export const THEME_CHANGE_EVENT = 'foodie:theme-change';
+export const THEME_CHANGE_EVENT = 'ariston:theme-change';
 
 const readStoredScheme = () => {
   try {

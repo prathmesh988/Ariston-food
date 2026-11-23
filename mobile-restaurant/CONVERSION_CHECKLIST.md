@@ -1,11 +1,11 @@
-# Conversion checklist — Foodie Restaurant Partner (web /food/restaurant → Expo / React Native, Android)
+# Conversion checklist — Ariston Cafe Restaurant Partner (web /food/restaurant → Expo / React Native, Android)
 
 Status words: **Verified** (ran it on a phone and saw it work) · **Built, not tested** (code written and statically checked, needs a phone test) · **Blocked** (cannot be done; reason given).
 
 ## 0. Identity
-- Package `com.foodie.restaurant`, name "Foodie Restaurant Partner", scheme `foodie-restaurant`.
-- Icon from `Downloads/Foodie/Restaurant Partner Apk Logo.png`; splash `#66001D` (cloche lifts off a steaming dish, COOK · SERVE · GROW).
-- Keystore `C:/Users/Prince/.foodie/foodie-restaurant-upload.jks` (outside the repo).
+- Package `com.ariston.restaurant`, name "Ariston Cafe Restaurant Partner", scheme `ariston-restaurant`.
+- Icon from `Downloads/Ariston Cafe/Restaurant Partner Apk Logo.png`; splash `#66001D` (cloche lifts off a steaming dish, COOK · SERVE · GROW).
+- Keystore `C:/Users/Prince/.ariston/ariston-restaurant-upload.jks` (outside the repo).
 
 ## 1. Routes (web RestaurantRouter + Food auth paths) — 56 routes, missing 0
 

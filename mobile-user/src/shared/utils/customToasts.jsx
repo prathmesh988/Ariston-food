@@ -13,7 +13,7 @@ const WORDMARK_SIZES = {
   lg: { box: 56, font: 15 },
 };
 
-/** Foodie web: the toasts lead with /logo-icon.webp (the square Foodie icon) in a rounded box (h-12 / h-14). */
+/** Ariston Cafe web: the toasts lead with /logo-icon.webp (the square Ariston Cafe icon) in a rounded box (h-12 / h-14). */
 const FOODIE_ICON = require("../../assets/public/images/logo-icon.webp");
 export const BrandToastIcon = ({ size = "lg" }) => {
   const box = size === "md" ? 48 : size === "sm" ? 40 : 56;
@@ -66,7 +66,7 @@ export const showNotificationToast = ({ title, message } = {}) => {
   );
 };
 
-export const showFoodieBrandedToast = ({ title, message, id = "foodie-branded-toast", duration = 4000 } = {}) => {
+export const showFoodieBrandedToast = ({ title, message, id = "ariston-branded-toast", duration = 4000 } = {}) => {
   markBrandToastShown(duration);
   toast.custom(
     () => (

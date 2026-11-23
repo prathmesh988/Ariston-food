@@ -182,7 +182,7 @@ export default function About() {
                 </View>
               </FadeIn>
 
-                <Text style={s.appTitle}>Foodie</Text>
+                <Text style={s.appTitle}>Ariston Cafe</Text>
 
               <FadeIn delay={0.4} y={10}>
                 <Text style={s.appSubtitle}>Food & Takeaway</Text>

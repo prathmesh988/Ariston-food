@@ -4,7 +4,7 @@
 // the JS bundle is still loading on its own thread, so the map is cheap when the home screen needs it.
 const { withMainActivity } = require('expo/config-plugins');
 
-const MARK = '// foodie: maps prewarm';
+const MARK = '// ariston: maps prewarm';
 // Called by reflection: the Maps SDK is a dependency of react-native-maps, not of the app module, so the app cannot
 // reference its classes at compile time. initialize(Context) loads the SDK module (the slow part).
 const CODE = `

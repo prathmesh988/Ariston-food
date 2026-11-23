@@ -31,7 +31,7 @@ Both screens are protected (signed-in rider only). DeliveryTabKeepAlive renders 
   - useNotificationInbox('delivery')
 - **OrdersV2** (/food/delivery/orders): `getCurrentDelivery`, `getOrders`, `rejectOrder`, `acceptOrder`.
 - **LiveMap**: `zoneAPI.getPublicZones`, Google Routes `computeRoutes`.
-- **PickupActionModal**: `uploadAPI.uploadMedia` (folder `foodie/delivery/bills`).
+- **PickupActionModal**: `uploadAPI.uploadMedia` (folder `ariston/delivery/bills`).
 - **DeliveryVerificationModal**: `verifyDropOtp`, `getPaymentStatus` (5 s poll), `createCollectQr`.
 - **Hook**:
   - socket events `join-delivery`, `resync`, `new_order`, `new_order_available`, `active_orders`, `active_order`, `delivery_capacity`, `play_notification_sound`, `order_ready`, `order_status_update`, `order_cancelled`, `order_deleted`, `order_reassigned_elsewhere`, `order_claimed`, `admin_notification`
@@ -105,6 +105,6 @@ It reads the active order, polyline, trip status, ETA, distance and the order-ma
 All files above: Built, not tested.
 
 ## 6. Blocked / notes for the integrator (shell, not edited)
-- **Images not bundled**: `cutlery_icon.webp`, `MapRider.png` and `profile_avatar.webp` (web `/assets/images/...`) are not in `mobile-delivery`. LiveMap and the header load them from `${VITE_ASSET_BASE_URL || https://foodie.org.in}/assets/images/...` through AppImage, so they need network. Better: copy them from `Frontend/public/assets/images/` into `src/assets/public/images/` and switch the three paths to `require(...)` (I was not allowed to create those files).
+- **Images not bundled**: `cutlery_icon.webp`, `MapRider.png` and `profile_avatar.webp` (web `/assets/images/...`) are not in `mobile-delivery`. LiveMap and the header load them from `${VITE_ASSET_BASE_URL || https://ariston.org.in}/assets/images/...` through AppImage, so they need network. Better: copy them from `Frontend/public/assets/images/` into `src/assets/public/images/` and switch the three paths to `require(...)` (I was not allowed to create those files).
 - **Socket reconnect on foreground**: `DeliveryApp.jsx`'s header comment says "the socket the screens use reconnects when the app comes back to the front", but nothing in the shell does it. I added it inside `useDeliveryNotifications` (visibilitychange → `socket.connect()` if disconnected).
 - **HistoryV2**: on the History tab the Home header is hidden and the content has no top padding (web `pt-0`), so HistoryV2 itself must leave room for the status bar (edge-to-edge). Pocket / Profile get `insets.top + 120` top padding from Home.

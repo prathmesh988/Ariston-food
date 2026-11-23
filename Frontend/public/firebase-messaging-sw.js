@@ -8,8 +8,8 @@ importScripts("https://www.gstatic.com/firebasejs/10.13.2/firebase-app-compat.js
 importScripts("https://www.gstatic.com/firebasejs/10.13.2/firebase-messaging-compat.js");
 
 const sanitize = (value) => String(value || "").trim().replace(/^['"]|['"]$/g, "");
-const CONFIG_CACHE = "foodie-fcm-config-v1";
-const CONFIG_URL = "/__foodie_fcm_web_config__";
+const CONFIG_CACHE = "ariston-fcm-config-v1";
+const CONFIG_URL = "/__ariston_fcm_web_config__";
 const notificationDedupWindowMs = 30000;
 
 let messagingReady = false;
@@ -116,8 +116,8 @@ async function resolveFirebaseConfig() {
 
 function shouldSkipDuplicateOsNotification(notificationKey) {
   if (!notificationKey) return false;
-  if (!self.__foodieOsDedup) self.__foodieOsDedup = {};
-  const shared = self.__foodieOsDedup;
+  if (!self.__aristonOsDedup) self.__aristonOsDedup = {};
+  const shared = self.__aristonOsDedup;
   const now = Date.now();
   for (const [key, timestamp] of Object.entries(shared)) {
     if (now - Number(timestamp) > notificationDedupWindowMs) delete shared[key];
@@ -226,7 +226,7 @@ async function showOsNotificationFromPayload(payload) {
     icon: "/logo-icon.webp",
     badge: "/logo-icon.webp",
     image,
-    tag: notificationKey || `foodie-${Date.now()}`,
+    tag: notificationKey || `ariston-${Date.now()}`,
     renotify: data.type === "admin_broadcast",
     silent: false,
     requireInteraction: data.type === "admin_broadcast",

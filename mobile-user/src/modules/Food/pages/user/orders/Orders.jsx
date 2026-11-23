@@ -885,7 +885,7 @@ Order again from this restaurant in the ${companyName} app.`
         }
         ListFooterComponent={
           <View style={{ alignItems: "center", marginTop: 32, marginBottom: 16 }}>
-            <Text style={s.branding}>foodie</Text>
+            <Text style={s.branding}>ariston</Text>
           </View>
         }
       />

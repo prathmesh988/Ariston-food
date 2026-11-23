@@ -963,7 +963,7 @@ export default function OrdersPage({ statusKey = "all" }) {
   }
 
   // Handle refund button click - show modal for wallet payments, confirm dialog for others
-  // Always open the modal so admin can choose Foodie wallet or bank
+  // Always open the modal so admin can choose Ariston Cafe wallet or bank
   const handleRefund = (order) => {
     setSelectedOrderForRefund(order)
     setRefundModalOpen(true)

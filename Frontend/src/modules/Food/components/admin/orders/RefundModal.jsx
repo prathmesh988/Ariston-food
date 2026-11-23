@@ -17,7 +17,7 @@ export default function RefundModal({ isOpen, onOpenChange, order, onConfirm, is
   // Bank refund is only possible for orders paid online (not wallet-paid ones)
   const isWalletPaid = order?.paymentType === "Wallet" || order?.payment?.method === "wallet"
   const canRefundToBank = !!order && !isWalletPaid
-  // Already credited to the Foodie wallet earlier: only "move to bank" makes sense now
+  // Already credited to the Ariston Cafe wallet earlier: only "move to bank" makes sense now
   const alreadyInWallet = !!order && order.paymentStatus === "Refunded" && order.refundDestination === "wallet"
 
   // Set default refund amount when order changes
@@ -125,7 +125,7 @@ export default function RefundModal({ isOpen, onOpenChange, order, onConfirm, is
             <label className={`flex items-start gap-3 p-3 border-2 rounded-lg cursor-pointer ${destination === "wallet" ? "border-purple-500 bg-purple-50" : "border-slate-200"}`}>
               <input type="radio" name="refund-destination" className="mt-1" checked={destination === "wallet"} onChange={() => setDestination("wallet")} disabled={isProcessing || alreadyInWallet} />
               <span className="text-sm text-slate-800">
-                <span className="font-semibold">Foodie Wallet</span>
+                <span className="font-semibold">Ariston Cafe Wallet</span>
                 <span className="block text-xs text-slate-600">
                   {alreadyInWallet ? "This refund has already been credited to the customer's wallet." : "Credited to the customer's wallet instantly."}
                 </span>

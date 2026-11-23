@@ -88,7 +88,7 @@ const CUSTOMIZATION_TOGGLES = [
     key: "diamond_membership_enabled",
     label: "Diamond Membership",
     description:
-      "Shows Foodie Diamond in the user app (Join button, member card, cart savings). When OFF it is hidden and no Diamond discount is applied.",
+      "Shows Ariston Cafe Diamond in the user app (Join button, member card, cart savings). When OFF it is hidden and no Diamond discount is applied.",
     defaultValue: true,
   },
   {

@@ -417,8 +417,8 @@ export default function OrderHelp() {
                       icon={Mail}
                       title="Email Support"
                       text={`Include order ${order.id} in subject`}
-                      linkText="support@foodie.com"
-                      link={`mailto:support@foodie.com?subject=${encodeURIComponent(`Help with Order ${order.id}`)}`}
+                      linkText="support@ariston.com"
+                      link={`mailto:support@ariston.com?subject=${encodeURIComponent(`Help with Order ${order.id}`)}`}
                     />
                   </View>
                   <View style={{ paddingTop: 16, borderTopWidth: 1, borderTopColor: k.border }}>

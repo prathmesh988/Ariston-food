@@ -350,7 +350,7 @@ export default function OTP() {
           </View>
 
           <View style={s.footer}>
-            <Text style={s.footerText}>Foodie Food Delivery</Text>
+            <Text style={s.footerText}>Ariston Cafe Food Delivery</Text>
           </View>
         </View>
       </ScrollView>

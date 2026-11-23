@@ -1,7 +1,7 @@
 import { toast } from "sonner"
 
 /**
- * Store links for the Foodie apps.
+ * Store links for the Ariston Cafe apps.
  *
  * Leave a link empty ("") while that app is not published yet: anything that
  * points at it (landing page buttons, footer "Apps For You", the QR code's
@@ -17,9 +17,9 @@ export const APP_LINKS = {
 }
 
 const APP_NAMES = {
-  user: "Foodie app",
-  restaurant: "Foodie Restaurant Partner app",
-  delivery: "Foodie Delivery Partner app",
+  user: "Ariston Cafe app",
+  restaurant: "Ariston Cafe Restaurant Partner app",
+  delivery: "Ariston Rider app",
 }
 
 /** True on iPhone, iPod and iPad (iPadOS reports itself as a Mac with touch). */

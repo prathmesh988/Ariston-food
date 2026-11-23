@@ -131,8 +131,8 @@ export default function CMSPage({
 
   const isSupport = endpoint?.includes("support") || defaultTitle?.toLowerCase().includes("support")
   const hasActualContent = pageData.content && pageData.content.replace(/<[^>]*>/g, "").trim().length > 0
-  // Foodie web: the CMS page's own email / phone, else the defaults it shows
-  const contactEmail = pageData.email || "support@foodie.com"
+  // Ariston Cafe web: the CMS page's own email / phone, else the defaults it shows
+  const contactEmail = pageData.email || "support@ariston.com"
   const contactPhone = pageData.mobile || "+91 00000 00000"
   const handleRaiseTicket = () => {
     if (isModuleAuthenticated(module.toLowerCase())) {
@@ -210,12 +210,12 @@ export default function CMSPage({
 
   const moduleLabel =
     module === "DRIVER"
-      ? "Foodie Captain"
+      ? "Ariston Cafe Captain"
       : module === "RESTAURANT"
-        ? "Foodie Restaurant Partner"
+        ? "Ariston Cafe Restaurant Partner"
         : module === "DELIVERY"
-          ? "Foodie Delivery Partner"
-          : "Foodie"
+          ? "Ariston Rider"
+          : "Ariston Cafe"
 
   const ContactCard = ({ icon: Icon, title, text, link, linkLabel, onPress, breakAll }) => {
     const inner = (
@@ -262,7 +262,7 @@ export default function CMSPage({
           </Pressable>
           <View style={{ flex: 1 }}>
             <Text style={s.title}>{pageData.title || defaultTitle}</Text>
-            <Text style={s.subtitle}>Foodie Information</Text>
+            <Text style={s.subtitle}>Ariston Cafe Information</Text>
           </View>
         </View>
 
@@ -345,7 +345,7 @@ export default function CMSPage({
 
           <Text style={s.footer}>
             Last updated: {now.toLocaleDateString("en-US", { year: "numeric", month: "long", day: "numeric" })}
-            {"\n"}© {now.getFullYear()} Foodie. All Rights Reserved.
+            {"\n"}© {now.getFullYear()} Ariston Cafe. All Rights Reserved.
           </Text>
         </ScrollView>
       </AnimatedPage>

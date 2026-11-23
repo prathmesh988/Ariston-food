@@ -953,7 +953,7 @@ export default function AdminSidebar({ isOpen = false, onClose, onCollapseChange
               <div className="flex items-center gap-3 min-w-0 animate-[slideIn_0.3s_ease-out]">
                 <img
                   src={brandLogo}
-                  alt={companyName || "Foodie"}
+                  alt={companyName || "Ariston Cafe"}
                   className="h-12 w-auto shrink-0 rounded-lg object-contain shadow-lg shadow-black/20"
                 />
                 <h2 className="text-sm font-semibold text-neutral-300 uppercase tracking-wider whitespace-nowrap">

@@ -1,5 +1,5 @@
 // Web: modules/Food/pages/user/profile/Profile.jsx — the Profile main tab (kept alive by MainTabKeepAlive): profile card
-// (Foodie Diamond look for members / when the plan is on sale), wallet, coupons, cart, saved addresses, Veg Mode,
+// (Ariston Cafe Diamond look for members / when the plan is on sale), wallet, coupons, cart, saved addresses, Veg Mode,
 // Appearance, collections, dining bookings, orders, More (help, about, safety, settings, log out), and the Veg Mode /
 // Appearance / Log out / balance warning / delete account popups.
 // Native: the page scrolls in a ScrollView (scroll memory = the kept-alive tab); Appearance writes 'appTheme' and
@@ -200,7 +200,7 @@ export default function Profile({ isTabActive = true }) {
   const displayName = userProfile?.name || userProfile?.phone || "User"
   const hasValidEmail = userProfile?.email && userProfile.email.trim() !== "" && userProfile.email.includes("@")
 
-  // Foodie Diamond: cached copy at once, fresh one while the Profile tab is open
+  // Ariston Cafe Diamond: cached copy at once, fresh one while the Profile tab is open
   const [diamond, setDiamond] = useState(() => getCachedDiamond())
   const isProfileTab = /\/profile\/?$/.test(location.pathname)
   useEffect(() => {
@@ -339,7 +339,7 @@ export default function Profile({ isTabActive = true }) {
               </View>
             </View>
           </View>
-          {/* Foodie Diamond strip, like Zomato's "Gold member · saved ₹53" */}
+          {/* Ariston Cafe Diamond strip, like Zomato's "Gold member · saved ₹53" */}
           {diamondCard && (
             <Link to="/food/user/diamond" onPressIn={() => preloadDiamondPage().catch(() => {})} style={({ pressed }) => [s.diamondStrip, pressed && { opacity: 0.9 }]}>
               <View style={s.diamondGem}>

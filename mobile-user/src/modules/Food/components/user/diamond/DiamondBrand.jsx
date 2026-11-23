@@ -1,4 +1,4 @@
-// Web: modules/Food/components/user/diamond/DiamondBrand.jsx — Foodie Diamond visual language: dark base, icy-blue
+// Web: modules/Food/components/user/diamond/DiamondBrand.jsx — Ariston Cafe Diamond visual language: dark base, icy-blue
 // "diamond" metal for the wordmark and accents. Same exports.
 // The web painted the metal on text with background-clip: text. Native text cannot be clipped to a gradient, so
 // <DiamondMetalText> draws the word as SVG text filled with the same gradient; `diamondTextStyle` (used on words inside
@@ -8,7 +8,7 @@ import { StyleSheet, View } from "react-native"
 import Svg, { Defs, G, LinearGradient as SvgLinearGradient, Path, Stop, Text as SvgText } from "react-native-svg"
 import { AppImage, Text } from "@/native/ui"
 import { fonts } from "@/theme"
-import foodieWordmark from "@food/assets/diamond/foodie-wordmark-white.webp"
+import foodieWordmark from "@food/assets/diamond/ariston-wordmark-white.webp"
 
 // Prince (18 Nov): first near-black (#0B0E13, "all black"), then saturated sapphire ("too blue, looks like AI"). Now
 // a calm slate navy: clearly blue next to the app's black / white, but muted. One solid colour, no gradients; the
@@ -107,7 +107,7 @@ export function DiamondGem({ size = 24, style, id = "gem" }) {
   )
 }
 
-/** "Foodie" over "DIAMOND", the O drawn as a gem in a ring. */
+/** "Ariston Cafe" over "DIAMOND", the O drawn as a gem in a ring. */
 export function DiamondWordmark({ size = "lg" }) {
   const big = size === "lg"
   const letterSize = big ? 68 : 34

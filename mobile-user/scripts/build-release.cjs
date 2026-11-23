@@ -1,7 +1,7 @@
 #!/usr/bin/env node
-// Local signed release APK -> <repo>/releases/Foodie-User-<version>.apk
+// Local signed release APK -> <repo>/releases/Ariston Cafe-User-<version>.apk
 //   npm run build:apk
-//   npm run build:aab -> <repo>/releases/Foodie-User-<version>-<versionCode>.aab (Play Store upload)
+//   npm run build:aab -> <repo>/releases/Ariston Cafe-User-<version>-<versionCode>.aab (Play Store upload)
 // Needs: Android SDK (ANDROID_HOME) with CMake 3.31.6 on Windows (see plugins/withShortCmakeObjectPaths.js), JDK 17,
 // and the upload keystore properties in ~/.gradle/gradle.properties (see plugins/withReleaseSigning.js); without them
 // Gradle signs with the debug key.
@@ -34,7 +34,7 @@ if (aab) {
   const bundle = path.join(androidDir, 'app', 'build', 'outputs', 'bundle', 'release', 'app-release.aab');
   const outDir = path.resolve(ROOT, '..', 'releases');
   fs.mkdirSync(outDir, { recursive: true });
-  const out = path.join(outDir, `Foodie-User-${app.version}-${app.android.versionCode}.aab`);
+  const out = path.join(outDir, `Ariston Cafe-User-${app.version}-${app.android.versionCode}.aab`);
   fs.copyFileSync(bundle, out);
   console.log(`\nAAB: ${out} (${(fs.statSync(out).size / 1048576).toFixed(1)} MB)`);
   process.exit(0);
@@ -46,6 +46,6 @@ snapshotNativeLibs(); // what a full build produced: later JS-only builds are ch
 verifyApk(apk);
 const outDir = path.resolve(ROOT, '..', 'releases');
 fs.mkdirSync(outDir, { recursive: true });
-const out = path.join(outDir, `Foodie-User-${app.version}.apk`);
+const out = path.join(outDir, `Ariston Cafe-User-${app.version}.apk`);
 fs.copyFileSync(apk, out);
 console.log(`\nAPK: ${out} (${(fs.statSync(out).size / 1048576).toFixed(1)} MB)`);

@@ -393,7 +393,7 @@ export const useDeliveryNotifications = () => {
 
       if (!audioRef.current) {
         audioRef.current = createAlertPlayer(soundFile);
-        debugLog('Audio initialized with:', selectedSound === 'original' ? 'Original' : 'Foodie Tone');
+        debugLog('Audio initialized with:', selectedSound === 'original' ? 'Original' : 'Ariston Rider Tone');
       }
 
       if (audioRef.current) {
@@ -663,7 +663,7 @@ export const useDeliveryNotifications = () => {
     if (!audioRef.current) {
       audioRef.current = createAlertPlayer(soundFile);
       if (audioRef.current) audioRef.current.volume = 0.7;
-      debugLog('Audio initialized with:', selectedSound === 'original' ? 'Original' : 'Foodie Tone');
+      debugLog('Audio initialized with:', selectedSound === 'original' ? 'Original' : 'Ariston Rider Tone');
     }
 
     return () => {

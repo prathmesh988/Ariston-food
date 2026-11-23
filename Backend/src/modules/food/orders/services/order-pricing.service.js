@@ -245,7 +245,7 @@ export async function calculateOrderPricing(userId, dto) {
     }
   }
 
-  // Foodie Diamond: members get free delivery / platform fee / extra % off (admin-set).
+  // Ariston Cafe Diamond: members get free delivery / platform fee / extra % off (admin-set).
   // The extra off is platform-funded like a coupon, so it is added to `discount` and every
   // payout/report keeps working; `diamondSavings` keeps the breakdown for the bill.
   const couponDiscount = discount;

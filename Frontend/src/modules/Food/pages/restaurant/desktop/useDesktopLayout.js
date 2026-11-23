@@ -4,7 +4,7 @@ const DESKTOP_QUERY = "(min-width: 1024px)"
 
 /**
  * True only for the browser dashboard on laptop / tablet-landscape / desktop screens.
- * Every phone / small-tablet screen keeps the mobile UI untouched. (Foodie's partner
+ * Every phone / small-tablet screen keeps the mobile UI untouched. (Ariston Cafe's partner
  * mobile app is a separate native app, so there is no WebView shell to detect here.)
  */
 export default function useDesktopLayout() {

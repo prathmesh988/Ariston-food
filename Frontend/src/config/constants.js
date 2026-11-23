@@ -1,5 +1,5 @@
 ﻿export const APP_CONFIG = {
-  NAME: 'Foodie',
+  NAME: 'Ariston Cafe',
   VERSION: '1.0.0',
 };
 

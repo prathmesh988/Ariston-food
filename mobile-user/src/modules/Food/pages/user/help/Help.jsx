@@ -306,8 +306,8 @@ export default function Help() {
                     </Text>
                   </ContactRow>
                   <ContactRow icon={Mail} title="Email Support" text="We'll respond within 24 hours">
-                    <Text style={[s.link, { color: k.primary }]} onPress={() => Linking.openURL("mailto:support@foodie.com").catch(() => {})}>
-                      support@foodie.com
+                    <Text style={[s.link, { color: k.primary }]} onPress={() => Linking.openURL("mailto:support@ariston.com").catch(() => {})}>
+                      support@ariston.com
                     </Text>
                   </ContactRow>
                   <ContactRow icon={MessageCircle} title="Live Chat" text="Available 24/7">

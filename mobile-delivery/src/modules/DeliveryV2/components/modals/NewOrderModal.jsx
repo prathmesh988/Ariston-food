@@ -20,7 +20,7 @@ const openUrl = (url) => {
 
 /**
  * NewOrderModal - Ported to Original 1:1 Theme with Slider Accept.
- * Matches the Foodie style Green Header + White Card.
+ * Matches the Ariston Rider style Green Header + White Card.
  */
 export const NewOrderModal = ({ order, onAccept, onReject, onMinimize, isMuted = false, onToggleMute }) => {
   const { riderLocation } = useDeliveryStore();

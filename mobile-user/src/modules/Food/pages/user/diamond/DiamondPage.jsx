@@ -1,4 +1,4 @@
-// Web: modules/Food/pages/user/diamond/DiamondPage.jsx — Foodie Diamond membership page (/food/user/diamond):
+// Web: modules/Food/pages/user/diamond/DiamondPage.jsx — Ariston Cafe Diamond membership page (/food/user/diamond):
 // wordmark + plan price (or "Member till ..."), savings till now (members), benefits, terms / support links and the
 // fixed "Join / Renew Diamond" bar (Razorpay order -> verify). Sections fade up one after another; the top bar title
 // fades in after scrolling past the logo. Cached copy draws at once, a fresh one replaces it.
@@ -138,7 +138,7 @@ export default function DiamondPage() {
       const fresh = await fetchDiamond()
       if (fresh) setData(fresh)
     } catch {
-      if (!getCachedDiamond()) toast.error("Could not load Foodie Diamond")
+      if (!getCachedDiamond()) toast.error("Could not load Ariston Cafe Diamond")
     } finally {
       setLoading(false)
     }
@@ -188,7 +188,7 @@ export default function DiamondPage() {
         currency: razorpay.currency || "INR",
         order_id: razorpay.orderId,
         name: companyName,
-        description: `Foodie Diamond · ${durationLabel || ""}`.trim(),
+        description: `Ariston Cafe Diamond · ${durationLabel || ""}`.trim(),
         prefill: {
           name: user.name || "",
           email: user.email || "",
@@ -206,7 +206,7 @@ export default function DiamondPage() {
             setCachedDiamond(next)
             setData(next)
             scrollRef.current?.scrollTo({ y: 0, animated: true })
-            toast.success(isMember ? "Diamond renewed" : "Welcome to Foodie Diamond")
+            toast.success(isMember ? "Diamond renewed" : "Welcome to Ariston Cafe Diamond")
           } catch (error) {
             toast.error(error?.response?.data?.message || "Payment verification failed. Please contact support.")
           } finally {
@@ -241,14 +241,14 @@ export default function DiamondPage() {
         <Pressable onPress={() => navigate(-1)} accessibilityLabel="Back" style={({ pressed }) => [{ marginLeft: -2, padding: 6 }, pressed && { opacity: 0.6 }]}>
           <ArrowLeft size={24} color={colors.white} strokeWidth={1.75} />
         </Pressable>
-        <Text style={[font, { fontSize: 19, lineHeight: 24, fontWeight: "600", color: colors.white, opacity: scrolled ? 1 : 0 }]}>Foodie Diamond</Text>
+        <Text style={[font, { fontSize: 19, lineHeight: 24, fontWeight: "600", color: colors.white, opacity: scrolled ? 1 : 0 }]}>Ariston Cafe Diamond</Text>
       </View>
 
       {loading ? (
         <DiamondSkeleton top={insets.top} />
       ) : !data ? (
         <View style={{ flex: 1, alignItems: "center", justifyContent: "center", gap: 12, paddingHorizontal: 24 }}>
-          <Text style={[font, { color: colors.gray[300], textAlign: "center" }]}>Could not load Foodie Diamond.</Text>
+          <Text style={[font, { color: colors.gray[300], textAlign: "center" }]}>Could not load Ariston Cafe Diamond.</Text>
           <Pressable onPress={load}>
             <Text style={[font, { fontWeight: "600", color: DIAMOND_ICE }]}>Try again</Text>
           </Pressable>
@@ -288,7 +288,7 @@ export default function DiamondPage() {
                       </View>
                     </>
                   ) : (
-                    <Text style={[font, { marginTop: 24, fontSize: 16, lineHeight: 22, color: colors.gray[300] }]}>Foodie Diamond is coming soon.</Text>
+                    <Text style={[font, { marginTop: 24, fontSize: 16, lineHeight: 22, color: colors.gray[300] }]}>Ariston Cafe Diamond is coming soon.</Text>
                   )}
                 </Reveal>
               </View>

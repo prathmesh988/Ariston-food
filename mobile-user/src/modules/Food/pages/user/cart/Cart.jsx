@@ -1599,7 +1599,7 @@ export default function Cart() {
   const packagingFee = pricing != null ? (pricing.packagingFee ?? 0) : (feeSettings.packagingFee ?? 0)
   const gstCharges = pricing != null ? (pricing.tax ?? 0) : Math.round(subtotal * ((feeSettings.gstRate ?? 0) / 100))
   const discount = pricing?.discount || (appliedCoupon ? Math.min(appliedCoupon.discount, subtotal * 0.5) : 0)
-  // Foodie Diamond: `discount` from the server already includes the Diamond extra off.
+  // Ariston Cafe Diamond: `discount` from the server already includes the Diamond extra off.
   const diamondSavings = pricing?.diamondSavings || null
   const diamondOffer = pricing?.diamondOffer || null
   const couponDiscount = Math.max(0, discount - Number(diamondSavings?.discount || 0))
@@ -3284,7 +3284,7 @@ export default function Cart() {
             )}
           </View>
 
-          {/* Foodie Diamond: what a member saves here, or what joining would save */}
+          {/* Ariston Cafe Diamond: what a member saves here, or what joining would save */}
           {!loadingPricing && (diamondSavings?.total > 0 || diamondOffer?.potentialSavings > 0) && (
             <Link to="/food/user/diamond" style={({ pressed }) => [s.diamondCard, pressed && { opacity: 0.9 }]}>
               <View style={s.diamondGemWrap}>
@@ -4190,7 +4190,7 @@ const useStyles = makeStyles((t) => {
     bogoLimitsText: { flexShrink: 1, fontSize: 12, lineHeight: 16, fontWeight: '500', color: d ? colors.gray[300] : colors.gray[700] },
     bogoStrike: { fontSize: 13, lineHeight: 18, fontWeight: '600', textDecorationLine: 'line-through', color: d ? colors.gray[300] : colors.gray[600] },
     bogoFreeText: { fontSize: 14, lineHeight: 20, fontWeight: '900', color: d ? colors.green[400] : colors.green[700] },
-    // Foodie Diamond strip (web: rounded-2xl px-4 py-3, background DIAMOND_BG, font Outfit)
+    // Ariston Cafe Diamond strip (web: rounded-2xl px-4 py-3, background DIAMOND_BG, font Outfit)
     diamondCard: { flexDirection: 'row', alignItems: 'center', gap: 12, borderRadius: 16, paddingHorizontal: 16, paddingVertical: 12, backgroundColor: '#0B0E13', ...shadow.sm },
     diamondGemWrap: { height: 36, width: 36, borderRadius: 9999, alignItems: 'center', justifyContent: 'center', backgroundColor: alpha('#ffffff', 0.07) },
     diamondTitle: { fontSize: 15, lineHeight: 21, fontWeight: '600', color: colors.white, fontFamily: 'Outfit' },

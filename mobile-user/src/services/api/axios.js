@@ -153,7 +153,7 @@ apiClient.interceptors.request.use(
 
     // Same live backend: mark local frontend so maintenance APIs stay open for dev.
     if (isLocalDevBrowser()) {
-      config.headers["X-Foodie-Client"] = "local-dev";
+      config.headers["X-Ariston-Client"] = "local-dev";
     }
 
     const token = getAccessToken(config);

@@ -1888,7 +1888,7 @@ export default function OrderTracking() {
         const successMessage = response.data?.message ||
           (paymentMethod === 'cash' || paymentMethod === 'cod'
             ? 'Order cancelled successfully. No refund required as payment was not made.'
-            : 'Order cancelled successfully. Refund has been added to your Foodie wallet.');
+            : 'Order cancelled successfully. Refund has been added to your Ariston Cafe wallet.');
         toast.success(successMessage);
         // the "order placed" card on home drops this order at once (it only re-read the orders every minute)
         window.dispatchEvent(new CustomEvent('order-cancelled', {
@@ -2592,9 +2592,9 @@ export default function OrderTracking() {
           <View style={{ gap: sp(5), paddingVertical: sp(6), paddingHorizontal: sp(2) }}>
             {isRazorpayPaidForDialog ? (
               <View style={s.walletRefundBox}>
-                <Text style={s.refundTitle}>Refund to Foodie Wallet</Text>
+                <Text style={s.refundTitle}>Refund to Ariston Cafe Wallet</Text>
                 <Text style={s.refundLabel}>
-                  {`₹${Number(order?.total || order?.totalAmount || 0).toFixed(2)} will be credited instantly to your Foodie wallet. You can use it on your next order.`}
+                  {`₹${Number(order?.total || order?.totalAmount || 0).toFixed(2)} will be credited instantly to your Ariston Cafe wallet. You can use it on your next order.`}
                 </Text>
               </View>
             ) : null}

@@ -15,9 +15,9 @@ import { getAppRoutePath } from "@/shared/utils/nativeShell";
 const WEBVIEW_SESSION_CACHE_BUSTER = `${Date.now()}-${Math.random().toString(36).slice(2, 8)}`;
 const APP_HOSTNAME = (() => {
   try {
-    return new URL(globalThis.location?.origin || "https://foodie.org.in").hostname;
+    return new URL(globalThis.location?.origin || "https://ariston.org.in").hostname;
   } catch {
-    return "foodie.org.in";
+    return "ariston.org.in";
   }
 })();
 
@@ -83,7 +83,7 @@ const RestaurantImageCarousel = React.memo(
         if (hasSignedParams) return resolvedUrl;
 
         try {
-          const parsed = new URL(resolvedUrl, globalThis.location?.origin || "https://foodie.org.in");
+          const parsed = new URL(resolvedUrl, globalThis.location?.origin || "https://ariston.org.in");
           const isLocalHost = /^(localhost|127\.0\.0\.1)$/i.test(parsed.hostname);
           const isSameHost = APP_HOSTNAME && parsed.hostname === APP_HOSTNAME;
 

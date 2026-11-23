@@ -1,4 +1,4 @@
-// /food/restaurant/** — the Foodie Restaurant Partner app (web: RestaurantRouter, phone layout). RestaurantApp
+// /food/restaurant/** — the Ariston Cafe Restaurant Partner app (web: RestaurantRouter, phone layout). RestaurantApp
 // brings the theme root, the router's session listeners, the global new-order card, the kept-alive bottom-bar
 // screens and the bottom bar; the Stack holds every other page. No slide animation: the web switches restaurant
 // screens instantly.

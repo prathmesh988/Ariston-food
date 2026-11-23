@@ -1,7 +1,7 @@
-# SOP vs Foodie Project — Gap Analysis
+# SOP vs Ariston Cafe Project — Gap Analysis
 
 **SOP:** `Food delivery application Documentation.pdf` (Master Blueprint + Part 1 Architecture + Part 2 Screen Spec)
-**Project:** `Foodie/` (Backend + Frontend), branch `main`, analysed on 2026-10-27
+**Project:** `Ariston Cafe/` (Backend + Frontend), branch `main`, analysed on 2026-10-27
 **Scope:** Read-only comparison. No code was changed.
 
 ### Status legend

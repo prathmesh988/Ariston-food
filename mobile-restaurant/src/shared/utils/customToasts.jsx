@@ -6,12 +6,12 @@ import { AppImage, Text } from "@/native/ui";
 import { colors, shadow } from "@/theme";
 import { markBrandToastShown } from "./toastGuard";
 
-/** Foodie web: the toasts lead with /logo-icon.webp (the square Foodie icon) in a rounded box (h-12 / h-14). */
+/** Ariston Cafe web: the toasts lead with /logo-icon.webp (the square Ariston Cafe icon) in a rounded box (h-12 / h-14). */
 const FOODIE_ICON = require("../../assets/public/images/logo-icon.webp");
 export const BrandToastIcon = ({ size = "lg" }) => {
   const box = size === "md" ? 48 : size === "sm" ? 40 : 56;
   return (
-    <View accessibilityLabel="Foodie" style={{ width: box, height: box, borderRadius: 16, overflow: "hidden", flexShrink: 0 }}>
+    <View accessibilityLabel="Ariston Cafe" style={{ width: box, height: box, borderRadius: 16, overflow: "hidden", flexShrink: 0 }}>
       <AppImage src={FOODIE_ICON} contentFit="contain" style={{ width: box, height: box }} />
     </View>
   );
@@ -59,7 +59,7 @@ export const showNotificationToast = ({ title, message } = {}) => {
   );
 };
 
-export const showFoodieBrandedToast = ({ title, message, id = "foodie-branded-toast", duration = 4000 } = {}) => {
+export const showFoodieBrandedToast = ({ title, message, id = "ariston-branded-toast", duration = 4000 } = {}) => {
   markBrandToastShown(duration);
   toast.custom(
     () => (

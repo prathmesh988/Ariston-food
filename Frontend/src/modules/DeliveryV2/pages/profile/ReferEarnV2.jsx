@@ -90,7 +90,7 @@ export const ReferEarnV2 = () => {
   const link = data?.shareLink || buildDeliveryReferralLink(code)
   const message =
     data?.shareMessage ||
-    `Hey! I deliver with Foodie and earn on my own schedule.\nJoin as a delivery partner using my referral code ${code}.\n\nSign up here: ${link}`
+    `Hey! I deliver with Ariston Cafe and earn on my own schedule.\nJoin as a delivery partner using my referral code ${code}.\n\nSign up here: ${link}`
 
   const handleCopy = async (what) => {
     const ok = await copyText(what === "code" ? code : link)
@@ -144,7 +144,7 @@ export const ReferEarnV2 = () => {
             <Card className="p-5">
               {data.enabled ? (
                 <>
-                  <p className="text-sm text-gray-500">Invite friends to deliver with Foodie</p>
+                  <p className="text-sm text-gray-500">Invite friends to deliver with Ariston Cafe</p>
                   <h2 className="mt-1 text-[26px] font-bold leading-tight">Earn up to {formatINR(data.maxEarning)}</h2>
                   <p className="mt-1.5 text-sm text-gray-600">{describePlan(data)}</p>
                 </>

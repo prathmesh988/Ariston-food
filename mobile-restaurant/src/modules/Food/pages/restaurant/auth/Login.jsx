@@ -104,7 +104,7 @@ export default function RestaurantLogin() {
   }
   const [loading, setLoading] = useState(false)
   const submitting = useRef(false)
-  // Foodie is restaurant-only (no "My Store"): the partner is always a restaurant partner.
+  // Ariston Cafe is restaurant-only (no "My Store"): the partner is always a restaurant partner.
   const partnerType = "restaurant"
   // The number already has an account for the OTHER role: ask before creating a second one.
 

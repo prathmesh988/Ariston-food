@@ -64,7 +64,7 @@ function getFoodieLogoUrl() {
         return `${frontendUrl}/logo.webp`;
     }
 
-    return 'https://foodieindia.cloud/logo.webp';
+    return 'https://aristontheoasis.in/logo.webp';
 }
 
 function getInlineLogoAttachment() {
@@ -82,10 +82,10 @@ function getInlineLogoAttachment() {
     try {
         const content = readFileSync(logoPath);
         cachedInlineLogoAttachment = {
-            filename: 'foodie-logo.webp',
+            filename: 'ariston-logo.webp',
             content,
             contentType: 'image/webp',
-            cid: 'foodie-logo'
+            cid: 'ariston-logo'
         };
         return cachedInlineLogoAttachment;
     } catch (error) {
@@ -104,7 +104,7 @@ function isValidEmail(email) {
     return EMAIL_REGEX.test(String(email || '').trim());
 }
 
-function resolveFromHeader(displayName = 'Foodie') {
+function resolveFromHeader(displayName = 'Ariston Cafe') {
     const emailUser = String(config.emailUser || '').trim();
     if (emailUser) {
         // Gmail SMTP requires the From address to match the authenticated account.
@@ -132,7 +132,7 @@ async function sendEmail({ to, subject, html, text, fromDisplay, logLabel = 'Ema
 
     try {
         await trans.sendMail({
-            from: fromDisplay || resolveFromHeader('Foodie'),
+            from: fromDisplay || resolveFromHeader('Ariston Cafe'),
             to,
             subject,
             text,
@@ -151,7 +151,7 @@ async function sendEmail({ to, subject, html, text, fromDisplay, logLabel = 'Ema
 
         try {
             await retryTrans.sendMail({
-                from: fromDisplay || resolveFromHeader('Foodie'),
+                from: fromDisplay || resolveFromHeader('Ariston Cafe'),
                 to,
                 subject,
                 text,
@@ -173,12 +173,12 @@ function buildEmailHeaderHtml() {
     const logoUrl = getFoodieLogoUrl();
     const safeLogoUrl = escapeHtml(logoUrl);
     const inlineLogo = getInlineLogoAttachment();
-    const logoSrc = inlineLogo ? 'cid:foodie-logo' : safeLogoUrl;
+    const logoSrc = inlineLogo ? 'cid:ariston-logo' : safeLogoUrl;
 
     return `
           <tr>
             <td style="background: ${PRIMARY_COLOR}; padding: 24px 32px; text-align: center;">
-              <img src="${logoSrc}" alt="Foodie" width="150" style="display: block; margin: 0 auto; max-width: 150px; width: 150px; height: auto; border: 0; outline: none; text-decoration: none; border-radius: 12px;" />
+              <img src="${logoSrc}" alt="Ariston Cafe" width="150" style="display: block; margin: 0 auto; max-width: 150px; width: 150px; height: auto; border: 0; outline: none; text-decoration: none; border-radius: 12px;" />
             </td>
           </tr>`;
 }
@@ -226,7 +226,7 @@ function buildFoodieEmailHtml({
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Foodie</title>
+  <title>Ariston Cafe</title>
 </head>
 <body style="margin: 0; padding: 0; background: #f4f5f7; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Arial, sans-serif;">
   <table role="presentation" cellpadding="0" cellspacing="0" width="100%" style="background: #f4f5f7; padding: 32px 16px;">
@@ -255,8 +255,8 @@ function buildFoodieEmailHtml({
           <tr>
             <td style="background: #fafafa; padding: 20px 32px; text-align: center; border-top: 1px solid #eee;">
               <p style="margin: 0; color: #999; font-size: 12px; line-height: 1.5;">
-                &copy; ${new Date().getFullYear()} Foodie. All rights reserved.<br>
-                <strong style="color: #666;">Team Foodie</strong>
+                &copy; ${new Date().getFullYear()} Ariston Cafe. All rights reserved.<br>
+                <strong style="color: #666;">Team Ariston Cafe</strong>
               </p>
             </td>
           </tr>
@@ -281,7 +281,7 @@ export async function sendAdminResetOtpEmail(to, otp) {
         return false;
     }
     const from = config.emailFrom || config.emailUser;
-    const subject = 'Your password reset code – Foodie Admin';
+    const subject = 'Your password reset code – Ariston Cafe Admin';
     const html = `
 <!DOCTYPE html>
 <html>
@@ -292,7 +292,7 @@ export async function sendAdminResetOtpEmail(to, otp) {
   <p style="font-size: 24px; font-weight: bold; letter-spacing: 4px; background: #f5f5f5; padding: 12px 16px; border-radius: 8px;">${otp}</p>
   <p style="color: #666; font-size: 14px;">If you did not request this, you can ignore this email.</p>
   <hr style="border: none; border-top: 1px solid #eee; margin: 20px 0;">
-  <p style="color: #999; font-size: 12px;">Foodie Admin</p>
+  <p style="color: #999; font-size: 12px;">Ariston Cafe Admin</p>
 </body>
 </html>`;
     const text = `Your password reset code is: ${otp}. It is valid for 10 minutes. If you did not request this, ignore this email.`;
@@ -302,7 +302,7 @@ export async function sendAdminResetOtpEmail(to, otp) {
         subject,
         html,
         text,
-        fromDisplay: `Foodie <${config.emailUser || from}>`,
+        fromDisplay: `Ariston Cafe <${config.emailUser || from}>`,
         logLabel: 'Admin reset OTP email'
     });
 }
@@ -320,8 +320,8 @@ export async function sendRestaurantApprovalEmail({ to, restaurantName, restaura
 
     const safeName = escapeHtml(restaurantName || 'your restaurant');
     const subject = isChangesApproval
-        ? '🎉 Your Restaurant Changes have been Approved | Foodie'
-        : '🎉 Your Restaurant has been Approved | Foodie';
+        ? '🎉 Your Restaurant Changes have been Approved | Ariston Cafe'
+        : '🎉 Your Restaurant has been Approved | Ariston Cafe';
 
     const html = buildFoodieEmailHtml({
         greeting: 'Hello,',
@@ -333,12 +333,12 @@ export async function sendRestaurantApprovalEmail({ to, restaurantName, restaura
         ],
         introParagraphs: isChangesApproval
             ? [
-                `Your profile changes for <strong>${safeName}</strong> have been approved on Foodie.`,
-                'Your updated restaurant details are now live on the Foodie platform. You can continue managing your business through the Foodie restaurant app.'
+                `Your profile changes for <strong>${safeName}</strong> have been approved on Ariston Cafe.`,
+                'Your updated restaurant details are now live on the Ariston Cafe platform. You can continue managing your business through the Ariston Cafe restaurant app.'
             ]
             : [
-                `<strong>${safeName}</strong> has been approved on Foodie. You can now start receiving orders through the Foodie app.`,
-                'Your restaurant profile is now live on the Foodie platform. Complete your menu setup, manage orders, and grow your business with us.'
+                `<strong>${safeName}</strong> has been approved on Ariston Cafe. You can now start receiving orders through the Ariston Cafe app.`,
+                'Your restaurant profile is now live on the Ariston Cafe platform. Complete your menu setup, manage orders, and grow your business with us.'
             ]
     });
 
@@ -346,13 +346,13 @@ export async function sendRestaurantApprovalEmail({ to, restaurantName, restaura
         'Congratulations!',
         '',
         isChangesApproval
-            ? `Your profile changes for ${restaurantName || 'your restaurant'} have been approved on Foodie.`
-            : `${restaurantName || 'Your restaurant'} has been approved on Foodie. You can now start receiving orders through the Foodie app.`,
+            ? `Your profile changes for ${restaurantName || 'your restaurant'} have been approved on Ariston Cafe.`
+            : `${restaurantName || 'Your restaurant'} has been approved on Ariston Cafe. You can now start receiving orders through the Ariston Cafe app.`,
         '',
         `Restaurant: ${restaurantName || '—'}`,
         `Status: ${isChangesApproval ? 'Changes Approved' : 'Approved'}`,
         '',
-        'Team Foodie'
+        'Team Ariston Cafe'
     ].join('\n');
 
     return sendEmail({
@@ -385,8 +385,8 @@ export async function sendRestaurantRejectionEmail({
     const safeName = escapeHtml(restaurantName || 'your restaurant');
 
     const subject = isChangesRejection
-        ? 'Your Restaurant Changes have been Rejected | Foodie'
-        : 'Your Restaurant has been Rejected | Foodie';
+        ? 'Your Restaurant Changes have been Rejected | Ariston Cafe'
+        : 'Your Restaurant has been Rejected | Ariston Cafe';
 
     const html = buildFoodieEmailHtml({
         greeting: 'Hello,',
@@ -407,8 +407,8 @@ export async function sendRestaurantRejectionEmail({
 
     const text = [
         isChangesRejection
-            ? 'Your restaurant changes on Foodie could not be approved.'
-            : 'Your restaurant registration on Foodie could not be approved.',
+            ? 'Your restaurant changes on Ariston Cafe could not be approved.'
+            : 'Your restaurant registration on Ariston Cafe could not be approved.',
         '',
         `Restaurant: ${restaurantName || '—'}`,
         'Status: Rejected',
@@ -416,7 +416,7 @@ export async function sendRestaurantRejectionEmail({
         '',
         'Please review the reason below and reapply when ready.',
         '',
-        'Team Foodie'
+        'Team Ariston Cafe'
     ].join('\n');
 
     return sendEmail({
@@ -441,22 +441,22 @@ export async function sendDeliveryApprovalEmail({ to, partnerName, partnerId, is
 
     const firstName = escapeHtml(getFirstName(partnerName));
     const subject = isChangesApproval
-        ? '🎉 Your Delivery Partner Changes have been Approved | Foodie'
-        : '🎉 Your Delivery Partner Account has been Approved | Foodie';
+        ? '🎉 Your Delivery Partner Changes have been Approved | Ariston Cafe'
+        : '🎉 Your Delivery Partner Account has been Approved | Ariston Cafe';
 
     const html = buildFoodieEmailHtml({
         greeting: 'Hello,',
         bannerType: 'success',
         bannerTitle: `Welcome ${firstName}!`,
         bannerMessage: isChangesApproval
-            ? 'Your profile changes have been approved. You can continue delivering with Foodie.'
-            : 'Your account is approved. You can now go online and start earning with Foodie.',
+            ? 'Your profile changes have been approved. You can continue delivering with Ariston Cafe.'
+            : 'Your account is approved. You can now go online and start earning with Ariston Cafe.',
         infoRows: [
             { label: 'Partner Name', value: partnerName || '—' },
             { label: 'Status', value: isChangesApproval ? 'Changes Approved' : 'Approved' }
         ],
         introParagraphs: [
-            'Open the Foodie delivery app, go online, and start accepting delivery requests in your zone.'
+            'Open the Ariston Cafe delivery app, go online, and start accepting delivery requests in your zone.'
         ]
     });
 
@@ -464,13 +464,13 @@ export async function sendDeliveryApprovalEmail({ to, partnerName, partnerId, is
         `Welcome ${getFirstName(partnerName)}!`,
         '',
         isChangesApproval
-            ? 'Your delivery partner profile changes have been approved on Foodie.'
-            : 'Your delivery partner account has been approved on Foodie.',
+            ? 'Your delivery partner profile changes have been approved on Ariston Cafe.'
+            : 'Your delivery partner account has been approved on Ariston Cafe.',
         '',
         `Partner: ${partnerName || '—'}`,
         `Status: ${isChangesApproval ? 'Changes Approved' : 'Approved'}`,
         '',
-        'Team Foodie'
+        'Team Ariston Cafe'
     ].join('\n');
 
     return sendEmail({
@@ -503,8 +503,8 @@ export async function sendDeliveryRejectionEmail({
     const firstName = escapeHtml(getFirstName(partnerName));
 
     const subject = isChangesRejection
-        ? 'Your Delivery Partner Changes have been Rejected | Foodie'
-        : 'Your Delivery Partner Account has been Rejected | Foodie';
+        ? 'Your Delivery Partner Changes have been Rejected | Ariston Cafe'
+        : 'Your Delivery Partner Account has been Rejected | Ariston Cafe';
 
     const html = buildFoodieEmailHtml({
         greeting: 'Hello,',
@@ -525,8 +525,8 @@ export async function sendDeliveryRejectionEmail({
 
     const text = [
         isChangesRejection
-            ? 'Your delivery partner profile changes on Foodie could not be approved.'
-            : 'Your delivery partner application on Foodie could not be approved.',
+            ? 'Your delivery partner profile changes on Ariston Cafe could not be approved.'
+            : 'Your delivery partner application on Ariston Cafe could not be approved.',
         '',
         `Partner: ${partnerName || '—'}`,
         'Status: Rejected',
@@ -534,7 +534,7 @@ export async function sendDeliveryRejectionEmail({
         '',
         'Please review the reason below and reapply when ready.',
         '',
-        'Team Foodie'
+        'Team Ariston Cafe'
     ].join('\n');
 
     return sendEmail({

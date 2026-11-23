@@ -3,19 +3,19 @@
 Where the prompt left a choice open, the safer option was taken and written down here.
 
 ## Identity / build
-1. **Package / name / scheme:** `com.foodie.restaurant`, "Foodie Restaurant Partner", `foodie-restaurant`. Firebase
+1. **Package / name / scheme:** `com.ariston.restaurant`, "Ariston Cafe Restaurant Partner", `ariston-restaurant`. Firebase
    `google-services.json` from Downloads (has the restaurant client).
-2. **Icon:** `Downloads\Foodie\Restaurant Partner Apk Logo.png` through `mobile-user/scripts/make-app-icons.cjs` (same sizes
+2. **Icon:** `Downloads\Ariston Cafe\Restaurant Partner Apk Logo.png` through `mobile-user/scripts/make-app-icons.cjs` (same sizes
    as the other three apps).
 3. **Splash:** the restaurant header's dark crimson `#66001D` (the end of the web header / bottom-bar gradient
-   `#B80B3D -> #66001D`) for the native splash, the window and the JS splash. Wordmark = the whole logo (Foodie +
+   `#B80B3D -> #66001D`) for the native splash, the window and the JS splash. Wordmark = the whole logo (Ariston Cafe +
    "Restaurant Partner" line) with the navy letters made white (`scripts/make-splash-wordmark.cjs`); the orange "Hello", the
    smile and the orange lines stay. Entrance = fades only: a restaurant counter, two hanging lamps and a plate with a cloche
    (dish cover) fade in below the wordmark, tagline "COOK · SERVE · GROW". Exit = one move when the app is ready (+250 ms,
    1.1 s, native driver): the cloche lifts up and tilts away, a warm glow + steam rise over the dish that was under it, then
    the splash fades. onDone is read from a ref.
-4. **Keystore:** new PKCS12 upload key `C:/Users/Prince/.foodie/foodie-restaurant-upload.jks`, alias
-   `foodie-restaurant`, random password in `RESTAURANT_KEYSTORE_README.txt` next to it, Gradle properties
+4. **Keystore:** new PKCS12 upload key `C:/Users/Prince/.ariston/ariston-restaurant-upload.jks`, alias
+   `ariston-restaurant`, random password in `RESTAURANT_KEYSTORE_README.txt` next to it, Gradle properties
    `FOODIE_RESTAURANT_*`. SHA-1 `5F:45:4C:9D:EA:25:D3:C1:0E:A3:9F:F8:12:AE:FA:F5:F6:7C:02:03`.
 5. **Packages:** the delivery app's package set unchanged (one `npm ci` from its lockfile, `legacy-peer-deps` like it);
    unused modules are harmless and removing them risked a second native build.

@@ -1,4 +1,4 @@
-// Web: modules/Food/pages/user/diamond/DiamondTerms.jsx — admin-written Foodie Diamond terms (GET diamond terms).
+// Web: modules/Food/pages/user/diamond/DiamondTerms.jsx — admin-written Ariston Cafe Diamond terms (GET diamond terms).
 // Plain text: blank lines split paragraphs, "1. Heading" lines become headings, lines starting "-" or "•" bullets.
 import React, { useEffect, useState } from "react"
 import { Pressable, ScrollView, View } from "react-native"
@@ -88,7 +88,7 @@ function DiamondTermsContent() {
       </View>
 
       <ScrollView contentContainerStyle={{ paddingHorizontal: 20, paddingVertical: 24, paddingBottom: 24 + insets.bottom }}>
-        <Text style={{ fontFamily: DIAMOND_FONT, marginBottom: 16, fontSize: 24, lineHeight: 32, fontWeight: "700", color: colors.gray[900] }}>Foodie Diamond</Text>
+        <Text style={{ fontFamily: DIAMOND_FONT, marginBottom: 16, fontSize: 24, lineHeight: 32, fontWeight: "700", color: colors.gray[900] }}>Ariston Cafe Diamond</Text>
         {terms === null ? (
           <View style={{ alignItems: "center", marginTop: 40 }}>
             <Spin>

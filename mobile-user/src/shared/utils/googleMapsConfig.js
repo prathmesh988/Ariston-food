@@ -13,7 +13,7 @@ watchAndInstallPlacesCompat();
 const sanitizeKey = (value) => String(value || "").trim().replace(/^['"]|['"]$/g, "");
 
 export const GOOGLE_MAPS_API_KEY = sanitizeKey(globalThis.__ENV__?.VITE_GOOGLE_MAPS_API_KEY);
-export const GOOGLE_MAPS_LOADER_ID = "foodie-google-maps";
+export const GOOGLE_MAPS_LOADER_ID = "ariston-google-maps";
 export const GOOGLE_MAPS_VERSION = "3.64";
 // A superset of what any screen needs; the same array instance is reused everywhere.
 export const GOOGLE_MAPS_LIBRARIES = Object.freeze(["drawing", "geometry", "places", "routes"]);

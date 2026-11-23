@@ -282,7 +282,7 @@ export async function createDiamondOrder(userId) {
     if (!oid) throw new ValidationError('User not found');
     const s = normalizeSettings(await getDiamondSettingsDoc({ fresh: true }));
     if (!(await isDiamondFeatureOn({ fresh: true })) || !s.enabled || s.price <= 0) {
-        throw new ValidationError('Foodie Diamond is not available right now');
+        throw new ValidationError('Ariston Cafe Diamond is not available right now');
     }
 
     const amountPaise = Math.round(s.price * 100);

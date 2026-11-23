@@ -354,7 +354,7 @@ export default function FinanceDetailsPage() {
                     rows={[
                       { label: 'GST on service and payment mechanism fees @18%', value: settlementData.taxDeductions?.gstOnServiceFees },
                       { label: 'TDS 194O', value: settlementData.taxDeductions.tds194O },
-                      { label: 'GST paid by Foodie on behalf of the restaurant u/s 9(5) of GST', value: settlementData.taxDeductions?.gstPaidByFoodie },
+                      { label: 'GST paid by Ariston Cafe on behalf of the restaurant u/s 9(5) of GST', value: settlementData.taxDeductions?.gstPaidByFoodie },
                     ]}
                   />
                   <Section

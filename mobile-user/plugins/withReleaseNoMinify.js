@@ -8,7 +8,7 @@ const fs = require('fs');
 const path = require('path');
 const { withDangerousMod, withGradleProperties } = require('expo/config-plugins');
 
-const RULES_MARK = '# foodie: Room / WorkManager';
+const RULES_MARK = '# ariston: Room / WorkManager';
 const RULES = `
 ${RULES_MARK} (WorkManager's database is created by reflection)
 -keep class * extends androidx.room.RoomDatabase { <init>(); }

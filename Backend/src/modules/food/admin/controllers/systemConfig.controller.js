@@ -63,7 +63,7 @@ const CUSTOMIZATION_TOGGLES = [
     {
         key: DIAMOND_FEATURE_KEY,
         defaultValue: true,
-        description: 'Foodie Diamond membership in the user app (Join button, member strip, cart savings, discounts). When OFF it is hidden everywhere and no Diamond discount is applied.'
+        description: 'Ariston Cafe Diamond membership in the user app (Join button, member strip, cart savings, discounts). When OFF it is hidden everywhere and no Diamond discount is applied.'
     },
     {
         key: 'driver_simulation_enabled',

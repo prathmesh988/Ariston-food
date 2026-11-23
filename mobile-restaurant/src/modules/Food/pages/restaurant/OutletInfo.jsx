@@ -441,7 +441,7 @@ export default function OutletInfo() {
             <TextInput
               value={editNameValue}
               onChangeText={(v) => setEditNameValue(v.replace(/[/-]/g, ''))}
-              placeholder="Ex: Foodie Express"
+              placeholder="Ex: Ariston Cafe Express"
               placeholderTextColor={colors.gray[400]}
               onFocus={() => setNameFocused(true)}
               onBlur={() => setNameFocused(false)}

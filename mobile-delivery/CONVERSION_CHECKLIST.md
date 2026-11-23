@@ -1,4 +1,4 @@
-# Conversion checklist — Foodie Delivery Partner (mobile-delivery)
+# Conversion checklist — Ariston Rider (mobile-delivery)
 
 Status per screen: **Built, not tested** = converted, all static checks pass, not yet opened on a phone.
 Nothing is "Verified" until checked on a real device (see REPORT.md "phone pe check karna").

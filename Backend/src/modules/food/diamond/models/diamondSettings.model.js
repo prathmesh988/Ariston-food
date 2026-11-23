@@ -1,7 +1,7 @@
 import mongoose from 'mongoose';
 
 /**
- * Foodie Diamond plan, set by admin (one active document).
+ * Ariston Cafe Diamond plan, set by admin (one active document).
  * Benefits are applied server-side in order pricing (see diamond.service.js).
  */
 const customBenefitSchema = new mongoose.Schema(

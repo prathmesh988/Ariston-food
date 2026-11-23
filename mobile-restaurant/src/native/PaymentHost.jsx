@@ -103,7 +103,7 @@ export function PaymentHost() {
         <WebView
           style={styles.web}
           originWhitelist={['*']}
-          source={isCheckout ? { html: checkoutHtml(serializable(session.rzp.options)), baseUrl: 'https://foodie.org.in' } : { uri: session.url }}
+          source={isCheckout ? { html: checkoutHtml(serializable(session.rzp.options)), baseUrl: 'https://ariston.org.in' } : { uri: session.url }}
           javaScriptEnabled
           domStorageEnabled
           setSupportMultipleWindows={false}

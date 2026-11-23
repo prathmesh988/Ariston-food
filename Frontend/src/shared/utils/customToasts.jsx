@@ -12,7 +12,7 @@ export const showNotificationToast = ({ title, message } = {}) => {
         <div className="h-12 w-12 rounded-2xl flex items-center justify-center">
           <img
             src="/logo-icon.webp"
-            alt="Foodie"
+            alt="Ariston Cafe"
             className="w-12 h-12 object-contain"
             onError={(e) => { e.target.style.display = 'none'; e.target.nextSibling.style.display = 'flex'; }}
           />
@@ -33,7 +33,7 @@ export const showNotificationToast = ({ title, message } = {}) => {
   });
 };
 
-export const showFoodieBrandedToast = ({ title, message, id = "foodie-branded-toast", duration = 4000 } = {}) => {
+export const showFoodieBrandedToast = ({ title, message, id = "ariston-branded-toast", duration = 4000 } = {}) => {
   toast.custom(
     () => (
       <div className="w-[calc(100vw-32px)] sm:w-[380px] bg-white shadow-[0_8px_30px_rgb(0,0,0,0.12)] rounded-3xl pointer-events-auto flex items-center gap-4 p-3.5 border border-gray-50 animate-in fade-in slide-in-from-top-4 z-[11000]">
@@ -41,7 +41,7 @@ export const showFoodieBrandedToast = ({ title, message, id = "foodie-branded-to
           <div className="h-14 w-14 rounded-2xl flex items-center justify-center">
             <img
               src="/logo-icon.webp"
-              alt="Foodie"
+              alt="Ariston Cafe"
               className="w-full h-full object-contain"
             />
           </div>

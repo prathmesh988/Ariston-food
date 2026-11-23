@@ -1,4 +1,4 @@
-# Foodie Restaurant Partner (restaurant app) — how a web file is converted
+# Ariston Cafe Restaurant Partner (restaurant app) — how a web file is converted
 
 The app in `mobile-restaurant/` is a **conversion** of the web restaurant-partner app in `Frontend/src`
 (`/food/restaurant/*` = `modules/Food/components/restaurant/RestaurantRouter.jsx` + `modules/Food/pages/restaurant/**` +
@@ -61,7 +61,7 @@ edit route files, `_layout.jsx` files or shell files.
 
 | Need | Use |
 |---|---|
-| `localStorage`, `sessionStorage`, `window.addEventListener/dispatchEvent`, `CustomEvent`, `document.visibilityState` + `visibilitychange`, `window.location` (pathname/search of the current route, origin `https://foodie.in`), `navigator.geolocation`, `navigator.onLine`, `navigator.clipboard`, `navigator.share`, `navigator.vibrate`, `matchMedia('(prefers-color-scheme: dark)')`, `import.meta.env.VITE_*` → `globalThis.__ENV__.VITE_*` | they just work (`src/lib/webCompat.js`). Keep the web logic that uses them. Tokens go to SecureStore automatically. |
+| `localStorage`, `sessionStorage`, `window.addEventListener/dispatchEvent`, `CustomEvent`, `document.visibilityState` + `visibilitychange`, `window.location` (pathname/search of the current route, origin `https://ariston.in`), `navigator.geolocation`, `navigator.onLine`, `navigator.clipboard`, `navigator.share`, `navigator.vibrate`, `matchMedia('(prefers-color-scheme: dark)')`, `import.meta.env.VITE_*` → `globalThis.__ENV__.VITE_*` | they just work (`src/lib/webCompat.js`). Keep the web logic that uses them. Tokens go to SecureStore automatically. |
 | `react-router-dom` (`useNavigate`, `useLocation` incl. `.state`, `useParams`, `useSearchParams`, `Link`, `Navigate`, `matchPath`, `useNavigationType`) | `@/lib/router` — same API. `useBeforeLeave(fn)` for back-button guards (`popstate` on the web). `Outlet`/`Routes` do not exist: layouts are Expo Router `_layout.jsx`. |
 | `sonner` / `react-hot-toast` | `import { toast } from '@/lib/toast'` (same API; `toast.custom(() => <View/>)` works) |
 | `lucide-react` | `lucide-react-native` (same icon names; `size`, `color`, `strokeWidth`; no className) |

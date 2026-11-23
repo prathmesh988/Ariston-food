@@ -88,7 +88,7 @@ export const config = {
         process.env.API_BASE_URL ||
         `http://localhost:${process.env.PORT || 5000}`
     ).replace(/\/+$/, ''),
-    // Set on a local/dev backend (e.g. https://foodie.org.in) to send every upload
+    // Set on a local/dev backend (e.g. https://ariston.org.in) to send every upload
     // and delete to the live server's /api/v1/uploads/internal instead of the
     // local disk. Ignored when NODE_ENV=production.
     uploadRemoteOrigin: String(process.env.UPLOAD_REMOTE_ORIGIN || '').trim().replace(/\/+$/, ''),

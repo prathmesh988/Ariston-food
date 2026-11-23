@@ -17,7 +17,7 @@ import { Alert, AppState, Linking, Platform } from 'react-native';
 import { hydrateStorage } from './storage';
 import { requestLocationDisclosure } from './locationDisclosure';
 
-export const RIDER_LOCATION_TASK = 'foodie-delivery-online-location';
+export const RIDER_LOCATION_TASK = 'ariston-delivery-online-location';
 
 const SEND_GAP_MS = 7000; // web: DeliveryHomeV2 sends at least every 7 s while online
 let lastSentAt = 0;
@@ -143,7 +143,7 @@ export async function startOnlineLocationUpdates() {
       pausesUpdatesAutomatically: false,
       foregroundService: {
         notificationTitle: 'You are online',
-        notificationBody: 'Foodie Delivery Partner is sharing your location to get orders.',
+        notificationBody: 'Ariston Rider is sharing your location to get orders.',
         notificationColor: '#15498B',
         killServiceOnDestroy: false,
       },
@@ -170,7 +170,7 @@ async function askToRunInBackground() {
     if (Date.now() - last < 24 * 60 * 60 * 1000) return;
     Alert.alert(
       'Keep getting orders with the screen off',
-      'In Battery settings choose "All apps", open Foodie Delivery Partner and select "Don\'t optimise", so your location and new orders keep coming while the phone is locked.\n\nOn Xiaomi / Redmi / POCO phones set Battery saver to "No restrictions" and turn on Autostart in the app settings.',
+      'In Battery settings choose "All apps", open Ariston Rider and select "Don\'t optimise", so your location and new orders keep coming while the phone is locked.\n\nOn Xiaomi / Redmi / POCO phones set Battery saver to "No restrictions" and turn on Autostart in the app settings.',
       [
         { text: 'Not now', style: 'cancel', onPress: () => localStorage.setItem(BATTERY_ASKED_KEY, String(Date.now())) },
         { text: 'App settings', onPress: () => Linking.openSettings().catch(() => {}) },

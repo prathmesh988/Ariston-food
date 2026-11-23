@@ -1,8 +1,8 @@
 // Signs local release builds (./gradlew assembleRelease) with the upload keystore named in Gradle properties,
 // so the generated android/ folder never has to be edited by hand. The keystore and passwords stay outside the repo:
 //   ~/.gradle/gradle.properties
-//     FOODIE_RESTAURANT_STORE_FILE=C:/Users/<you>/.foodie/foodie-restaurant-upload.jks
-//     FOODIE_RESTAURANT_KEY_ALIAS=foodie-restaurant
+//     FOODIE_RESTAURANT_STORE_FILE=C:/Users/<you>/.ariston/ariston-cafe-restaurant-upload.jks
+//     FOODIE_RESTAURANT_KEY_ALIAS=ariston-cafe-restaurant
 //     FOODIE_RESTAURANT_STORE_PASSWORD=...
 //     FOODIE_RESTAURANT_KEY_PASSWORD=...
 // Without those properties the release build falls back to the debug key (as the Expo template does).

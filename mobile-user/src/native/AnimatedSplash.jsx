@@ -1,6 +1,6 @@
-// App splash (native addition; the web's App.jsx splash is commented out). Foodie red; the restaurant (cloche) and
+// App splash (native addition; the web's App.jsx splash is commented out). Ariston Cafe red; the restaurant (cloche) and
 // delivery (scooter) apps have their own scene, the customer app builds a burger:
-//   1. entrance: the white "Foodie" wordmark starts exactly where the native splash (app.json) drew it, grows and
+//   1. entrance: the white "Ariston Cafe" wordmark starts exactly where the native splash (app.json) drew it, grows and
 //      lifts; a warm spotlight and a plate fade in below it (fades only: the UI thread stalls while the app mounts
 //      behind the splash, and anything moving then jumps - restaurant/delivery lesson);
 //   2. show (once the app is ready and mounted, so the UI thread is free): the burger is built on the plate layer by
@@ -11,14 +11,14 @@
 // smile's JS-driven width was mixed with native-driven transforms) "had nothing of food in it" - replaced.
 // Prince (18 Nov, later): the splash took ~4.5 s - too slow on every launch ("fast and smooth like Zomato"). Start delay
 // 200 ms, glide 420, burger 700, exit 250; the app mounts after the burger is built (app/_layout.jsx).
-// Every animation runs on the native driver. Same API as the other Foodie apps: ready / onShown / onDone, SPLASH_BG.
+// Every animation runs on the native driver. Same API as the other Ariston Cafe apps: ready / onShown / onDone, SPLASH_BG.
 import React, { useEffect, useRef, useState } from 'react';
 import { Animated, Easing, Image, StyleSheet, Text, View, useWindowDimensions } from 'react-native';
 import { StatusBar } from 'expo-status-bar';
 import Svg, { Circle, Ellipse, G, Path, Rect } from 'react-native-svg';
 import { fonts } from '@/theme';
 
-// white "Foodie" letters + green leaf + smile, 900 x 421 (same mark as assets/splash-icon-light.png, where it is
+// white "Ariston Cafe" letters + green leaf + smile, 900 x 421 (same mark as assets/splash-icon-light.png, where it is
 // 70 % of the 1024 canvas shown 240 dp wide)
 const WORDMARK = require('../../assets/splash-wordmark-light.png');
 const WORDMARK_RATIO = 421 / 900;

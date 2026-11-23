@@ -258,15 +258,15 @@ export function createPlacesAutocomplete(input, options = {}) {
 
   // Some pages force every `.pac-container` to display:block (z-index fixes). An empty list
   // must never show as a bare bordered box, so empty = hidden, whatever inline style says.
-  if (!document.getElementById("foodie-places-new-style")) {
+  if (!document.getElementById("ariston-places-new-style")) {
     const style = document.createElement("style")
-    style.id = "foodie-places-new-style"
-    style.textContent = ".foodie-places-new:empty{display:none !important}"
+    style.id = "ariston-places-new-style"
+    style.textContent = ".ariston-places-new:empty{display:none !important}"
     document.head.appendChild(style)
   }
 
   const box = document.createElement("div")
-  box.className = "pac-container foodie-places-new"
+  box.className = "pac-container ariston-places-new"
   box.setAttribute("role", "listbox")
   Object.assign(box.style, {
     position: "fixed",

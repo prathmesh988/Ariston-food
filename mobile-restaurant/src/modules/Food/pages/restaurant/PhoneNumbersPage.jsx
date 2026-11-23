@@ -285,7 +285,7 @@ export default function PhoneNumbersPage() {
             <View style={{ flex: 1 }}>
               <Text style={s.cardTitle}>Order reminder numbers</Text>
               <Text style={s.cardSub}>
-                Should always be available for Foodie to reach out for live order support and order reminders.
+                Should always be available for Ariston Cafe to reach out for live order support and order reminders.
               </Text>
             </View>
           </View>
@@ -323,7 +323,7 @@ export default function PhoneNumbersPage() {
             </View>
             <View style={{ flex: 1 }}>
               <Text style={s.cardTitle}>Restaurant page number</Text>
-              <Text style={s.cardSub}>Number for Foodie customers to call your restaurant.</Text>
+              <Text style={s.cardSub}>Number for Ariston Cafe customers to call your restaurant.</Text>
             </View>
           </View>
 

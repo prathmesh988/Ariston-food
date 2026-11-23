@@ -214,7 +214,7 @@ export const ProfileV2 = () => {
                 <Text style={styles.referSub}>
                   {referralStats?.enabled && referralStats?.maxEarning > 0
                     ? `Earn up to ₹${Number(referralStats.maxEarning).toLocaleString("en-IN")} when friends join as delivery partners`
-                    : "Invite friends to deliver with Foodie"}
+                    : "Invite friends to deliver with Ariston Rider"}
                 </Text>
                 <View style={styles.referLinkRow}>
                   <Text style={styles.referLink}>Invite friends</Text>

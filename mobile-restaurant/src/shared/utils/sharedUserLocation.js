@@ -1,6 +1,6 @@
 export const FOOD_USER_LOCATION_KEY = "userLocation"
-export const TAXI_LOCATION_STORAGE_KEY = "foodie:lastLocation"
-export const TAXI_LOCATION_UPDATED_EVENT = "foodie:location-updated"
+export const TAXI_LOCATION_STORAGE_KEY = "ariston:lastLocation"
+export const TAXI_LOCATION_UPDATED_EVENT = "ariston:location-updated"
 export const FOOD_LOCATION_UPDATED_EVENT = "userLocationUpdated"
 export const LOCATION_ALLOWED_KEY = "foodie_location_allowed"
 /**

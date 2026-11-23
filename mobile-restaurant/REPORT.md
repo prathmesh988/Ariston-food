@@ -1,11 +1,11 @@
-# Foodie Restaurant Partner — native app report (27 Oct 2026, update 2)
+# Ariston Cafe Restaurant Partner — native app report (27 Oct 2026, update 2)
 
 ## Kya ho gaya
 - Web ka restaurant partner app (`/food/restaurant/*`) poora Expo / React Native me convert: `mobile-restaurant/`.
-- Package `com.foodie.restaurant`, naam "Foodie Restaurant Partner", logo `Downloads/Foodie/Restaurant Partner Apk Logo.png`.
+- Package `com.ariston.restaurant`, naam "Ariston Cafe Restaurant Partner", logo `Downloads/Ariston Cafe/Restaurant Partner Apk Logo.png`.
 - Splash: maroon `#66001D`, wordmark, soft roshni me dhakkan wali thaali — jaate waqt dhakkan uthke fade hota hai aur bhaap wali dish dikhti hai, tagline COOK · SERVE · GROW (dish ke neeche).
-- Signed release: `releases/Foodie-Restaurant-1.0.0.apk` (v2 signature OK, 29/29 arm64 libraries). Keystore
-  `C:/Users/Prince/.foodie/foodie-restaurant-upload.jks` (password README ke saath), SHA-1
+- Signed release: `releases/Ariston Cafe-Restaurant-1.0.0.apk` (v2 signature OK, 29/29 arm64 libraries). Keystore
+  `C:/Users/Prince/.ariston/ariston-restaurant-upload.jks` (password README ke saath), SHA-1
   `0B:D3:73:0A:F8:11:3B:33:38:93:F7:A6:FC:EF:2E:50:73:FE:28:C3 (16 Nov: nayi keystore, purani is computer pe nahi thi)`.
 
 ## Checks
@@ -41,7 +41,7 @@
 `Backend/src/modules/food/restaurant/models/restaurant.model.js`, `.../services/restaurant.service.js`.
 
 ## 16 Nov — web vs native compare + fixes
-- Toast ka icon "Hello Parth" likha tha → ab web jaisa Foodie `logo-icon.webp`.
+- Toast ka icon "Hello Parth" likha tha → ab web jaisa Ariston Cafe `logo-icon.webp`.
 - Login logo: web ab `/logo.webp` banner (h-14, rounded, shadow) dikhata hai → native bhi wahi.
 - Menu Categories: native kehta tha "admin approval nahi chahiye", jabki backend category ko pending rakhta hai → web
   wale texts / toasts wapas ("sent for admin approval", "Foods can be added only after approval").
@@ -55,7 +55,7 @@
 - FSSAI me PDF upload ka option nahi (sirf camera / gallery).
 
 ## Phone pe check karna (Built, not tested)
-1. Install: purana web wala "Foodie Restaurant Partner" APK ho toh pehle uninstall karo, phir `releases/Foodie-Restaurant-1.0.0.apk` file manager se.
+1. Install: purana web wala "Ariston Cafe Restaurant Partner" APK ho toh pehle uninstall karo, phir `releases/Ariston Cafe-Restaurant-1.0.0.apk` file manager se.
 2. Login (OTP 1234) → Orders home. Header ka Open/Closed switch dabao → status badalna chahiye.
 3. Naya order (user app se ek test order): app khula / background / screen off pe ring + accept-reject popup. Accept → Preparing → Ready → handover.
 4. Orders → "Full History" → date range calendar → order detail → bill PDF share.
