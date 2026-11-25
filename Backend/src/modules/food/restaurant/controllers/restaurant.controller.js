@@ -21,9 +21,16 @@ import {
 } from '../../dining/services/dining.service.js';
 import { validateRestaurantRegisterDto } from '../validators/restaurant.validator.js';
 import { sendResponse } from '../../../../utils/response.js';
+import { isSingleVendor } from '../../../../config/platformMode.js';
 
 export const registerRestaurantController = async (req, res, next) => {
     try {
+        if (isSingleVendor()) {
+            return res.status(403).json({
+                success: false,
+                message: 'Restaurant registration is disabled in Single-Vendor mode. Only the administrator can provision accounts for Ariston Cafe.'
+            });
+        }
         const validated = validateRestaurantRegisterDto(req.body);
         const restaurant = await registerRestaurant(validated, req.files);
         return sendResponse(res, 201, 'Restaurant registered successfully', restaurant);

@@ -22,6 +22,7 @@ import {
 } from './auth.controller.js';
 import { authMiddleware, requireAdmin } from './auth.middleware.js';
 import { authRateLimiter } from '../../middleware/rateLimit.js';
+import { marketplaceOnly } from '../../middleware/marketplaceOnly.js';
 
 const router = express.Router();
 
@@ -29,9 +30,11 @@ const router = express.Router();
 router.post('/user/request-otp', authRateLimiter, requestUserOtpController);
 router.post('/user/verify-otp', authRateLimiter, verifyUserOtpController);
 
+// Restaurant OTP auth — works in both modes (owner logs in via restaurant OTP in single_vendor too)
 router.post('/restaurant/request-otp', authRateLimiter, requestRestaurantOtpController);
 router.post('/restaurant/verify-otp', authRateLimiter, verifyRestaurantOtpController);
-router.post('/restaurant/reapply', authRateLimiter, reapplyRestaurantController);
+// Reapply is only relevant when restaurant self-registered (marketplace)
+router.post('/restaurant/reapply', marketplaceOnly, authRateLimiter, reapplyRestaurantController);
 
 router.post('/delivery/request-otp', authRateLimiter, requestDeliveryOtpController);
 router.post('/delivery/verify-otp', authRateLimiter, verifyDeliveryOtpController);

@@ -1,5 +1,6 @@
 import { FoodTransaction } from '../models/foodTransaction.model.js';
 import { FoodRestaurantCommission } from '../../admin/models/restaurantCommission.model.js';
+import { isSingleVendor } from '../../../../config/platformMode.js';
 import mongoose from 'mongoose';
 
 const RESTAURANT_COMMISSION_CACHE_MS = 60 * 1000;
@@ -52,6 +53,17 @@ export function computeRestaurantCommissionAmount(baseAmount, rule) {
 export async function getRestaurantCommissionSnapshot(orderDoc) {
   const baseAmount =
     Number(orderDoc?.pricing?.baseSubtotal ?? orderDoc?.pricing?.subtotal ?? 0) || 0;
+
+  // Single-vendor mode: platform owns the restaurant, commission is 0
+  if (isSingleVendor()) {
+    return {
+      commissionAmount: 0,
+      commissionType: 'percentage',
+      commissionValue: 0,
+      baseAmount,
+    };
+  }
+
   const restaurantIdRaw =
     orderDoc?.restaurantId?._id ?? orderDoc?.restaurantId ?? null;
 

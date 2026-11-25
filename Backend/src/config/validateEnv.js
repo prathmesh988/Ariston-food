@@ -1,5 +1,6 @@
-﻿import { config } from './env.js';
+import { config } from './env.js';
 import { logger } from '../utils/logger.js';
+import { getPlatformMode, getDefaultRestaurantId } from './platformMode.js';
 
 /**
  * Validates required environment configuration on startup.
@@ -35,6 +36,15 @@ export const validateConfig = () => {
             missing.push(`ASSET_BASE_URL must be an https:// origin (got "${assetBase}")`);
         } else if (/localhost|127\.0\.0\.1/i.test(assetBase)) {
             missing.push(`ASSET_BASE_URL must not point at localhost in production (got "${assetBase}")`);
+        }
+    }
+
+    // Single-vendor mode: DEFAULT_RESTAURANT_ID must be a valid 24-char ObjectId
+    if (getPlatformMode() === 'single_vendor') {
+        try {
+            getDefaultRestaurantId(); // throws if missing or invalid
+        } catch (err) {
+            missing.push(err.message);
         }
     }
 

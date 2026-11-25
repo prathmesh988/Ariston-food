@@ -36,6 +36,7 @@ import {
   View,
   useWindowDimensions,
 } from 'react-native';
+import { usePlatformMode } from '@food/hooks/usePlatformMode';
 import { LinearGradient } from 'expo-linear-gradient';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import DateTimePicker, { DateTimePickerAndroid } from '@react-native-community/datetimepicker';
@@ -629,12 +630,13 @@ export default function ExploreMore() {
   ];
 
   // All sections with their items
+  const { isSingleVendor } = usePlatformMode();
   const allSections = [
     { title: 'Manage outlet', items: manageOutletItems, key: 'manage-outlet' },
     { title: 'Settings', items: settingsItems, key: 'settings' },
     { title: 'Orders', items: ordersItems, key: 'orders' },
     { title: 'Help', items: helpItems, key: 'help' },
-    { title: 'Finance', items: accountingItems, key: 'accounting' },
+    ...(!isSingleVendor ? [{ title: 'Finance', items: accountingItems, key: 'accounting' }] : []),
   ];
 
   // Filter logic

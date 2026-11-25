@@ -1,4 +1,4 @@
-﻿import mongoose from 'mongoose';
+import mongoose from 'mongoose';
 import { ValidationError, NotFoundError } from '../../../../core/auth/errors.js';
 import { logger } from '../../../../utils/logger.js';
 import { releaseStoredAssets } from '../../../../services/assetCleanup.service.js';
@@ -3193,6 +3193,8 @@ export async function updateRestaurantById(id, body = {}) {
     if (body.ownerEmail !== undefined) doc.ownerEmail = toStr(body.ownerEmail).toLowerCase();
     if (body.ownerPhone !== undefined) doc.ownerPhone = toStr(body.ownerPhone);
     if (body.primaryContactNumber !== undefined) doc.primaryContactNumber = toStr(body.primaryContactNumber);
+    if (body.email !== undefined) doc.email = toStr(body.email).toLowerCase();
+    else if (body.primaryEmail !== undefined) doc.email = toStr(body.primaryEmail).toLowerCase();
 
     if (body.pureVegRestaurant !== undefined) {
         doc.pureVegRestaurant = parseBooleanLike(body.pureVegRestaurant, 'pureVegRestaurant');
@@ -3278,7 +3280,29 @@ export async function updateRestaurantById(id, body = {}) {
         }
     }
 
+    if (body.authorizedLogins !== undefined && Array.isArray(body.authorizedLogins)) {
+        doc.authorizedLogins = body.authorizedLogins
+            .filter((l) => l && (l.phone || typeof l === 'string'))
+            .map((l) => {
+                if (typeof l === 'string') {
+                    return { phone: toStr(l), name: '', role: 'staff', createdAt: new Date() };
+                }
+                return {
+                    name: toStr(l.name),
+                    phone: toStr(l.phone),
+                    role: toStr(l.role) || 'staff',
+                    createdAt: l.createdAt ? new Date(l.createdAt) : new Date(),
+                };
+            });
+    }
+
     await doc.save();
+    try {
+        const { isSingleVendor, getDefaultRestaurantId, invalidateDefaultRestaurantCache } = await import('../../../../config/platformMode.js');
+        if (isSingleVendor() && String(id) === String(getDefaultRestaurantId())) {
+            await invalidateDefaultRestaurantCache();
+        }
+    } catch {}
     void releaseStoredAssets(previousImages, restaurantImages());
     return FoodRestaurant.findById(id).select('-__v').populate('zoneId', 'name zoneName serviceLocation isActive').lean();
 }
@@ -3346,6 +3370,8 @@ export async function updateRestaurantLocation(id, body = {}) {
     }
     doc.location.type = 'Point';
     if (latitude !== null && longitude !== null) {
+        doc.latitude = latitude;
+        doc.longitude = longitude;
         doc.location.latitude = latitude;
         doc.location.longitude = longitude;
         doc.location.coordinates = [longitude, latitude];

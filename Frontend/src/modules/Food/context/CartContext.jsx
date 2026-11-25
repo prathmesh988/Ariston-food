@@ -1,4 +1,4 @@
-﻿// src/modules/Food/context/CartContext.jsx
+// src/modules/Food/context/CartContext.jsx
 import {
   createContext,
   useContext,
@@ -12,6 +12,7 @@ import { toast } from "sonner"
 import { foodCartAPI } from "@food/api"
 import { useProfile } from "@food/context/ProfileContext"
 import { buildCartLineId } from "@food/utils/foodVariants"
+import { usePlatformMode } from "@food/hooks/usePlatformMode"
 
 const debugWarn = (...args) => {}
 const debugError = (...args) => {}
@@ -338,6 +339,7 @@ export function CartProvider({ children }) {
   const [lastRemoveEvent, setLastRemoveEvent] = useState(null)
   const [cartMode, setCartModeState] = useState(readCartMode)
   const { orderType } = useProfile()
+  const { isSingleVendor, defaultRestaurantId } = usePlatformMode()
   const currentMode = toCartMode(orderType)
 
   const setCartMode = useCallback((mode) => {
@@ -569,6 +571,11 @@ export function CartProvider({ children }) {
     async (item, sourcePosition = null) => {
       if (!item) return { ok: false, error: "Invalid item" }
 
+      if (isSingleVendor) {
+        if (!item.restaurantId) item.restaurantId = defaultRestaurantId
+        if (!item.restaurant) item.restaurant = "Ariston Cafe"
+      }
+
       if (normalizedCart.length > 0 && isCartModeMismatch) {
         const error = `Your ${cartModeLabel(cartMode)} cart already has items. Clear it to start a ${cartModeLabel(currentMode)} order.`
         toast.error(error, {
@@ -597,7 +604,7 @@ export function CartProvider({ children }) {
       const authed = isUserAuthenticated()
       if (!authed) {
         // Guest path (local only)
-        if (normalizedCart.length > 0) {
+        if (!isSingleVendor && normalizedCart.length > 0) {
           const currentOrderType = getItemOrderType(normalizedCart[0])
           const nextOrderType = getItemOrderType(item)
           if (currentOrderType === "food" && nextOrderType === "food") {
@@ -626,10 +633,15 @@ export function CartProvider({ children }) {
           }
         }
         if (!item?.restaurantId && !item?.restaurant) {
-          return {
-            ok: false,
-            error: "Item is missing restaurant information. Please refresh the page.",
-            code: "MISSING_RESTAURANT",
+          if (isSingleVendor) {
+            item.restaurantId = defaultRestaurantId
+            item.restaurant = "Ariston Cafe"
+          } else {
+            return {
+              ok: false,
+              error: "Item is missing restaurant information. Please refresh the page.",
+              code: "MISSING_RESTAURANT",
+            }
           }
         }
 
@@ -730,12 +742,16 @@ export function CartProvider({ children }) {
         const code = err?.response?.data?.code || err?.code
         const message = apiErrorMessage(err)
         if (code === "RESTAURANT_MISMATCH" || /another restaurant|already contains/i.test(message)) {
+          if (isSingleVendor) {
+            await clearCart()
+            return addToCart(item, sourcePosition)
+          }
           return { ok: false, error: message, code: "RESTAURANT_MISMATCH" }
         }
         return { ok: false, error: message }
       }
     },
-    [applyServerCart, normalizedCart, isCartModeMismatch, cartMode, currentMode, setCartMode, clearCart, scheduleFlush, flushLine],
+    [applyServerCart, normalizedCart, isCartModeMismatch, cartMode, currentMode, setCartMode, clearCart, scheduleFlush, flushLine, isSingleVendor, defaultRestaurantId],
   )
 
   const removeFromCart = useCallback(

@@ -1,4 +1,4 @@
-﻿import { Outlet, useLocation, useNavigate, useNavigationType } from "react-router-dom"
+import { Outlet, useLocation, useNavigate, useNavigationType } from "react-router-dom"
 import { useEffect, useState, createContext, useContext, useRef, useCallback, useMemo } from "react"
 import { toast } from "sonner"
 import { ProfileProvider } from "@food/context/ProfileContext"
@@ -334,10 +334,13 @@ function UserLayoutContent() {
                        normalizedPath.includes('privacy') || 
                        normalizedPath.includes('support');
 
+  const isTakeawayOrDining = normalizedPath.includes('takeaway') || normalizedPath.includes('dining');
+
   const shouldBlockOutOfZone = 
     hasValidCoordinates &&
     !isAuthPage && 
     !isPolicyPage &&
+    !isTakeawayOrDining &&
     !normalizedPath.includes('profile') &&
     !normalizedPath.includes('wallet') &&
     !normalizedPath.includes('help') &&

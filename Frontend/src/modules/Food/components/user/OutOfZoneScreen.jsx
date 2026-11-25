@@ -1,11 +1,13 @@
-﻿import React from 'react';
+import React from 'react';
 import { MapPin, ChevronDown, Wallet } from 'lucide-react';
 import { Link, useLocation } from 'react-router-dom';
 import { useProfile } from "@food/context/ProfileContext";
+import { usePlatformMode } from "@food/hooks/usePlatformMode";
 
 import outOfZoneBg from '@food/assets/illustrations/out-of-zone-bg.jpg';
 
 const OutOfZoneScreen = ({ location, handleLocationClick }) => {
+  const { isSingleVendor } = usePlatformMode();
   const { userProfile } = useProfile();
   const BRAND_NAME = "Ariston Cafe"; // Change this for different projects
 
@@ -15,6 +17,27 @@ const OutOfZoneScreen = ({ location, handleLocationClick }) => {
     const name = userProfile.firstName || userProfile.name || "";
     return name[0]?.toUpperCase() || "U";
   }, [userProfile]);
+
+  const handleSetStoreLocation = () => {
+    const storeLocation = {
+      latitude: 22.71756,
+      longitude: 75.871741,
+      city: "Indore",
+      state: "Madhya Pradesh",
+      country: "India",
+      area: "South Tukoganj",
+      address: "No 169, UGF, Corporate House, RNT Marg, Flim Colony, South Tukoganj, Indore, Madhya Pradesh 452001",
+      formattedAddress: "No 169, UGF, Corporate House, RNT Marg, Flim Colony, South Tukoganj, Indore, Madhya Pradesh 452001",
+    };
+    try {
+      localStorage.setItem("userLocation", JSON.stringify(storeLocation));
+      localStorage.setItem("userZoneStatus", "IN_SERVICE");
+      localStorage.removeItem("userZoneId");
+      localStorage.removeItem("userZone");
+      window.dispatchEvent(new CustomEvent("locationUpdated", { detail: storeLocation }));
+    } catch {}
+    window.location.reload();
+  };
 
   return (
     <div className="flex flex-col h-[100dvh] bg-[#2a1c3d] overflow-hidden fixed inset-0 z-40">
@@ -82,13 +105,42 @@ const OutOfZoneScreen = ({ location, handleLocationClick }) => {
 
       {/* Text Context - Positioned independently to avoid layout shifts */}
       <div className="absolute top-[48vh] left-0 w-full -translate-y-1/2 flex flex-col items-center z-10 px-6">
-        <div className="text-center">
-          <h2 className="text-[28px] font-bold text-white leading-[1.2] mb-4 tracking-tight drop-shadow-md">
+        <div className="text-center flex flex-col items-center">
+          <h2 className="text-[28px] font-bold text-white leading-[1.2] mb-3 tracking-tight drop-shadow-md">
             We'll be there soon –<br />hang tight!
           </h2>
-          <p className="text-[16px] font-medium text-white/90 leading-[1.5] max-w-[320px] mx-auto drop-shadow-sm">
-            Looks like online ordering isn't available<br />at your location yet.
+          <p className="text-[15px] font-medium text-white/90 leading-[1.5] max-w-[320px] mx-auto drop-shadow-sm">
+            Looks like online delivery isn't available<br />at your current location yet.
           </p>
+
+          {/* Action Buttons */}
+          <div className="mt-6 flex flex-col items-center gap-2.5 w-full max-w-xs">
+            <button
+              type="button"
+              onClick={handleLocationClick}
+              className="w-full px-5 py-3 bg-[#DC2626] hover:bg-[#b91c1c] active:scale-95 text-white font-bold text-sm rounded-xl shadow-lg transition-all flex items-center justify-center gap-2 cursor-pointer"
+            >
+              <MapPin className="w-4 h-4" />
+              <span>Change Delivery Location</span>
+            </button>
+
+            <button
+              type="button"
+              onClick={handleSetStoreLocation}
+              className="w-full px-4 py-2.5 bg-white/20 hover:bg-white/30 backdrop-blur-md active:scale-95 text-white font-semibold text-xs rounded-xl border border-white/30 shadow transition-all flex items-center justify-center gap-1.5 cursor-pointer"
+            >
+              <span>Explore Menu in Indore</span>
+            </button>
+
+            {!isSingleVendor && (
+              <Link
+                to="/food/user/takeaway"
+                className="w-full px-4 py-2 text-center text-xs text-white/80 hover:text-white underline font-medium transition-colors"
+              >
+                Order Takeaway / Pickup Instead
+              </Link>
+            )}
+          </div>
         </div>
       </div>
 

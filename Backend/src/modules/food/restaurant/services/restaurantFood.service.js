@@ -15,6 +15,7 @@ import {
     categoryAllowsFoodType,
     GLOBAL_CATEGORY_FILTER
 } from '../../shared/categoryWorkflow.js';
+import { isSingleVendor } from '../../../../config/platformMode.js';
 
 const toStr = (v) => (v != null ? String(v).trim() : '');
 const APPROVED_CATEGORY_FILTER = [
@@ -216,7 +217,8 @@ export async function createRestaurantFood(restaurantId, body = {}) {
         isAvailable,
         isRecommended: body.isRecommended === true,
         preparationTime,
-        approvalStatus: 'pending',
+        approvalStatus: isSingleVendor() ? 'approved' : 'pending',
+        approvedAt: isSingleVendor() ? new Date() : null,
         requestedAt: new Date(),
         actionType: 'NEW',
         oldData: null,
@@ -328,7 +330,8 @@ export async function updateRestaurantFood(restaurantId, foodId, body = {}) {
     const shouldResubmitForApproval = Object.keys(contentUpdate).length > 0;
 
     if (shouldResubmitForApproval) {
-        update.approvalStatus = 'pending';
+        update.approvalStatus = isSingleVendor() ? 'approved' : 'pending';
+        update.approvedAt = isSingleVendor() ? new Date() : null;
         update.requestedAt = new Date();
         update.rejectionReason = '';
         update.approvedAt = null;

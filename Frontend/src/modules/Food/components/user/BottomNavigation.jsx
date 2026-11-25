@@ -10,10 +10,12 @@ import {
   getLandingSettingsPublic,
 } from "@food/utils/foodPageCache"
 import { emitBottomNavVisibility, subscribeBottomNavShow } from "@food/utils/bottomNavEvents"
+import { usePlatformMode } from "@food/hooks/usePlatformMode"
 
 const HIDE_LOCK_MS = 900
 
 export default function BottomNavigation() {
+  const { isSingleVendor } = usePlatformMode()
   const location = useLocation()
   const navigate = useNavigate()
   const pathname = location.pathname
@@ -196,14 +198,18 @@ export default function BottomNavigation() {
       active: isDelivery,
       orderType: "delivery",
     },
-    {
-      id: "takeaway",
-      label: "Takeaway",
-      icon: IoBag,
-      to: "/food/user/takeaway",
-      active: isTakeaway,
-      orderType: "takeaway",
-    },
+    ...(!isSingleVendor
+      ? [
+          {
+            id: "takeaway",
+            label: "Takeaway",
+            icon: IoBag,
+            to: "/food/user/takeaway",
+            active: isTakeaway,
+            orderType: "takeaway",
+          },
+        ]
+      : []),
     {
       id: "under250",
       label: `Under ₹${under250PriceLimit}`,

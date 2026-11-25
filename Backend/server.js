@@ -9,6 +9,7 @@ import { initSocket } from './src/config/socket.js';
 import { initializeQueues, closeBullMQConnection } from './src/queues/index.js';
 import { expireExpiredOffers } from './src/modules/food/admin/services/admin.service.js';
 import { syncExpiredFssaiNotifications } from './src/modules/food/restaurant/services/fssaiExpiry.service.js';
+import { getPlatformMode, isSingleVendor, getDefaultRestaurant, syncPlatformModeFromDB } from './src/config/platformMode.js';
 
 import { logger } from './src/utils/logger.js';
 import { initializeFirebaseRealtime } from './src/config/firebase.js';
@@ -59,8 +60,26 @@ const startServer = async () => {
 
         // 1. Connect to Database (MongoDB)
         await connectDB();
+        // Load dynamic platform mode saved in database (if any)
+        await syncPlatformModeFromDB();
         // Old sparse unique index on food_notifications dropped inbox messages; replace it once.
         void repairNotificationIndexes();
+
+        // 1a. Single-vendor boot check: fail fast if default restaurant missing from DB
+        if (isSingleVendor()) {
+            logger.info(`[platform] Running in single_vendor mode — verifying default restaurant…`);
+            const defaultRest = await getDefaultRestaurant();
+            if (!defaultRest) {
+                logger.error(
+                    `[platform] FATAL: single_vendor mode requires DEFAULT_RESTAURANT_ID="${config.defaultRestaurantId}" ` +
+                    'to exist in the database. Run: npm run seed:default-restaurant'
+                );
+                process.exit(1);
+            }
+            logger.info(`[platform] Default restaurant confirmed: "${defaultRest.restaurantName}" (${defaultRest._id})`);
+        } else {
+            logger.info(`[platform] Running in marketplace mode`);
+        }
 
         // 2. Create HTTP server from Express app
         const httpServer = http.createServer(app);

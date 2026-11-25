@@ -28,6 +28,7 @@ import {
 import { PendingOnlinePayment } from '../models/pendingOnlinePayment.model.js';
 import { getIO, rooms } from '../../../../config/socket.js';
 import { addOrderJob } from '../../../../queues/producers/order.producer.js';
+import { isSingleVendor, getDefaultRestaurantId } from '../../../../config/platformMode.js';
 import { fetchPolyline, toGeoJsonPoint } from '../utils/googleMaps.js';
 import { resolveRiderEarningForDelivery } from './riderEarning.service.js';
 import { getFirebaseDB } from '../../../../config/firebase.js';
@@ -544,6 +545,11 @@ export async function createOrder(userId, dto, options = {}) {
     }
   }
 
+  // Single-vendor mode: always force default restaurant ID (ignore client restaurantId)
+  if (isSingleVendor()) {
+    dto.restaurantId = getDefaultRestaurantId();
+  }
+
   // SECURITY: load items from DB cart + recompute fees/coupon server-side.
   const priced = await calculateOrderPricing(userId, {
     ...dto,
@@ -554,7 +560,7 @@ export async function createOrder(userId, dto, options = {}) {
       : dto.deliveryAddress,
   });
   const verifiedItems = priced.items || [];
-  const restaurantId = priced.restaurantId || dto.restaurantId;
+  const restaurantId = isSingleVendor() ? getDefaultRestaurantId() : (priced.restaurantId || dto.restaurantId);
   if (!restaurantId) throw new ValidationError("Restaurant id required");
   if (!verifiedItems.length) throw new ValidationError("Your cart is empty");
 
@@ -919,13 +925,15 @@ export async function createOrder(userId, dto, options = {}) {
     }
   }
  
-  // Calculate restaurant commission from subtotal
-  const { commissionAmount: restaurantCommission } = await foodTransactionService.getRestaurantCommissionSnapshot({
-    pricing: normalizedPricing,
-    restaurantId: dto.restaurantId
-  });
+  // Calculate restaurant commission from subtotal (0 in single_vendor mode)
+  const { commissionAmount: restaurantCommission } = isSingleVendor()
+    ? { commissionAmount: 0 }
+    : await foodTransactionService.getRestaurantCommissionSnapshot({
+        pricing: normalizedPricing,
+        restaurantId: dto.restaurantId
+      });
 
-  normalizedPricing.restaurantCommission = restaurantCommission || 0;
+  normalizedPricing.restaurantCommission = isSingleVendor() ? 0 : (restaurantCommission || 0);
 
   // Coupon discount is platform-funded (the restaurant share is not reduced), so it comes off the
   // platform's profit, the same as in the ledger (foodTransaction.service createInitialTransaction).

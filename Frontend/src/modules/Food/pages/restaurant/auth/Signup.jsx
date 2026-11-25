@@ -1,4 +1,4 @@
-import { useState } from "react"
+import { useState, useEffect } from "react"
 import { useNavigate } from "react-router-dom"
 import { Phone, User, AlertCircle, Loader2, UtensilsCrossed } from "lucide-react"
 import { restaurantAPI } from "@food/api"
@@ -14,6 +14,7 @@ import {
   SelectValue,
 } from "@food/components/ui/select"
 import { useCompanyName } from "@food/hooks/useCompanyName"
+import { usePlatformMode } from "@food/hooks/usePlatformMode"
 
 const countryCodes = [
   { code: "+91", country: "IN", flag: "🇮🇳" },
@@ -22,6 +23,14 @@ const countryCodes = [
 export default function RestaurantSignup() {
   const navigate = useNavigate()
   const companyName = useCompanyName()
+  const { isSingleVendor } = usePlatformMode()
+
+  useEffect(() => {
+    if (isSingleVendor) {
+      navigate("/food/restaurant/login", { replace: true })
+    }
+  }, [isSingleVendor, navigate])
+
   const [formData, setFormData] = useState({
     phone: "",
     countryCode: "+91",
@@ -132,6 +141,10 @@ export default function RestaurantSignup() {
     } finally {
       setIsLoading(false)
     }
+  }
+
+  if (isSingleVendor) {
+    return null
   }
 
   return (

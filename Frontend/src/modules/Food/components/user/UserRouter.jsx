@@ -4,6 +4,7 @@ import UserLayout from "./UserLayout"
 import Loader from "@food/components/Loader"
 import ProtectedRoute from "@food/components/ProtectedRoute"
 import AuthRedirect from "@food/components/AuthRedirect"
+import { usePlatformMode } from "@food/hooks/usePlatformMode"
 
 const SearchResults = lazy(() => import("@food/pages/user/search/ProfessionalSearch"))
 
@@ -144,6 +145,7 @@ const RequireInitialAuth = ({ children }) => {
 }
 
 export default function UserRouter() {
+  const { isSingleVendor } = usePlatformMode()
   return (
     <Suspense fallback={<AppShellSkeleton />}>
       <Routes>
@@ -190,7 +192,7 @@ export default function UserRouter() {
           {/* Home & Discovery — kept alive in UserLayout MainTabKeepAlive */}
           <Route path="" element={<MainTabRoutePlaceholder />} />
           <Route path="home" element={<MainTabRoutePlaceholder />} />
-          <Route path="takeaway" element={<MainTabRoutePlaceholder />} />
+          <Route path="takeaway" element={isSingleVendor ? <Navigate to="/food/user" replace /> : <MainTabRoutePlaceholder />} />
           <Route path="dining" element={<MainTabRoutePlaceholder />} />
           <Route path="dining/:category" element={<DiningCategory />} />
           <Route path="dining/explore/upto50" element={<DiningExplore50 />} />
@@ -200,7 +202,7 @@ export default function UserRouter() {
           <Route path="under-250" element={<MainTabRoutePlaceholder />} />
           <Route path="categories" element={<Categories />} />
           <Route path="category/:category" element={<MainTabRoutePlaceholder />} />
-          <Route path="restaurants" element={<Restaurants />} />
+          <Route path="restaurants" element={isSingleVendor ? <Navigate to="/food/user" replace /> : <Restaurants />} />
           <Route path="restaurants/:slug" element={<RestaurantDetails />} />
           <Route path="search" element={<SearchResults />} />
           <Route path="product/:id" element={<ProductDetail />} />

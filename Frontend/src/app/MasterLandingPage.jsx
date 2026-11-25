@@ -1,9 +1,10 @@
-﻿import React, { useEffect, useRef } from "react"
+import React, { useEffect, useRef } from "react"
 import { motion, MotionConfig } from "framer-motion"
 import Lenis from "lenis"
 import "lenis/dist/lenis.css"
 import { RestaurantOnboardingSection, DeliveryOnboardingSection, PatternDivider } from "./landing/PartnerOnboardingSections"
 import { openAppStore } from "./landing/appLinks"
+import { usePlatformMode } from "@food/hooks/usePlatformMode"
 import {
   Clock,
   MapPin,
@@ -111,6 +112,7 @@ const EASE_OUT = [0.22, 1, 0.36, 1]
 const REVEAL_VIEWPORT = { once: true, amount: 0.2 }
 
 export default function MasterLandingPage() {
+  const { isSingleVendor } = usePlatformMode()
   const lenisRef = useRef(null)
 
   // Warm the cache for the Download App phone so it doesn't pop in mid-animation
@@ -484,8 +486,12 @@ export default function MasterLandingPage() {
       <PatternDivider from="#111111" to="#0B0B0B" edge />
 
       {/* 5. Partner onboarding */}
-      <RestaurantOnboardingSection />
-      <PatternDivider from="#0B0B0B" to="#111111" edge />
+      {!isSingleVendor && (
+        <>
+          <RestaurantOnboardingSection />
+          <PatternDivider from="#0B0B0B" to="#111111" edge />
+        </>
+      )}
       <DeliveryOnboardingSection />
 
       <PatternDivider from="#111111" to="#ffffff" />

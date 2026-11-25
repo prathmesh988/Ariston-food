@@ -13,6 +13,41 @@ export const adminSidebarMenu = [
   },
   {
     type: "section",
+    label: "MY RESTAURANT",
+    modes: ["single_vendor"],
+    items: [
+      {
+        type: "link",
+        label: "Restaurant Profile & Timings",
+        path: "/admin/food/my-restaurant/profile",
+        icon: "Building2",
+        modes: ["single_vendor"],
+      },
+      {
+        type: "link",
+        label: "Menu & Pricing",
+        path: "/admin/food/foods",
+        icon: "Utensils",
+        modes: ["single_vendor"],
+      },
+      {
+        type: "link",
+        label: "Add-ons",
+        path: "/admin/food/addons",
+        icon: "Plus",
+        modes: ["single_vendor"],
+      },
+      {
+        type: "link",
+        label: "Table Reservations",
+        path: "/admin/food/dining-list",
+        icon: "Calendar",
+        modes: ["single_vendor"],
+      },
+    ],
+  },
+  {
+    type: "section",
     label: "FOOD MANAGEMENT",
     items: [
       {
@@ -20,6 +55,7 @@ export const adminSidebarMenu = [
         label: "Food Approval",
         path: "/admin/food/food-approval",
         icon: "CheckCircle2",
+        modes: ["marketplace"],
       },
       {
         type: "expandable",
@@ -53,6 +89,7 @@ export const adminSidebarMenu = [
         type: "expandable",
         label: "Restaurants",
         icon: "UtensilsCrossed",
+        modes: ["marketplace"],
         subItems: [
           { label: "Restaurants List", path: "/admin/food/restaurants" },
           { label: "New Joining Request", path: "/admin/food/restaurants/joining-request" },
@@ -216,7 +253,7 @@ export const adminSidebarMenu = [
     type: "section",
     label: "TRANSACTION MANAGEMENT",
     items: [
-      { type: "link", label: "Restaurant Withdraws", path: "/admin/food/restaurant-withdraws", icon: "CreditCard" },
+      { type: "link", label: "Restaurant Withdraws", path: "/admin/food/restaurant-withdraws", icon: "CreditCard", modes: ["marketplace"] },
     ],
   },
   {
@@ -233,7 +270,7 @@ export const adminSidebarMenu = [
     items: [
       { type: "link", label: "Dining Banners", path: "/admin/food/dining-management", icon: "UtensilsCrossed" },
       { type: "link", label: "Dining List", path: "/admin/food/dining-list", icon: "FileText" },
-      { type: "link", label: "Dining Category Request", path: "/admin/food/dining-requests", icon: "CheckCircle" },
+      { type: "link", label: "Dining Category Request", path: "/admin/food/dining-requests", icon: "CheckCircle", modes: ["marketplace"] },
     ],
   },
   {
@@ -272,4 +309,46 @@ export const adminSidebarMenu = [
     ],
   },
 ];
+
+/**
+ * Filter admin sidebar menu by deployment mode: 'marketplace' | 'single_vendor'.
+ * Items without an explicit modes array default to ['marketplace', 'single_vendor'].
+ */
+export function filterSidebarMenuByMode(menu = adminSidebarMenu, mode = 'marketplace') {
+  const currentMode = mode || 'marketplace';
+
+  return menu.reduce((acc, item) => {
+    if (item.modes && !item.modes.includes(currentMode)) {
+      return acc;
+    }
+
+    if (item.type === "section") {
+      const filteredItems = (item.items || []).reduce((subAcc, subItem) => {
+        if (subItem.modes && !subItem.modes.includes(currentMode)) {
+          return subAcc;
+        }
+
+        if (subItem.type === "expandable" && Array.isArray(subItem.subItems)) {
+          const filteredSubItems = subItem.subItems.filter((si) => {
+            if (!si.modes) return true;
+            return si.modes.includes(currentMode);
+          });
+          if (filteredSubItems.length > 0) {
+            subAcc.push({ ...subItem, subItems: filteredSubItems });
+          }
+        } else {
+          subAcc.push(subItem);
+        }
+        return subAcc;
+      }, []);
+
+      if (filteredItems.length > 0) {
+        acc.push({ ...item, items: filteredItems });
+      }
+    } else {
+      acc.push(item);
+    }
+    return acc;
+  }, []);
+}
 

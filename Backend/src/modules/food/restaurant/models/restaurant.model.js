@@ -55,6 +55,12 @@ const restaurantSchema = new mongoose.Schema(
     ownerEmail: {
       type: String,
       trim: true,
+      lowercase: true,
+    },
+    email: {
+      type: String,
+      trim: true,
+      lowercase: true,
     },
     ownerPhone: {
       type: String,
@@ -269,6 +275,17 @@ const restaurantSchema = new mongoose.Schema(
       type: String,
       enum: ["registration", "changes"],
       default: "registration",
+    },
+    authorizedLogins: {
+      type: [
+        {
+          name: { type: String, trim: true, default: "" },
+          phone: { type: String, trim: true, required: true },
+          role: { type: String, trim: true, default: "staff" },
+          createdAt: { type: Date, default: Date.now },
+        },
+      ],
+      default: [],
     },
     deletedAt: {
       type: Date,

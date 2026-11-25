@@ -2,18 +2,25 @@ import { FoodBusinessSettings } from '../models/businessSettings.model.js';
 import { sendResponse } from '../../../../utils/response.js';
 import { storeImageBuffer } from '../../../../services/storage.service.js';
 import { releaseStoredAssets } from '../../../../services/assetCleanup.service.js';
+import { getPlatformMode, isSingleVendor, getDefaultRestaurantId, setPlatformMode } from '../../../../config/platformMode.js';
 
 export async function getBusinessSettings(req, res, next) {
     try {
         let settings = await FoodBusinessSettings.findOne().lean();
         if (!settings) {
             // Create default settings if none exist
-            settings = await FoodBusinessSettings.create({
+            const created = await FoodBusinessSettings.create({
                 companyName: 'Ariston Cafe',
                 email: 'admin@appzeto.com'
             });
+            settings = created.toObject();
         }
-        return sendResponse(res, 200, 'Business settings fetched successfully', settings);
+        const data = {
+            ...settings,
+            platformMode: getPlatformMode(),
+            defaultRestaurantId: isSingleVendor() ? getDefaultRestaurantId() : null,
+        };
+        return sendResponse(res, 200, 'Business settings fetched successfully', data);
     } catch (error) {
         next(error);
     }
@@ -33,7 +40,7 @@ export async function updateBusinessSettings(req, res, next) {
             return res.status(400).json({ success: false, message: 'Invalid data format' });
         }
 
-        const { companyName, email, phoneCountryCode, phoneNumber, address, state, pincode, region, removeLogo, removeFavicon } = data;
+        const { companyName, email, phoneCountryCode, phoneNumber, address, state, pincode, region, removeLogo, removeFavicon, platformMode } = data;
 
         // Ensure string inputs for validation to prevent crashes from non-string values
         const s_companyName = String(companyName || "").trim();
@@ -83,6 +90,10 @@ export async function updateBusinessSettings(req, res, next) {
         if (state !== undefined) settings.state = s_state;
         if (pincode !== undefined) settings.pincode = s_pincode;
         if (region !== undefined) settings.region = String(region || 'India').trim() || 'India';
+        if (platformMode && ['marketplace', 'single_vendor'].includes(platformMode)) {
+            settings.platformMode = platformMode;
+            setPlatformMode(platformMode);
+        }
 
         const previousLogo = settings.logo?.url;
         const previousFavicon = settings.favicon?.url;
@@ -118,7 +129,46 @@ export async function updateBusinessSettings(req, res, next) {
         await settings.save();
         void releaseStoredAssets(previousLogo, settings.logo?.url);
         void releaseStoredAssets(previousFavicon, settings.favicon?.url);
-        return sendResponse(res, 200, 'Business settings updated successfully', settings);
+        const responseData = {
+            ...settings.toObject(),
+            platformMode: getPlatformMode(),
+            defaultRestaurantId: isSingleVendor() ? getDefaultRestaurantId() : null,
+        };
+        return sendResponse(res, 200, 'Business settings updated successfully', responseData);
+    } catch (error) {
+        next(error);
+    }
+}
+
+/**
+ * Dedicated endpoint to update platform mode (marketplace <-> single_vendor)
+ * PATCH /api/v1/food/admin/business-settings/platform-mode
+ */
+export async function updatePlatformModeController(req, res, next) {
+    try {
+        const { platformMode } = req.body;
+        if (!platformMode || !['marketplace', 'single_vendor'].includes(platformMode)) {
+            return res.status(400).json({
+                success: false,
+                message: 'Invalid platform mode. Allowed values: "marketplace", "single_vendor"'
+            });
+        }
+
+        let settings = await FoodBusinessSettings.findOne();
+        if (!settings) {
+            settings = new FoodBusinessSettings({
+                companyName: 'Ariston Cafe',
+                email: 'admin@appzeto.com'
+            });
+        }
+        settings.platformMode = platformMode;
+        await settings.save();
+        setPlatformMode(platformMode);
+
+        return sendResponse(res, 200, `Platform mode switched to ${platformMode}`, {
+            platformMode,
+            defaultRestaurantId: isSingleVendor() ? getDefaultRestaurantId() : null
+        });
     } catch (error) {
         next(error);
     }

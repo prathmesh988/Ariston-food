@@ -1140,6 +1140,12 @@ export const adminAPI = {
       contextModule: "admin",
     });
   },
+  updatePlatformMode: (platformMode) =>
+    apiClient.patch(
+      `${API_ENDPOINTS.ADMIN.BUSINESS_SETTINGS}/platform-mode`,
+      { platformMode },
+      { contextModule: "admin" }
+    ),
 };
 
 let restaurantOrdersCache = null;

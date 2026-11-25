@@ -1,4 +1,4 @@
-﻿import { useState, useEffect, useRef, useMemo, Fragment } from "react"
+import { useState, useEffect, useRef, useMemo, Fragment } from "react"
 import { getNetworkErrorMessage } from "@/shared/utils/networkError"
 import { createPortal } from "react-dom"
 import { Link, useNavigate, useLocation } from "react-router-dom"
@@ -24,6 +24,7 @@ import { useCompanyName } from "@food/hooks/useCompanyName"
 import { getRestaurantAvailabilityStatus } from "@food/utils/restaurantAvailability"
 import useAppBackNavigation from "@food/hooks/useAppBackNavigation"
 import { filterPublicOffers, mapPublicOfferToCartCoupon } from "@food/utils/offerUtils"
+import { usePlatformMode } from "@food/hooks/usePlatformMode"
 import dishFallbackImage from "@food/assets/placeholders/dish_fallback.webp"
 import BogoTag from "@food/components/user/BogoTag"
 import { DIAMOND_BG, DIAMOND_FONT, DiamondGem, diamondTextStyle } from "@food/components/user/diamond/DiamondBrand"
@@ -87,6 +88,7 @@ const CART_RECIPIENT_DETAILS_STORAGE_KEY = "food-cart-recipient-details-v1"
 const CART_ORDER_NOTE_STORAGE_KEY = "food-cart-order-note-v1"
 
 export default function Cart() {
+  const { isSingleVendor } = usePlatformMode()
   const companyName = useCompanyName()
   const navigate = useNavigate()
   const location = useLocation()
@@ -2462,9 +2464,13 @@ export default function Cart() {
             <Utensils className="h-10 w-10 text-gray-400" />
           </div>
           <h2 className="text-lg font-semibold text-gray-800 dark:text-white mb-1">Your cart is empty</h2>
-          <p className="text-sm text-gray-500 dark:text-gray-400 mb-4 text-center">Add items from a restaurant to start a new order</p>
-          <Link to="/user">
-            <Button className="bg-[#DC2626] hover:bg-[#991B1B] text-white">Browse Restaurants</Button>
+          <p className="text-sm text-gray-500 dark:text-gray-400 mb-4 text-center">
+            {isSingleVendor ? "Add items from our menu to start a new order" : "Add items from a restaurant to start a new order"}
+          </p>
+          <Link to="/food/user">
+            <Button className="bg-[#DC2626] hover:bg-[#991B1B] text-white">
+              {isSingleVendor ? "Explore Menu" : "Browse Restaurants"}
+            </Button>
           </Link>
         </div>
       </AnimatedPage>

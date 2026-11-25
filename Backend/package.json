@@ -17,7 +17,10 @@
     "cleanup:legacy-collections": "node scripts/cleanup-legacy-collections.js",
     "migrate:uploads": "node scripts/migrate-cloudinary-to-local.js",
     "migrate:uploads:apply": "node scripts/migrate-cloudinary-to-local.js --apply --clean-empty",
-    "seed:admin": "node scripts/seed-admin.js",
+    "seed:admin": "node scripts/createAdmin.js",
+    "seed:zone": "node scripts/seedDefaultZone.js",
+    "seed:default-restaurant": "node scripts/seedDefaultRestaurant.js",
+    "seed:default-restaurant:with-owner": "node scripts/seedDefaultRestaurant.js --with-owner",
     "migrate:old": "node scripts/migrate-from-redgo.js",
     "migrate:old:apply": "node scripts/migrate-from-redgo.js --apply",
     "test": "echo \"Error: no test specified\" && exit 1"

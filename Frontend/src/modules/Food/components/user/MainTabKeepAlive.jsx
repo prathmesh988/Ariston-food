@@ -5,10 +5,12 @@ import { AppShellSkeleton } from "@food/components/ui/loading-skeletons";
 import { registerFoodPageCacheLifecycle } from "@food/utils/foodPageCache";
 import { normalizeBrowsePath } from "@food/utils/browseScrollMemory";
 import { requestBottomNavShow } from "@food/utils/bottomNavEvents";
+import { usePlatformMode } from "@food/hooks/usePlatformMode";
 
 const Dining = lazy(() => import("@food/pages/user/Dining"));
 const Under250 = lazy(() => import("@food/pages/user/Under250"));
 const Profile = lazy(() => import("@food/pages/user/profile/Profile"));
+const RestaurantDetails = lazy(() => import("@food/pages/user/restaurants/RestaurantDetails"));
 
 const TAB_SHELL_CLASS = "main-tab-keep-alive-pane";
 
@@ -38,6 +40,7 @@ function TabSuspense({ children }) {
  * (no remount, no duplicate API calls, scroll preserved per tab).
  */
 export default function MainTabKeepAlive({ activeTab, isVisible = true }) {
+  const { isSingleVendor } = usePlatformMode();
   const [visited, setVisited] = useState(() => new Set(activeTab ? [activeTab] : []));
   const scrollPositionsRef = useRef({});
   const prevTabRef = useRef(activeTab);
@@ -177,19 +180,31 @@ export default function MainTabKeepAlive({ activeTab, isVisible = true }) {
     <>
       {visited.has("delivery") && (
         <div {...paneProps("delivery")}>
-          <Home
-            homeMode="delivery"
-            isTabActive={isVisible && activeTab === "delivery"}
-          />
+          {isSingleVendor ? (
+            <TabSuspense>
+              <RestaurantDetails />
+            </TabSuspense>
+          ) : (
+            <Home
+              homeMode="delivery"
+              isTabActive={isVisible && activeTab === "delivery"}
+            />
+          )}
         </div>
       )}
 
       {visited.has("takeaway") && (
         <div {...paneProps("takeaway")}>
-          <Home
-            homeMode="takeaway"
-            isTabActive={isVisible && activeTab === "takeaway"}
-          />
+          {isSingleVendor ? (
+            <TabSuspense>
+              <RestaurantDetails />
+            </TabSuspense>
+          ) : (
+            <Home
+              homeMode="takeaway"
+              isTabActive={isVisible && activeTab === "takeaway"}
+            />
+          )}
         </div>
       )}
 

@@ -2,6 +2,7 @@ import { logger } from '../../utils/logger.js';
 import { creditWallet } from '../../core/payments/wallet.service.js';
 import { createPayment, markPaymentSuccess } from '../../core/payments/payment.service.js';
 import { initiateRefund } from '../../core/payments/refund.service.js';
+import { isSingleVendor } from '../../config/platformMode.js';
 
 /**
  * Post-delivery financial settlement processor.
@@ -58,8 +59,8 @@ async function handleDeliveryCompleted(data) {
         total = 0, paymentMethod
     } = data;
 
-    // 1. Credit restaurant wallet with their commission (payout)
-    if (restaurantId && commissionAmount > 0) {
+    // 1. Credit restaurant wallet with their commission (payout) — skip in single_vendor mode
+    if (!isSingleVendor() && restaurantId && commissionAmount > 0) {
         try {
             await creditWallet({
                 entityType: 'restaurant',

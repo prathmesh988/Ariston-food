@@ -13,6 +13,7 @@ import { HoldThemeContext } from '@/theme';
 import { StyleSheet, View } from 'react-native';
 import { isModuleAuthenticated } from '@food/utils/auth';
 import Home from '@food/pages/user/Home';
+import RestaurantDetails from '@food/pages/user/restaurants/RestaurantDetails';
 import Dining from '@food/pages/user/Dining';
 import Under250 from '@food/pages/user/Under250';
 import Profile from '@food/pages/user/profile/Profile';
@@ -22,6 +23,7 @@ import { registerFoodPageCacheLifecycle } from '@food/utils/foodPageCache';
 import { getBrowseScrollY, normalizeBrowsePath, restoreBrowseScroll, setActiveBrowseScroller } from '@food/utils/browseScrollMemory';
 import { requestBottomNavShow } from '@food/utils/bottomNavEvents';
 import { mainTabToPath } from '@food/utils/mainTabRoutes';
+import { usePlatformMode } from '@food/hooks/usePlatformMode';
 
 function isHomeBrowsePath(path) {
   const p = normalizeBrowsePath(path);
@@ -61,6 +63,7 @@ const scrollTab = (tab, y) => restoreBrowseScroll({ path: mainTabToPath(tab), sc
 export default memo(MainTabKeepAlive);
 
 function MainTabKeepAlive({ activeTab, holdTab = activeTab, isVisible = true }) {
+  const { isSingleVendor } = usePlatformMode();
   const [visited, setVisited] = useState(() => new Set(activeTab ? [activeTab] : []));
   const scrollPositionsRef = useRef({});
   const prevTabRef = useRef(activeTab);
@@ -245,7 +248,13 @@ function MainTabKeepAlive({ activeTab, holdTab = activeTab, isVisible = true }) 
           <HoldCartContext hold={pagesTab !== 'delivery'}>
           <HoldThemeContext hold={pagesTab !== 'delivery'}>
             <HoldWhileHidden hold={holdTab !== 'delivery' && visited.has('delivery')}>
-              <HomePage homeMode="delivery" isTabActive={pageActive('delivery')} />
+              {isSingleVendor ? (
+                <TabSuspense>
+                  <RestaurantDetails />
+                </TabSuspense>
+              ) : (
+                <HomePage homeMode="delivery" isTabActive={pageActive('delivery')} />
+              )}
             </HoldWhileHidden>
           </HoldThemeContext>
           </HoldCartContext>
@@ -262,7 +271,13 @@ function MainTabKeepAlive({ activeTab, holdTab = activeTab, isVisible = true }) 
           <HoldCartContext hold={pagesTab !== 'takeaway'}>
           <HoldThemeContext hold={pagesTab !== 'takeaway'}>
             <HoldWhileHidden hold={holdTab !== 'takeaway' && visited.has('takeaway')}>
-              <HomePage homeMode="takeaway" isTabActive={pageActive('takeaway')} />
+              {isSingleVendor ? (
+                <TabSuspense>
+                  <RestaurantDetails />
+                </TabSuspense>
+              ) : (
+                <HomePage homeMode="takeaway" isTabActive={pageActive('takeaway')} />
+              )}
             </HoldWhileHidden>
           </HoldThemeContext>
           </HoldCartContext>

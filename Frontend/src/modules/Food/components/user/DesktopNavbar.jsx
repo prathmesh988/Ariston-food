@@ -18,12 +18,14 @@ import {
   getCachedUnder250PriceLimit,
   getLandingSettingsPublic,
 } from "@food/utils/foodPageCache"
+import { usePlatformMode } from "@food/hooks/usePlatformMode"
 const debugLog = (...args) => {}
 const debugWarn = (...args) => {}
 const debugError = (...args) => {}
 
 
 export default function DesktopNavbar({ showLogo = true }) {
+    const { isSingleVendor } = usePlatformMode()
     const location = useLocation()
     const navigate = useNavigate()
     const { location: userLocation, loading: locationLoading } = useLocationHook()
@@ -289,7 +291,7 @@ export default function DesktopNavbar({ showLogo = true }) {
                                                 }
                                             }}
                                             className="h-6 p-0 border-0 bg-transparent text-sm font-medium placeholder:text-gray-500 focus-visible:ring-0 focus-visible:ring-offset-0"
-                                            placeholder="Search for restaurants, food..."
+                                            placeholder={isSingleVendor ? "Search menu, dishes..." : "Search for restaurants, food..."}
                                         />
                                         {heroSearch && (
                                             <Button
@@ -388,24 +390,26 @@ export default function DesktopNavbar({ showLogo = true }) {
                             </Link>
 
                             {/* Takeaway Tab */}
-                            <Link
-                                to="/food/user/takeaway"
-                                className={`flex flex-col items-center gap-1 px-2 py-1 transition-colors relative group ${isTakeaway
-                                    ? "text-[#DC2626]"
-                                    : "text-gray-600 dark:text-gray-400 hover:text-[#DC2626]"
-                                    }`}
-                            >
-                                <span className="text-sm font-bold tracking-wide uppercase">Takeaway</span>
-                                {isTakeaway && (
-                                    <motion.div
-                                        layoutId="navIndicator"
-                                        className="absolute -bottom-3 left-0 right-0 h-0.5 bg-[#DC2626]"
-                                        initial={{ opacity: 0 }}
-                                        animate={{ opacity: 1 }}
-                                        transition={{ duration: 0.3 }}
-                                    />
-                                )}
-                            </Link>
+                            {!isSingleVendor && (
+                              <Link
+                                  to="/food/user/takeaway"
+                                  className={`flex flex-col items-center gap-1 px-2 py-1 transition-colors relative group ${isTakeaway
+                                      ? "text-[#DC2626]"
+                                      : "text-gray-600 dark:text-gray-400 hover:text-[#DC2626]"
+                                      }`}
+                              >
+                                  <span className="text-sm font-bold tracking-wide uppercase">Takeaway</span>
+                                  {isTakeaway && (
+                                      <motion.div
+                                          layoutId="navIndicator"
+                                          className="absolute -bottom-3 left-0 right-0 h-0.5 bg-[#DC2626]"
+                                          initial={{ opacity: 0 }}
+                                          animate={{ opacity: 1 }}
+                                          transition={{ duration: 0.3 }}
+                                      />
+                                  )}
+                              </Link>
+                            )}
 
                             {/* Under 250 Tab */}
                             <Link

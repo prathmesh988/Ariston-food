@@ -29,6 +29,7 @@ import { getZonesArea, rankLocationResults } from "@food/utils/zoneGeometry"
 import { RESTAURANT_CUISINES, MAX_RESTAURANT_CUISINES } from "@food/constants/dining"
 import { clearOnboardingFromLocalStorage, clearAllFilesFromDB, hasRestaurantStep1Progress } from "@food/utils/onboardingUtils"
 import { useCompanyName } from "@food/hooks/useCompanyName"
+import { usePlatformMode } from "@food/hooks/usePlatformMode"
 import { clearModuleAuth, clearAuthData, getModuleToken, setPendingPartnerType } from "@food/utils/auth"
 import { ImageSourcePicker } from "@food/components/ImageSourcePicker"
 import { prepareUploadFile, prepareUploadFiles } from "@/shared/utils/imageCompressor"
@@ -681,6 +682,7 @@ function TimeSelector({ label, value, onValueChange: onChange }) {
 
 export default function RestaurantOnboarding() {
   const companyName = useCompanyName()
+  const { isSingleVendor } = usePlatformMode()
   const navigate = useNavigate()
   const [searchParams] = useSearchParams()
   const [step, setStep] = useState(1)
@@ -691,6 +693,12 @@ export default function RestaurantOnboarding() {
   const scrollRef = useRef(null)
   // web: the footer is hidden while the soft keyboard is open (keyboardInset)
   const keyboardInset = useKeyboardOffset()
+
+  useEffect(() => {
+    if (isSingleVendor) {
+      navigate("/food/restaurant", { replace: true })
+    }
+  }, [isSingleVendor, navigate])
 
   useEffect(() => {
     prefetchModuleFcmToken("restaurant")
@@ -2680,6 +2688,10 @@ export default function RestaurantOnboarding() {
     if (step === 1) return renderStep1()
     if (step === 2) return renderStep2()
     return renderStep3()
+  }
+
+  if (isSingleVendor) {
+    return null
   }
 
   if (loading) {

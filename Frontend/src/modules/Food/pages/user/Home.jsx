@@ -98,6 +98,7 @@ import api, { publicGetOnce, restaurantAPI, adminAPI } from "@food/api";
 import { API_BASE_URL } from "@food/api/config";
 import OptimizedImage from "@food/components/OptimizedImage";
 import ComboOffersRow from "@food/components/user/home/ComboOffersRow";
+import QuickDeliveryTabsSection from "@food/components/user/home/QuickDeliveryTabsSection";
 import RestaurantImageCarousel from "@food/components/user/RestaurantImageCarousel";
 import { getRestaurantAvailabilityStatus } from "@food/utils/restaurantAvailability";
 import { compareRestaurantsByAvailabilityAndDistance } from "@food/utils/restaurantBrowseSort";
@@ -3434,6 +3435,10 @@ export default function Home({ homeMode = null, isTabActive = true }) {
             isOutOfService={isOutOfService}
             vegMode={vegMode}
           />
+        )}
+
+        {effectiveOrderType !== "takeaway" && !isTakeawayPage && (
+          <QuickDeliveryTabsSection restaurants={restaurants} />
         )}
 
         {effectiveOrderType !== "takeaway" && !isTakeawayPage && (loadingRecommended || recommendedForYouRestaurants.length > 0) && (

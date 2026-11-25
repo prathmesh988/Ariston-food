@@ -13,16 +13,21 @@ import {
 } from './order-item-pricing.service.js';
 import { applyBogoToItems } from '../../admin/services/bogoPricing.service.js';
 import { resolveDiamondPricing } from '../../diamond/services/diamond.service.js';
+import { isSingleVendor, getDefaultRestaurantId } from '../../../../config/platformMode.js';
 
 export async function calculateOrderPricing(userId, dto) {
   const resolved = await resolveCheckoutItems(userId, dto);
+  const targetRestaurantId = isSingleVendor()
+    ? getDefaultRestaurantId()
+    : (resolved.restaurantId || dto.restaurantId);
+
   // Buy 1 Get 1 free lines are never priced from input; they are rebuilt below from live offers.
   const paidItems = await enforceMinimumFoodItemPrices(
     resolved.items.filter((item) => item?.isBogoFree !== true),
-    resolved.restaurantId || dto.restaurantId,
+    targetRestaurantId,
   );
 
-  const restaurantId = resolved.restaurantId || dto.restaurantId;
+  const restaurantId = targetRestaurantId;
   if (!restaurantId) throw new ValidationError('Restaurant id required');
 
   const restaurant = await FoodRestaurant.findById(restaurantId)

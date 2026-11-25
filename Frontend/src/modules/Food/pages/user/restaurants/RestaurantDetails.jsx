@@ -53,6 +53,7 @@ import { isModuleAuthenticated } from "@food/utils/auth"
 import { getRestaurantAvailabilityStatus } from "@food/utils/restaurantAvailability"
 import useAppBackNavigation from "@food/hooks/useAppBackNavigation"
 import { isMongoObjectId, toRestaurantUrlSlug } from "@food/utils/mainTabRoutes"
+import { usePlatformMode } from "@food/hooks/usePlatformMode"
 import {
   buildCartLineId,
   getDefaultFoodVariant,
@@ -67,6 +68,15 @@ import BogoTag from "@food/components/user/BogoTag"
 import { isVegMenuItem } from "@food/utils/vegMode"
 import dishFallbackImage from "@food/assets/placeholders/dish_fallback.webp"
 import { useComboOffers } from "@food/components/user/home/ComboOffersRow"
+import {
+  DIAMOND_BG,
+  DIAMOND_FONT,
+  DIAMOND_BUTTON,
+  DiamondGem,
+  DiamondPattern,
+  diamondTextStyle,
+} from "@food/components/user/diamond/DiamondBrand"
+import QuickDeliveryTabsSection from "@food/components/user/home/QuickDeliveryTabsSection"
 
 const fssaiLogo = "/images/fssai.png?v=3"
 
@@ -122,7 +132,10 @@ const ScallopBadge = ({ className = "" }) => (
 
 
 function RestaurantDetailsContent() {
-  const { slug } = useParams()
+  const { slug: routeSlug } = useParams()
+  const { isSingleVendor, defaultRestaurantId } = usePlatformMode()
+  const slug = routeSlug || (isSingleVendor ? defaultRestaurantId : '')
+  const isHomeView = isSingleVendor && !routeSlug
   const navigate = useNavigate()
   const routerLocation = useRouterLocation()
   const goBack = useAppBackNavigation()
@@ -2583,15 +2596,17 @@ function RestaurantDetailsContent() {
       <div className="px-4 sm:px-6 md:px-8 lg:px-10 xl:px-12 pt-3 md:pt-4 lg:pt-5 pb-2 md:pb-3 bg-white dark:bg-[#0a0a0a]">
         <div className="max-w-7xl mx-auto flex items-center justify-between">
           {/* Back Button */}
-          <Button
-            type="button"
-            variant="outline"
-            size="icon"
-            className="rounded-full h-10 w-10 border-gray-200 dark:border-gray-800 shadow-sm bg-white dark:bg-[#1a1a1a] relative z-50 touch-manipulation"
-            onClick={goBack}
-          >
-            <ArrowLeft className="h-5 w-5 text-gray-900 dark:text-white" />
-          </Button>
+          {!isHomeView && (
+            <Button
+              type="button"
+              variant="outline"
+              size="icon"
+              className="rounded-full h-10 w-10 border-gray-200 dark:border-gray-800 shadow-sm bg-white dark:bg-[#1a1a1a] relative z-50 touch-manipulation"
+              onClick={goBack}
+            >
+              <ArrowLeft className="h-5 w-5 text-gray-900 dark:text-white" />
+            </Button>
+          )}
 
           {/* Right side: Search pill + menu */}
           <div className="flex items-center gap-3">
@@ -2776,6 +2791,63 @@ function RestaurantDetailsContent() {
             )
           })()}
 
+
+          {/* Table Booking & Dining Entry */}
+          {(isSingleVendor || restaurant?.diningSettings?.isEnabled) && (
+            <div className="flex items-center justify-between border border-amber-200/80 dark:border-amber-900/50 bg-gradient-to-r from-amber-50/90 via-white to-amber-50/60 dark:from-amber-950/20 dark:via-[#1a1a1a] dark:to-amber-950/10 p-3.5 sm:p-4 rounded-2xl mb-3 shadow-sm">
+              <div className="flex items-center gap-3 min-w-0">
+                <div className="w-10 h-10 rounded-xl bg-amber-500/10 text-amber-600 dark:text-amber-400 flex items-center justify-center shrink-0">
+                  <Utensils className="h-5 w-5" />
+                </div>
+                <div className="min-w-0">
+                  <p className="text-sm font-bold text-gray-900 dark:text-white leading-tight">Dine-in & Table Booking</p>
+                  <p className="text-xs text-gray-500 dark:text-gray-400 mt-0.5 truncate">Reserve your table at Ariston Cafe</p>
+                </div>
+              </div>
+              <Button
+                size="sm"
+                className="bg-amber-600 hover:bg-amber-700 text-white font-bold text-xs rounded-xl shadow-sm px-4 shrink-0"
+                onClick={() => navigate(`/food/user/dining/book/${slug || defaultRestaurantId}`)}
+              >
+                Book Table
+              </Button>
+            </div>
+          )}
+
+          {/* Ariston Cafe Diamond Membership Strip */}
+          <div
+            onClick={() => navigate("/food/user/diamond")}
+            className="flex items-center justify-between p-3.5 sm:p-4 rounded-2xl cursor-pointer transition-all duration-300 hover:scale-[1.01] active:scale-[0.99] mb-3 relative overflow-hidden shadow-md"
+            style={{ background: DIAMOND_BG, color: "#ffffff" }}
+          >
+            <DiamondPattern corner />
+            <div className="flex items-center gap-3 relative z-10 min-w-0">
+              <div className="h-10 w-10 rounded-xl flex items-center justify-center bg-white/10 shrink-0 border border-white/10">
+                <DiamondGem className="h-6 w-6" id="rd-gem" />
+              </div>
+              <div className="min-w-0">
+                <div className="flex items-center gap-1.5">
+                  <span className="text-sm font-black tracking-wide" style={{ ...diamondTextStyle, fontFamily: DIAMOND_FONT }}>
+                    ARISTON DIAMOND
+                  </span>
+                </div>
+                <p className="text-xs text-gray-300 mt-0.5 truncate">
+                  Unlimited free delivery & exclusive dining privileges
+                </p>
+              </div>
+            </div>
+            <div className="relative z-10 shrink-0 pl-2">
+              <span
+                className="inline-flex items-center text-xs font-black px-3.5 py-1.5 rounded-full text-[#0B0E13] shadow-sm"
+                style={{ background: DIAMOND_BUTTON }}
+              >
+                Join Now
+              </span>
+            </div>
+          </div>
+
+          {/* Reorder / Food in 15 mins Dual Tab Carousel (as requested) */}
+          <QuickDeliveryTabsSection restaurant={restaurant} />
 
           {/* Filter/Category Buttons */}
           {restaurant?.menuSections && Array.isArray(restaurant.menuSections) && restaurant.menuSections.length > 0 && (
