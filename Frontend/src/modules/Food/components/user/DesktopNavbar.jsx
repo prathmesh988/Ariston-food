@@ -32,7 +32,7 @@ export default function DesktopNavbar({ showLogo = true }) {
     const { getCartCount } = useCart()
     const { openLocationSelector } = useLocationSelector()
     const { setSearchValue } = useSearchOverlay()
-    const { vegMode, setVegMode } = useProfile()
+    const { vegMode, setVegMode, userProfile } = useProfile()
     const [heroSearch, setHeroSearch] = useState("")
     const [logoUrl, setLogoUrl] = useState(null)
     const [companyName, setCompanyName] = useState(null)
@@ -356,6 +356,35 @@ export default function DesktopNavbar({ showLogo = true }) {
                                             <span className="text-xs font-bold text-white">{cartCount > 99 ? "99+" : cartCount}</span>
                                         </span>
                                     )}
+                                </Button>
+                            </Link>
+
+                            {/* Profile Icon / Avatar */}
+                            <Link 
+                                to="/food/user/profile"
+                                state={{ from: location.pathname }}
+                                onClick={(e) => {
+                                    if (!isModuleAuthenticated('user')) {
+                                        e.preventDefault();
+                                        window.dispatchEvent(new CustomEvent('show-login-required'));
+                                    }
+                                }}
+                            >
+                                <Button
+                                    variant="ghost"
+                                    className="h-12 w-12 lg:h-14 lg:w-14 rounded-full p-0 hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors flex items-center justify-center"
+                                    title="Profile"
+                                >
+                                    <div className="h-9 w-9 lg:h-10 lg:w-10 rounded-full overflow-hidden border border-gray-200 dark:border-gray-700 shadow-sm flex items-center justify-center bg-gray-50 dark:bg-gray-800">
+                                        <img
+                                            src={userProfile?.profileImage || "/images/profile-avatar.webp"}
+                                            alt="Profile"
+                                            className="h-full w-full object-cover"
+                                            onError={(e) => {
+                                                e.currentTarget.src = "/images/profile-avatar.webp"
+                                            }}
+                                        />
+                                    </div>
                                 </Button>
                             </Link>
                         </div>

@@ -180,31 +180,19 @@ export default function MainTabKeepAlive({ activeTab, isVisible = true }) {
     <>
       {visited.has("delivery") && (
         <div {...paneProps("delivery")}>
-          {isSingleVendor ? (
-            <TabSuspense>
-              <RestaurantDetails />
-            </TabSuspense>
-          ) : (
-            <Home
-              homeMode="delivery"
-              isTabActive={isVisible && activeTab === "delivery"}
-            />
-          )}
+          <Home
+            homeMode="delivery"
+            isTabActive={isVisible && activeTab === "delivery"}
+          />
         </div>
       )}
 
       {visited.has("takeaway") && (
         <div {...paneProps("takeaway")}>
-          {isSingleVendor ? (
-            <TabSuspense>
-              <RestaurantDetails />
-            </TabSuspense>
-          ) : (
-            <Home
-              homeMode="takeaway"
-              isTabActive={isVisible && activeTab === "takeaway"}
-            />
-          )}
+          <Home
+            homeMode="takeaway"
+            isTabActive={isVisible && activeTab === "takeaway"}
+          />
         </div>
       )}
 

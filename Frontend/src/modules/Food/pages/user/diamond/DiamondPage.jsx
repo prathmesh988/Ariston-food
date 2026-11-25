@@ -18,6 +18,7 @@ import {
   formatMemberDate,
 } from "@food/components/user/diamond/DiamondBrand"
 import { fetchDiamond, getCachedDiamond, setCachedDiamond } from "@food/components/user/diamond/diamondCache"
+import { useDiamondEnabled } from "@food/hooks/useCustomizationSettings"
 
 const BENEFIT_ICONS = {
   free_delivery: Bike,
@@ -105,22 +106,35 @@ function DiamondSkeleton() {
 
 export default function DiamondPage() {
   const navigate = useNavigate()
+  const isDiamondEnabled = useDiamondEnabled()
   // Cached copy draws instantly; a fresh one replaces it in the background.
   const [data, setData] = useState(() => getCachedDiamond())
   const [loading, setLoading] = useState(() => !getCachedDiamond())
   const [paying, setPaying] = useState(false)
   const [scrolled, setScrolled] = useState(false)
 
+  useEffect(() => {
+    if (isDiamondEnabled === false || (data && data.featureEnabled === false)) {
+      toast.error("Diamond membership is currently unavailable")
+      navigate("/food/user", { replace: true })
+    }
+  }, [isDiamondEnabled, data, navigate])
+
   const load = useCallback(async () => {
     try {
       const fresh = await fetchDiamond()
+      if (fresh?.featureEnabled === false) {
+        toast.error("Diamond membership is currently unavailable")
+        navigate("/food/user", { replace: true })
+        return
+      }
       if (fresh) setData(fresh)
     } catch {
       if (!getCachedDiamond()) toast.error("Could not load Ariston Cafe Diamond")
     } finally {
       setLoading(false)
     }
-  }, [])
+  }, [navigate])
 
   useEffect(() => {
     load()

@@ -48,6 +48,7 @@ import {
   diamondTextStyle,
 } from "@food/components/user/diamond/DiamondBrand";
 import { fetchDiamond, getCachedDiamond, preloadDiamondPage } from "@food/components/user/diamond/diamondCache";
+import { useDiamondEnabled } from "@food/hooks/useCustomizationSettings";
 import { normalizeImageUrl } from "@food/utils/common";
 
 import AnimatedPage from "@food/components/user/AnimatedPage";
@@ -331,10 +332,11 @@ export default function Profile() {
 
   // Ariston Cafe Diamond strip on the profile card. The profile tab stays mounted, so refresh
   // whenever it is shown again (e.g. right after buying Diamond).
+  const isDiamondEnabled = useDiamondEnabled();
   const [diamond, setDiamond] = useState(() => getCachedDiamond());
   const isProfileTab = /\/profile\/?$/.test(location.pathname);
   useEffect(() => {
-    if (!isProfileTab) return undefined;
+    if (!isProfileTab || !isDiamondEnabled) return undefined;
     let mounted = true;
     const cached = getCachedDiamond();
     if (cached) setDiamond(cached);
@@ -346,11 +348,11 @@ export default function Profile() {
     return () => {
       mounted = false;
     };
-  }, [isProfileTab]);
-  const isDiamondMember = Boolean(diamond?.membership?.isMember);
-  const showDiamondJoin = !isDiamondMember && diamond?.plan?.enabled && diamond?.plan?.price > 0;
+  }, [isProfileTab, isDiamondEnabled]);
+  const isDiamondMember = Boolean(isDiamondEnabled && diamond?.membership?.isMember && diamond?.featureEnabled !== false);
+  const showDiamondJoin = Boolean(isDiamondEnabled && !isDiamondMember && diamond?.plan?.enabled && diamond?.plan?.price > 0 && diamond?.featureEnabled !== false);
   // Zomato-style dark card whenever Diamond is shown (member or on sale).
-  const diamondCard = isDiamondMember || showDiamondJoin;
+  const diamondCard = Boolean(isDiamondEnabled && (isDiamondMember || showDiamondJoin));
 
   useEffect(() => {
     let mounted = true;

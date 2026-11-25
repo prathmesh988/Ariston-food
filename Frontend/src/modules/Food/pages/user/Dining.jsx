@@ -11,7 +11,8 @@ import AnimatedPage from "@food/components/user/AnimatedPage"
 import { useLocation as useLocationHook, resolveServiceCity } from "@food/hooks/useLocation"
 import { useZone } from "@food/hooks/useZone"
 import { useProfile } from "@food/context/ProfileContext"
-import { diningAPI } from "@food/api"
+import { diningAPI, restaurantAPI } from "@food/api"
+import { usePlatformMode } from "@food/hooks/usePlatformMode"
 import OptimizedImage from "@food/components/OptimizedImage"
 import { HeroBannerSkeleton } from "@food/components/ui/loading-skeletons"
 import { isModuleAuthenticated } from "@food/utils/auth"
@@ -180,6 +181,26 @@ export default function Dining({ isTabActive = true }) {
 
   const [categories, setCategories] = useState([])
   const [restaurantList, setRestaurantList] = useState([])
+  const { isSingleVendor, defaultRestaurantId } = usePlatformMode()
+  const singleVendorId = defaultRestaurantId || "650000000000000000a15701"
+  const [singleVendorRestaurant, setSingleVendorRestaurant] = useState(null)
+
+  useEffect(() => {
+    if (!isSingleVendor) return
+    let mounted = true
+    restaurantAPI
+      .getRestaurantById(singleVendorId)
+      .then((res) => {
+        const rest = res?.data?.data?.restaurant || res?.data?.restaurant
+        if (mounted && rest) setSingleVendorRestaurant(rest)
+      })
+      .catch((err) => {
+        debugError("Failed to fetch single vendor restaurant for dining", err)
+      })
+    return () => {
+      mounted = false
+    }
+  }, [isSingleVendor, singleVendorId])
 
   // Cuisine filter options come from what the dining restaurants actually serve
   const availableCuisines = useMemo(() => {
@@ -560,6 +581,15 @@ export default function Dining({ isTabActive = true }) {
 
   const diningSearchQuery = heroSearch.trim()
   const isDiningSearching = diningSearchQuery.length > 0
+  const singleVendorMatchesSearch = useMemo(() => {
+    if (!isDiningSearching) return true
+    const q = diningSearchQuery.trim().toLowerCase()
+    const name = String(singleVendorRestaurant?.restaurantName || "Ariston Cafe").toLowerCase()
+    const cuisines = Array.isArray(singleVendorRestaurant?.cuisines)
+      ? singleVendorRestaurant.cuisines.join(" ").toLowerCase()
+      : "multi-cuisine indian continental"
+    return name.includes(q) || cuisines.includes(q)
+  }, [isDiningSearching, diningSearchQuery, singleVendorRestaurant])
   const showPageSkeleton = (loading || zoneLoading) && !isDiningSearching
   const showDiningSearchEmpty =
     isDiningSearching && !loading && filteredRestaurants.length === 0
@@ -905,20 +935,22 @@ export default function Dining({ isTabActive = true }) {
             <div className={`mb-4 ${isDiningSearching ? "mt-0" : "mt-4 sm:mt-6"}`}>
               {!isDiningSearching && <DiningSectionHeaderSkeleton />}
 
-              <section className="mb-4 py-1">
-                <div className="flex items-center gap-2 overflow-hidden pb-1">
-                  {Array.from({ length: 6 }, (_, index) => (
-                    <div
-                      key={`filter-skeleton-${index}`}
-                      className={`relative h-8 rounded-md border border-[#efe3d7] bg-[#fff7f1] ${shimmerClassName}`}
-                      style={{ width: index === 0 ? 90 : index % 2 === 0 ? 122 : 108 }}
-                    />
-                  ))}
-                </div>
-              </section>
+              {!isSingleVendor && (
+                <section className="mb-4 py-1">
+                  <div className="flex items-center gap-2 overflow-hidden pb-1">
+                    {Array.from({ length: 6 }, (_, index) => (
+                      <div
+                        key={`filter-skeleton-${index}`}
+                        className={`relative h-8 rounded-md border border-[#efe3d7] bg-[#fff7f1] ${shimmerClassName}`}
+                        style={{ width: index === 0 ? 90 : index % 2 === 0 ? 122 : 108 }}
+                      />
+                    ))}
+                  </div>
+                </section>
+              )}
 
               <div className="grid grid-cols-1 gap-4 sm:gap-5 md:grid-cols-2 md:gap-6 lg:grid-cols-3 lg:gap-8">
-                {loadingRestaurantCards.map((key, index) => (
+                {(isSingleVendor ? [1] : loadingRestaurantCards).map((key, index) => (
                   <DiningRestaurantSkeleton key={key} index={index} />
                 ))}
               </div>
@@ -972,7 +1004,126 @@ export default function Dining({ isTabActive = true }) {
         </div>
         )}
 
-        {/* Popular Restaurants Around You Section */}
+        {/* Restaurant Section: Single Vendor vs Multi-Vendor */}
+        {isSingleVendor ? (
+          <div className={`mb-8 ${isDiningSearching ? "mt-0" : "mt-4 sm:mt-6"}`}>
+            <div className="mb-6">
+              <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 px-1">
+                <div className="flex items-center gap-3">
+                  <div className="h-8 w-1 bg-[#ef4f5f] rounded-full shadow-[0_0_10px_rgba(239,79,95,0.4)]" />
+                  <h3 className="text-xl sm:text-2xl font-black text-gray-900 dark:text-white tracking-tight whitespace-nowrap">
+                    {isDiningSearching ? "Search Results" : "Our Restaurant"}
+                  </h3>
+                </div>
+                <div className="flex items-center">
+                  <div className="px-3 py-1 bg-amber-50 dark:bg-amber-950/30 border border-amber-200 dark:border-amber-900/50 rounded-full shadow-sm">
+                    <p className="text-[10px] sm:text-xs font-black text-amber-600 dark:text-amber-400 uppercase tracking-widest">
+                      {isDiningSearching ? "1 RESTAURANT" : "DINE-IN & TABLE BOOKING"}
+                    </p>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            {/* Single Vendor Card */}
+            {isDiningSearching && !singleVendorMatchesSearch ? (
+              <div className="flex flex-col items-center justify-center py-16 px-6 text-center">
+                <div className="w-16 h-16 rounded-full bg-gray-100 dark:bg-gray-800 flex items-center justify-center mb-4">
+                  <Search className="h-7 w-7 text-gray-300 dark:text-gray-500" />
+                </div>
+                <p className="text-base font-bold text-gray-800 dark:text-gray-200">
+                  No dining restaurants found for &quot;{diningSearchQuery}&quot;
+                </p>
+              </div>
+            ) : (
+              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-5 md:gap-6 lg:gap-8">
+                <motion.div
+                  className="h-full"
+                  initial={{ opacity: 0, y: 20 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ duration: 0.4 }}
+                >
+                  <Link
+                    to={`/food/user/dining/book/${singleVendorId}`}
+                    className="h-full flex rounded-[22px] block group"
+                  >
+                    <Card className="overflow-hidden gap-0 space-y-0 cursor-pointer border border-gray-100 dark:border-gray-800 hover:shadow-xl group bg-white dark:bg-[#1a1a1a] transition-all duration-300 py-0 rounded-[22px] h-full flex flex-col w-full relative">
+                      {/* Image Section */}
+                      <div className="relative h-48 sm:h-56 md:h-60 w-full flex-shrink-0 overflow-hidden">
+                        <img
+                          src={
+                            singleVendorRestaurant?.coverImages?.[0] ||
+                            singleVendorRestaurant?.image ||
+                            singleVendorRestaurant?.images?.[0] ||
+                            "/images/restaurant_cover.jpg"
+                          }
+                          alt={singleVendorRestaurant?.restaurantName || "Ariston Cafe"}
+                          className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
+                          onError={(e) => {
+                            e.currentTarget.src = "/images/restaurant_cover.jpg"
+                          }}
+                        />
+                        <div className="absolute inset-0 bg-gradient-to-t from-black/75 via-black/25 to-transparent" />
+
+                        {/* Rating Badge Top Left */}
+                        <div className="absolute top-3 left-3 z-10">
+                          <span className="bg-white/95 dark:bg-[#1a1a1a]/95 text-gray-900 dark:text-white px-3 py-1.5 rounded-lg text-xs font-bold shadow-md inline-flex items-center gap-1.5">
+                            <Star className="h-3.5 w-3.5 fill-amber-400 text-amber-400" />
+                            {singleVendorRestaurant?.rating || 4.8}
+                          </span>
+                        </div>
+
+                        {/* Pre-book Table Promo Bottom Left */}
+                        <div className="absolute bottom-0 left-0 right-0 p-4 text-white z-10">
+                          <p className="text-xs font-bold uppercase tracking-wider text-amber-300 mb-0.5">
+                            PRE-BOOK TABLE
+                          </p>
+                          <p className="text-base sm:text-lg font-black leading-snug">
+                            Reserve your table at {singleVendorRestaurant?.restaurantName || "Ariston Cafe"}
+                          </p>
+                        </div>
+                      </div>
+
+                      {/* Content Section */}
+                      <CardContent className="p-4 flex-1 flex flex-col justify-between">
+                        <div>
+                          <div className="flex items-start justify-between gap-2 mb-1.5">
+                            <h3 className="text-lg sm:text-xl font-bold text-gray-900 dark:text-white group-hover:text-[#DC2626] transition-colors">
+                              {singleVendorRestaurant?.restaurantName || "Ariston Cafe"}
+                            </h3>
+                          </div>
+                          <p className="text-xs sm:text-sm text-gray-500 dark:text-gray-400 mb-2 line-clamp-1">
+                            {Array.isArray(singleVendorRestaurant?.cuisines) && singleVendorRestaurant.cuisines.length > 0
+                              ? singleVendorRestaurant.cuisines.join(" • ")
+                              : "Multi-Cuisine • Indian • Continental"}
+                          </p>
+                          <div className="flex items-center gap-1.5 text-xs text-gray-500 dark:text-gray-400 mb-4">
+                            <MapPin className="h-3.5 w-3.5 text-gray-400 shrink-0" />
+                            <span className="truncate">
+                              {singleVendorRestaurant?.area || singleVendorRestaurant?.location?.area || "South Tukoganj, Indore"}
+                            </span>
+                          </div>
+                        </div>
+
+                        {/* Action Button: Book Table */}
+                        <Button
+                          className="w-full bg-[#DC2626] hover:bg-[#b91c1c] text-white font-bold text-sm py-2.5 rounded-xl shadow-md transition-all flex items-center justify-center gap-2"
+                          onClick={(e) => {
+                            e.stopPropagation()
+                            navigate(`/food/user/dining/book/${singleVendorId}`)
+                          }}
+                        >
+                          <UtensilsCrossed className="h-4 w-4" />
+                          <span>Book a Table</span>
+                        </Button>
+                      </CardContent>
+                    </Card>
+                  </Link>
+                </motion.div>
+              </div>
+            )}
+          </div>
+        ) : (
         <div className={`mb-4 ${isDiningSearching ? "mt-0" : "mt-4 sm:mt-6"}`}>
           {!showDiningSearchEmpty && (
           <div className="mb-6">
@@ -1529,6 +1680,7 @@ export default function Dining({ isTabActive = true }) {
           </div>
           )}
         </div>
+        )}
         </motion.div>
         )}
       </div>

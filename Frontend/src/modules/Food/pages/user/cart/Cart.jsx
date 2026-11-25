@@ -28,6 +28,7 @@ import { usePlatformMode } from "@food/hooks/usePlatformMode"
 import dishFallbackImage from "@food/assets/placeholders/dish_fallback.webp"
 import BogoTag from "@food/components/user/BogoTag"
 import { DIAMOND_BG, DIAMOND_FONT, DiamondGem, diamondTextStyle } from "@food/components/user/diamond/DiamondBrand"
+import { useDiamondEnabled } from "@food/hooks/useCustomizationSettings"
 import { getBogoLimitsLabel, getCartBogoFreeByLine, getCartBogoSavings, isBogoUsedUp } from "@food/utils/bogo"
 const zoopSound = "/zomato_sms.mp3"
 const debugLog = (...args) => { }
@@ -123,6 +124,7 @@ export default function Cart() {
   }
 
   const { cart, updateQuantity, addToCart, getCartCount, clearCart, cleanCartForRestaurant } = cartContext;
+  const isDiamondEnabled = useDiamondEnabled()
   const { getDefaultAddress, getDefaultPaymentMethod, setDefaultAddress, addresses, paymentMethods, userProfile, orderType, setOrderType } = useProfile()
   const { createOrder } = useOrders()
   const { openLocationSelector } = useLocationSelector()
@@ -3219,7 +3221,7 @@ export default function Cart() {
                 )}
               </div>
 {/* Ariston Cafe Diamond: what a member saves here, or what joining would save */}
-              {!loadingPricing && (diamondSavings?.total > 0 || diamondOffer?.potentialSavings > 0) && (
+              {!loadingPricing && isDiamondEnabled && (diamondSavings?.total > 0 || diamondOffer?.potentialSavings > 0) && (
                 <Link
                   to="/food/user/diamond"
                   className="flex items-center gap-3 rounded-2xl px-4 py-3 shadow-sm active:opacity-90"
@@ -3308,7 +3310,7 @@ export default function Cart() {
                            <span className={deliveryFee === 0 ? "text-[#DC2626] font-medium" : "text-gray-800 dark:text-gray-200 font-medium"}>
                              {loadingPricing ? (
                                <span className="inline-block h-4 w-12 rounded bg-gray-200 dark:bg-gray-700 animate-pulse align-middle" />
-                             ) : deliveryFee === 0 && diamondSavings?.delivery > 0 ? (
+                             ) : deliveryFee === 0 && isDiamondEnabled && diamondSavings?.delivery > 0 ? (
                                <span className="flex items-baseline gap-1.5">
                                  <span className="text-xs text-gray-400 line-through">{RUPEE_SYMBOL}{Number(diamondSavings.delivery).toFixed(2)}</span>
                                  FREE
@@ -3338,7 +3340,7 @@ export default function Cart() {
                     )}
 
                     {/* Removed TAKEAWAY ORDER badge from here */}
-                    {platformFee === 0 && diamondSavings?.platformFee > 0 && (
+                    {platformFee === 0 && isDiamondEnabled && diamondSavings?.platformFee > 0 && (
                       <div className="flex justify-between text-sm">
                         <span className="text-gray-600 dark:text-gray-400 font-medium">Platform Fee</span>
                         <span className="flex items-baseline gap-1.5 text-[#DC2626] font-medium">

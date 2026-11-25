@@ -3,6 +3,7 @@ import { useNavigate } from "react-router-dom"
 import { ArrowLeft, Loader2 } from "lucide-react"
 import { userAPI } from "@food/api"
 import { DIAMOND_FONT } from "@food/components/user/diamond/DiamondBrand"
+import { useDiamondEnabled } from "@food/hooks/useCustomizationSettings"
 
 /** Admin-written Diamond terms. Plain text: blank lines split paragraphs, lines starting "-" or "•" become bullets. */
 function TermsText({ text }) {
@@ -49,14 +50,19 @@ function TermsText({ text }) {
 
 export default function DiamondTerms() {
   const navigate = useNavigate()
+  const isDiamondEnabled = useDiamondEnabled()
   const [terms, setTerms] = useState(null)
 
   useEffect(() => {
+    if (isDiamondEnabled === false) {
+      navigate("/food/user", { replace: true })
+      return
+    }
     userAPI
       .getDiamondTerms()
       .then((res) => setTerms(res?.data?.data?.terms || ""))
       .catch(() => setTerms(""))
-  }, [])
+  }, [isDiamondEnabled, navigate])
 
   return (
     <div className="min-h-screen bg-white" style={{ fontFamily: DIAMOND_FONT }}>

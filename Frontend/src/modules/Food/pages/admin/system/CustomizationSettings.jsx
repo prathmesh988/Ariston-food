@@ -1,4 +1,4 @@
-﻿import { useEffect, useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { Settings, Loader2, SlidersHorizontal } from "lucide-react";
 import { toast } from "sonner";
 import { adminAPI } from "@food/api";
@@ -200,17 +200,23 @@ export default function CustomizationSettings() {
 
     try {
       await adminAPI.updateCustomizationSettings({ [key]: checked });
+      try {
+        const raw = localStorage.getItem("foodie_customization_settings");
+        const parsed = raw ? JSON.parse(raw) : {};
+        localStorage.setItem(
+          "foodie_customization_settings",
+          JSON.stringify({ ...parsed, [key]: checked })
+        );
+      } catch {
+        /* ignore */
+      }
+      window.dispatchEvent(
+        new CustomEvent("customizationSettingsChanged", {
+          detail: { key, checked, settings: { ...settings, [key]: checked } },
+        })
+      );
+
       if (key === "maintenance_mode_enabled") {
-        try {
-          const raw = localStorage.getItem("foodie_customization_settings");
-          const parsed = raw ? JSON.parse(raw) : {};
-          localStorage.setItem(
-            "foodie_customization_settings",
-            JSON.stringify({ ...parsed, maintenance_mode_enabled: checked === true })
-          );
-        } catch {
-          /* ignore */
-        }
         window.dispatchEvent(
           new CustomEvent("maintenanceModeChanged", {
             detail: { enabled: checked === true },

@@ -119,6 +119,7 @@ import HomeHeader from "@food/components/user/home/HomeHeader";
 import QuickSection from "@food/components/user/home/QuickSection";
 import PromoRow from "@food/components/user/home/PromoRow";
 import FestBanner from "@food/components/user/home/FestBanner";
+import { usePlatformMode } from "@food/hooks/usePlatformMode";
 
 // Persistence for back-navigation and refresh speed
 const getSessionCache = (key) => {
@@ -477,6 +478,9 @@ export default function Home({ homeMode = null, isTabActive = true }) {
     useSearchOverlay();
   const { openLocationSelector } = useLocationSelector();
   const { userProfile, vegMode, setVegMode: setVegModeContext, vegModeOption, setVegModeOption, orderType, setOrderType } = useProfile();
+  const { isSingleVendor, defaultRestaurantId } = usePlatformMode();
+  const singleVendorId = defaultRestaurantId || "650000000000000000a15701";
+  const [singleVendorRestaurant, setSingleVendorRestaurant] = useState(null);
   // homeMode lets MainTabKeepAlive mount Delivery + Takeaway Home side-by-side
   // without both instances fighting over global orderType / pathname.
   const isTakeawayPage =
@@ -880,6 +884,62 @@ export default function Home({ homeMode = null, isTabActive = true }) {
 
     return () => clearInterval(intervalId);
   }, []);
+
+  // Fetch single-vendor restaurant info when in single-vendor mode
+  useEffect(() => {
+    if (!isSingleVendor) return;
+    let mounted = true;
+    restaurantAPI
+      .getRestaurantById(singleVendorId)
+      .then((res) => {
+        const rest = res?.data?.data?.restaurant || res?.data?.restaurant;
+        if (mounted && rest) {
+          const cuisine =
+            Array.isArray(rest.cuisines) && rest.cuisines.length > 0
+              ? rest.cuisines[0]
+              : "Multi-cuisine";
+          const allImages = extractImages([
+            ...(Array.isArray(rest.coverImages) ? rest.coverImages : [rest.coverImages]).filter(Boolean),
+            rest.profileImage,
+          ]);
+          setSingleVendorRestaurant({
+            ...rest,
+            id: rest.restaurantId || rest._id,
+            mongoId: rest._id || null,
+            name: getRestaurantDisplayName(rest),
+            cuisine,
+            cuisines: Array.isArray(rest.cuisines) ? rest.cuisines : [cuisine],
+            rating: Number(rest.rating) || 0,
+            totalRatings: Number(rest.totalRatings) || 0,
+            deliveryTime: rest.deliveryTime || rest.estimatedDeliveryTime || "25-35 mins",
+            distance: rest.distance || "1.2 km",
+            distanceInKm: rest.distanceInKm || 1.2,
+            image: allImages[0] || normalizeImageUrl(rest.profileImage) || foodImages[0],
+            images: allImages.length > 0 ? allImages : [foodImages[0]],
+            priceRange: rest.priceRange || "$$",
+            slug: rest.slug || rest.restaurantId || rest._id,
+            restaurantId: rest.restaurantId || rest._id,
+            pureVegRestaurant: rest.pureVegRestaurant === true,
+            isActive: rest.isActive !== false,
+            isAcceptingOrders: rest.isAcceptingOrders !== false,
+            openDays: Array.isArray(rest.openDays) ? rest.openDays : [],
+            deliveryTimings: rest.deliveryTimings || null,
+            outletTimings: rest.outletTimings || null,
+            openingTime: rest.openingTime || rest?.deliveryTimings?.openingTime || null,
+            closingTime: rest.closingTime || rest?.deliveryTimings?.closingTime || null,
+            recommendedDishes: Array.isArray(rest.recommendedDishes) ? rest.recommendedDishes : [],
+            hasDishes: rest.hasDishes === true || (rest.totalMenuItems > 0),
+            totalMenuItems: rest.totalMenuItems || 0,
+          });
+        }
+      })
+      .catch((err) => {
+        debugError("Failed to fetch single vendor restaurant in Home", err);
+      });
+    return () => {
+      mounted = false;
+    };
+  }, [isSingleVendor, singleVendorId, extractImages]);
 
   useEffect(() => {
     const handleScroll = () => {
@@ -1545,12 +1605,13 @@ export default function Home({ homeMode = null, isTabActive = true }) {
   const effectiveZoneLoading = zoneLoading;
 
   const showCategorySkeleton = loadingRealCategories || loadingMenuCategories || zoneLoading;
-  const showRestaurantSkeleton = isLoadingFilterResults || loadingRestaurants || zoneLoading;
+  const showRestaurantSkeleton = isSingleVendor
+    ? (!singleVendorRestaurant && (loadingRestaurants || zoneLoading))
+    : (isLoadingFilterResults || loadingRestaurants || zoneLoading);
   // While zone/restaurants are settling, never surface a real "0 restaurants" count.
-  const isRestaurantsResolving =
-    loadingRestaurants ||
-    isLoadingFilterResults ||
-    zoneLoading;
+  const isRestaurantsResolving = isSingleVendor
+    ? (!singleVendorRestaurant && (loadingRestaurants || zoneLoading))
+    : (loadingRestaurants || isLoadingFilterResults || zoneLoading);
 
   // Only flip restaurant loading when the zone actually changes (not every detect flicker).
   const prevResolvedZoneIdRef = useRef(zoneId);
@@ -2257,6 +2318,31 @@ export default function Home({ homeMode = null, isTabActive = true }) {
   const filteredRestaurants = useMemo(() => {
     let result = (restaurantsData || []).filter(matchesVegMode);
 
+    if (isSingleVendor) {
+      const singleIdStr = String(singleVendorId || "").trim();
+      const allRests = (restaurantsData && restaurantsData.length > 0)
+        ? restaurantsData
+        : (singleVendorRestaurant ? [singleVendorRestaurant] : []);
+      const matching = allRests.filter(
+        (r) =>
+          (singleIdStr && (
+            String(r.mongoId || "") === singleIdStr ||
+            String(r._id || "") === singleIdStr ||
+            String(r.id || "") === singleIdStr ||
+            String(r.restaurantId || "") === singleIdStr ||
+            String(r.slug || "") === singleIdStr
+          )) ||
+          (r.name && r.name.toLowerCase().includes("ariston"))
+      );
+      if (matching.length > 0) {
+        return matching.filter(matchesVegMode);
+      }
+      if (singleVendorRestaurant) {
+        return matchesVegMode(singleVendorRestaurant) ? [singleVendorRestaurant] : [];
+      }
+      return [];
+    }
+
     if (effectiveOrderType === "takeaway" || isTakeawayPage) {
       result = result.filter(
         (restaurant) =>
@@ -2285,7 +2371,7 @@ export default function Home({ homeMode = null, isTabActive = true }) {
       .map((item) => item.restaurant);
 
     return sortedResult;
-  }, [restaurantsData, matchesVegMode, effectiveOrderType, isTakeawayPage, heroSearch, matchesTakeawayName, availabilityTick]);
+  }, [restaurantsData, matchesVegMode, isSingleVendor, singleVendorId, singleVendorRestaurant, effectiveOrderType, isTakeawayPage, heroSearch, matchesTakeawayName, availabilityTick]);
 
   // Stable browse path — don't use restaurant URL while Home stays mounted underneath
   const homeBrowsePath =
@@ -2415,6 +2501,9 @@ export default function Home({ homeMode = null, isTabActive = true }) {
     filteredRestaurants.length === 0;
 
   const takeawaySectionSubtitle = useMemo(() => {
+    if (isSingleVendor) {
+      return `${filteredRestaurants.length} Restaurant Delivering to You`;
+    }
     if (isRestaurantsResolving) return "Finding Restaurants For You";
     if (!isTakeawayActive) {
       return `${filteredRestaurants.length} Restaurants Delivering to You`;
@@ -2427,6 +2516,7 @@ export default function Home({ homeMode = null, isTabActive = true }) {
     }
     return `${filteredRestaurants.length} Restaurant${filteredRestaurants.length === 1 ? "" : "s"} near you`;
   }, [
+    isSingleVendor,
     isRestaurantsResolving,
     isTakeawayActive,
     isTakeawaySearching,
@@ -2435,10 +2525,11 @@ export default function Home({ homeMode = null, isTabActive = true }) {
   ]);
 
   const takeawaySectionTitle = useMemo(() => {
+    if (isSingleVendor) return "Our Restaurant";
     if (!isTakeawayActive) return "Featured Restaurants";
     if (isTakeawaySearching) return "Search Results";
     return "Takeaway Restaurants";
-  }, [isTakeawayActive, isTakeawaySearching]);
+  }, [isSingleVendor, isTakeawayActive, isTakeawaySearching]);
 
   const visibleRestaurants = useMemo(
     () => filteredRestaurants.slice(0, visibleRestaurantCount),
@@ -2520,6 +2611,7 @@ export default function Home({ homeMode = null, isTabActive = true }) {
   ]);
 
   const recommendedForYouRestaurants = useMemo(() => {
+    if (isSingleVendor) return [];
     const idsInOrder = (recommendedRestaurantIds || []).map((id) => String(id));
     const hasIds = idsInOrder.length > 0;
     const fromSettings = Array.isArray(recommendedRestaurantsFromSettings)
@@ -2598,6 +2690,7 @@ export default function Home({ homeMode = null, isTabActive = true }) {
     extractImages,
     normalizeImageUrl,
     matchesVegMode,
+    isSingleVendor,
   ]);
 
   // Featured foods removed - will be handled by restaurants data from API
@@ -2719,6 +2812,10 @@ export default function Home({ homeMode = null, isTabActive = true }) {
             type="button"
             className="absolute inset-0 z-20 h-full w-full border-0 p-0 bg-transparent text-left"
             onClick={() => {
+              if (isSingleVendor) {
+                navigate(toFoodUserPath(`/user/restaurants/${singleVendorId}`));
+                return;
+              }
               const actualIndex = currentBannerIndex === heroBannerImages.length ? 0 : currentBannerIndex;
               const bannerData = heroBannersData[actualIndex];
               const allLinked = bannerData?.linkedRestaurants || [];
@@ -3413,6 +3510,16 @@ export default function Home({ homeMode = null, isTabActive = true }) {
                   </section>
                 )}
 
+                {/* Quick Delivery Tabs Section (REORDER / FOOD IN 15 MINS) */}
+                {effectiveOrderType !== "takeaway" && !isTakeawayPage && (
+                  <div className="pt-2 pb-1">
+                    <QuickDeliveryTabsSection
+                      restaurant={singleVendorRestaurant || filteredRestaurants[0]}
+                      restaurants={filteredRestaurants}
+                    />
+                  </div>
+                )}
+
               </motion.div>
             ) : (
               <motion.div
@@ -3437,11 +3544,7 @@ export default function Home({ homeMode = null, isTabActive = true }) {
           />
         )}
 
-        {effectiveOrderType !== "takeaway" && !isTakeawayPage && (
-          <QuickDeliveryTabsSection restaurants={restaurants} />
-        )}
-
-        {effectiveOrderType !== "takeaway" && !isTakeawayPage && (loadingRecommended || recommendedForYouRestaurants.length > 0) && (
+        {!isSingleVendor && effectiveOrderType !== "takeaway" && !isTakeawayPage && (loadingRecommended || recommendedForYouRestaurants.length > 0) && (
           <motion.section
             className="content-auto pt-1 sm:pt-2"
             initial={false}
