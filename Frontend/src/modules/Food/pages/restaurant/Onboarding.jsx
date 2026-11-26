@@ -27,6 +27,7 @@ import { AdapterDateFns } from "@mui/x-date-pickers/AdapterDateFns"
 import { determineStepToShow, clearOnboardingFromLocalStorage, clearAllFilesFromDB, hasRestaurantStep1Progress } from "@food/utils/onboardingUtils"
 import { toast } from "sonner"
 import { useCompanyName } from "@food/hooks/useCompanyName"
+import { usePlatformMode } from "@food/hooks/usePlatformMode"
 import { getGoogleMapsApiKey } from "@food/utils/googleMapsApiKey"
 import { clearModuleAuth, clearAuthData, isModuleAuthenticated, getModuleToken } from "@food/utils/auth"
 import { ImageSourcePicker } from "@food/components/ImageSourcePicker"
@@ -555,6 +556,7 @@ function TimeSelector({ label, value, onChange }) {
 
 export default function RestaurantOnboarding() {
   const companyName = useCompanyName()
+  const { isSingleVendor } = usePlatformMode()
   const navigate = useNavigate()
   const [searchParams] = useSearchParams()
   const [step, setStep] = useState(1)
@@ -562,6 +564,15 @@ export default function RestaurantOnboarding() {
   const [saving, setSaving] = useState(false)
   const [error, setError] = useState("")
   const [isLoggingOut, setIsLoggingOut] = useState(false)
+
+  useEffect(() => {
+    if (isSingleVendor) {
+      toast.info("Single-vendor mode is active", {
+        description: "Restaurant onboarding is disabled. Ariston Cafe is the exclusive restaurant.",
+      })
+      navigate("/food/restaurant", { replace: true })
+    }
+  }, [isSingleVendor, navigate])
 
   useEffect(() => {
     prefetchModuleFcmToken("restaurant")
@@ -2969,6 +2980,10 @@ export default function RestaurantOnboarding() {
     if (step === 1) return renderStep1()
     if (step === 2) return renderStep2()
     return renderStep3()
+  }
+
+  if (isSingleVendor) {
+    return null
   }
 
   return (

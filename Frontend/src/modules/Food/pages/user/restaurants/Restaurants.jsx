@@ -1,6 +1,7 @@
 import { useEffect, useMemo, useState } from "react"
-import { Link } from "react-router-dom"
+import { Link, useNavigate } from "react-router-dom"
 import { ArrowLeft, Clock, MapPin, Heart, Star } from "lucide-react"
+import { usePlatformMode } from "@food/hooks/usePlatformMode"
 import AnimatedPage from "@food/components/user/AnimatedPage"
 import Footer from "@food/components/user/Footer"
 import ScrollReveal from "@food/components/user/ScrollReveal"
@@ -43,6 +44,16 @@ const pickRestaurantImage = (restaurant) => {
 }
 
 export default function Restaurants() {
+  const navigate = useNavigate()
+  const { isSingleVendor, defaultRestaurantId } = usePlatformMode()
+
+  // In single-vendor mode, the listing route immediately redirects to the default restaurant
+  useEffect(() => {
+    if (isSingleVendor && defaultRestaurantId) {
+      navigate(`/food/user/restaurants/${defaultRestaurantId}`, { replace: true })
+    }
+  }, [isSingleVendor, defaultRestaurantId, navigate])
+
   const { addFavorite, removeFavorite, isFavorite, orderType, vegMode, vegModeOption } = useProfile()
   const { location: userLocation } = useLocation()
   const { zoneId } = useZone(userLocation)

@@ -18,19 +18,21 @@ import {
   getCachedUnder250PriceLimit,
   getLandingSettingsPublic,
 } from "@food/utils/foodPageCache"
+import { usePlatformMode } from "@food/hooks/usePlatformMode"
 const debugLog = (...args) => {}
 const debugWarn = (...args) => {}
 const debugError = (...args) => {}
 
 
 export default function DesktopNavbar({ showLogo = true }) {
+    const { isSingleVendor } = usePlatformMode()
     const location = useLocation()
     const navigate = useNavigate()
     const { location: userLocation, loading: locationLoading } = useLocationHook()
     const { getCartCount } = useCart()
     const { openLocationSelector } = useLocationSelector()
     const { setSearchValue } = useSearchOverlay()
-    const { vegMode, setVegMode } = useProfile()
+    const { vegMode, setVegMode, userProfile } = useProfile()
     const [heroSearch, setHeroSearch] = useState("")
     const [logoUrl, setLogoUrl] = useState(null)
     const [companyName, setCompanyName] = useState(null)
@@ -289,7 +291,7 @@ export default function DesktopNavbar({ showLogo = true }) {
                                                 }
                                             }}
                                             className="h-6 p-0 border-0 bg-transparent text-sm font-medium placeholder:text-gray-500 focus-visible:ring-0 focus-visible:ring-offset-0"
-                                            placeholder="Search for restaurants, food..."
+                                            placeholder={isSingleVendor ? "Search menu, dishes..." : "Search for restaurants, food..."}
                                         />
                                         {heroSearch && (
                                             <Button
@@ -356,6 +358,35 @@ export default function DesktopNavbar({ showLogo = true }) {
                                     )}
                                 </Button>
                             </Link>
+
+                            {/* Profile Icon / Avatar */}
+                            <Link 
+                                to="/food/user/profile"
+                                state={{ from: location.pathname }}
+                                onClick={(e) => {
+                                    if (!isModuleAuthenticated('user')) {
+                                        e.preventDefault();
+                                        window.dispatchEvent(new CustomEvent('show-login-required'));
+                                    }
+                                }}
+                            >
+                                <Button
+                                    variant="ghost"
+                                    className="h-12 w-12 lg:h-14 lg:w-14 rounded-full p-0 hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors flex items-center justify-center"
+                                    title="Profile"
+                                >
+                                    <div className="h-9 w-9 lg:h-10 lg:w-10 rounded-full overflow-hidden border border-gray-200 dark:border-gray-700 shadow-sm flex items-center justify-center bg-gray-50 dark:bg-gray-800">
+                                        <img
+                                            src={userProfile?.profileImage || "/images/profile-avatar.webp"}
+                                            alt="Profile"
+                                            className="h-full w-full object-cover"
+                                            onError={(e) => {
+                                                e.currentTarget.src = "/images/profile-avatar.webp"
+                                            }}
+                                        />
+                                    </div>
+                                </Button>
+                            </Link>
                         </div>
                     </div>
                 </div>
@@ -388,24 +419,26 @@ export default function DesktopNavbar({ showLogo = true }) {
                             </Link>
 
                             {/* Takeaway Tab */}
-                            <Link
-                                to="/food/user/takeaway"
-                                className={`flex flex-col items-center gap-1 px-2 py-1 transition-colors relative group ${isTakeaway
-                                    ? "text-[#DC2626]"
-                                    : "text-gray-600 dark:text-gray-400 hover:text-[#DC2626]"
-                                    }`}
-                            >
-                                <span className="text-sm font-bold tracking-wide uppercase">Takeaway</span>
-                                {isTakeaway && (
-                                    <motion.div
-                                        layoutId="navIndicator"
-                                        className="absolute -bottom-3 left-0 right-0 h-0.5 bg-[#DC2626]"
-                                        initial={{ opacity: 0 }}
-                                        animate={{ opacity: 1 }}
-                                        transition={{ duration: 0.3 }}
-                                    />
-                                )}
-                            </Link>
+                            {!isSingleVendor && (
+                              <Link
+                                  to="/food/user/takeaway"
+                                  className={`flex flex-col items-center gap-1 px-2 py-1 transition-colors relative group ${isTakeaway
+                                      ? "text-[#DC2626]"
+                                      : "text-gray-600 dark:text-gray-400 hover:text-[#DC2626]"
+                                      }`}
+                              >
+                                  <span className="text-sm font-bold tracking-wide uppercase">Takeaway</span>
+                                  {isTakeaway && (
+                                      <motion.div
+                                          layoutId="navIndicator"
+                                          className="absolute -bottom-3 left-0 right-0 h-0.5 bg-[#DC2626]"
+                                          initial={{ opacity: 0 }}
+                                          animate={{ opacity: 1 }}
+                                          transition={{ duration: 0.3 }}
+                                      />
+                                  )}
+                              </Link>
+                            )}
 
                             {/* Under 250 Tab */}
                             <Link

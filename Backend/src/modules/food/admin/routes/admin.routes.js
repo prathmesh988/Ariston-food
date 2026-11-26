@@ -24,6 +24,7 @@ import * as comboOfferController from '../controllers/comboOffer.controller.js';
 import * as bogoOfferController from '../controllers/bogoOffer.controller.js';
 import * as deliveryReferralController from '../controllers/deliveryReferral.controller.js';
 import * as diamondController from '../../diamond/controllers/diamond.controller.js';
+import { marketplaceOnly } from '../../../../middleware/marketplaceOnly.js';
 
 const router = express.Router();
 
@@ -87,7 +88,8 @@ router.get('/reports/restaurants', adminController.getRestaurantReport);
 router.get('/reports/transactions', adminController.getTransactionReport);
 router.get('/reports/tax', adminController.getTaxReport);
 router.get('/reports/tax/:id', adminController.getTaxReportDetail);
-router.get('/restaurants/pending', adminController.getPendingRestaurants);
+// Pending restaurant approvals — marketplace-only (in single_vendor the restaurant is pre-seeded)
+router.get('/restaurants/pending', marketplaceOnly, adminController.getPendingRestaurants);
 router.get('/restaurants/reviews', adminController.getRestaurantReviews);
 router.get('/restaurants/:id', adminController.getRestaurantById);
 router.get('/restaurants/:id/analytics', adminController.getRestaurantAnalytics);
@@ -97,18 +99,19 @@ router.patch('/restaurants/:id', adminController.updateRestaurantById);
 router.patch('/restaurants/:id/status', adminController.updateRestaurantStatus);
 router.patch('/restaurants/:id/location', adminController.updateRestaurantLocation);
 router.patch('/restaurants/:id/menu', adminController.updateRestaurantMenuById);
-router.patch('/restaurants/:id/approve', adminController.approveRestaurant);
-router.patch('/restaurants/:id/reject', adminController.rejectRestaurant);
+// Approve/reject — marketplace-only workflows
+router.patch('/restaurants/:id/approve', marketplaceOnly, adminController.approveRestaurant);
+router.patch('/restaurants/:id/reject', marketplaceOnly, adminController.rejectRestaurant);
 router.delete('/restaurants/:id', adminController.deleteRestaurant);
 
-// ----- Restaurant Commission -----
-router.get('/restaurant-commissions/bootstrap', adminController.getRestaurantCommissionBootstrap);
-router.get('/restaurant-commissions', adminController.getRestaurantCommissions);
-router.post('/restaurant-commissions', adminController.createRestaurantCommission);
-router.get('/restaurant-commissions/:id', adminController.getRestaurantCommissionById);
-router.patch('/restaurant-commissions/:id', adminController.updateRestaurantCommission);
-router.delete('/restaurant-commissions/:id', adminController.deleteRestaurantCommission);
-router.patch('/restaurant-commissions/:id/toggle', adminController.toggleRestaurantCommissionStatus);
+// ----- Restaurant Commission — marketplace-only -----
+router.get('/restaurant-commissions/bootstrap', marketplaceOnly, adminController.getRestaurantCommissionBootstrap);
+router.get('/restaurant-commissions', marketplaceOnly, adminController.getRestaurantCommissions);
+router.post('/restaurant-commissions', marketplaceOnly, adminController.createRestaurantCommission);
+router.get('/restaurant-commissions/:id', marketplaceOnly, adminController.getRestaurantCommissionById);
+router.patch('/restaurant-commissions/:id', marketplaceOnly, adminController.updateRestaurantCommission);
+router.delete('/restaurant-commissions/:id', marketplaceOnly, adminController.deleteRestaurantCommission);
+router.patch('/restaurant-commissions/:id/toggle', marketplaceOnly, adminController.toggleRestaurantCommissionStatus);
 
 // ----- Categories -----
 router.get('/categories', adminController.getCategories);
@@ -211,6 +214,7 @@ router.patch('/business-settings', upload.fields([
     { name: 'logo', maxCount: 1 },
     { name: 'favicon', maxCount: 1 }
 ]), businessSettingsController.updateBusinessSettings);
+router.patch('/business-settings/platform-mode', businessSettingsController.updatePlatformModeController);
 
 // ----- Login Page Images (user / restaurant / delivery) -----
 router.get('/login-pages/:appType/images', listLoginPageImagesController);
@@ -233,9 +237,11 @@ router.get('/archived-accounts', adminController.getArchivedAccounts);
 router.get('/delivery-emergency-help', adminController.getEmergencyHelp);
 router.put('/delivery-emergency-help', adminController.createOrUpdateEmergencyHelp);
 
-// ----- Withdrawals (admin) -----
-router.get('/withdrawals', adminController.getWithdrawals);
-router.patch('/withdrawals/:id', adminController.updateWithdrawalStatus);
+// ----- Withdrawals (admin) — vendor payouts are marketplace-only -----
+// Restaurant vendor withdrawals only make sense when there are independent vendors
+router.get('/withdrawals', marketplaceOnly, adminController.getWithdrawals);
+router.patch('/withdrawals/:id', marketplaceOnly, adminController.updateWithdrawalStatus);
+// Delivery-partner withdrawals are operational in both modes
 router.get('/delivery/withdrawals', adminController.getDeliveryWithdrawals);
 router.patch('/delivery/withdrawals/:id', adminController.updateDeliveryWithdrawalStatus);
 router.get('/delivery/cash-limit-settlements', adminController.getCashLimitSettlements);

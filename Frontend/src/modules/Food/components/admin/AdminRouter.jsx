@@ -198,6 +198,9 @@ export default function AdminRouter() {
             <Route path="zone-setup/edit/:id" element={<AddZone />} />
             <Route path="zone-setup/view/:id" element={<ViewZone />} />
             <Route path="food-approval" element={<FoodApproval />} />
+            {/* Single-vendor My Restaurant routes */}
+            <Route path="my-restaurant/profile" element={<EditRestaurant />} />
+            <Route path="my-restaurant" element={<Navigate to="profile" replace />} />
             <Route path="restaurants" element={<RestaurantsList />} />
             <Route path="restaurants/add" element={<AddRestaurant />} />
             <Route path="restaurants/edit/:id" element={<EditRestaurant />} />

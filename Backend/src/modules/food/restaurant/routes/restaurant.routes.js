@@ -59,23 +59,31 @@ import { sendError } from '../../../../utils/response.js';
 import { getRestaurantFinanceController } from '../controllers/restaurantFinance.controller.js';
 
 import { cacheResponse, invalidateCache, invalidateFoodBrowseCaches } from '../../../../middleware/cache.js';
+import { marketplaceOnly } from '../../../../middleware/marketplaceOnly.js';
+import { resolveRestaurantContext } from '../../../../middleware/resolveRestaurantContext.js';
+import { isSingleVendor, getDefaultRestaurantId } from '../../../../config/platformMode.js';
 
 const router = express.Router();
 
 const requireRestaurant = (req, res, next) => {
-    if (req.user?.role !== 'RESTAURANT') {
-        return sendError(res, 403, 'Restaurant access required');
+    const role = req.user?.role;
+    if (role === 'RESTAURANT') return next();
+    if (isSingleVendor() && (role === 'ADMIN' || role === 'SUB_ADMIN')) {
+        return next();
     }
-    next();
+    return sendError(res, 403, 'Restaurant access required');
 };
 
 const requireApprovedRestaurant = async (req, res, next) => {
-    if (req.user?.role !== 'RESTAURANT') {
+    const role = req.user?.role;
+    const isAllowedRole = role === 'RESTAURANT' || (isSingleVendor() && (role === 'ADMIN' || role === 'SUB_ADMIN'));
+    if (!isAllowedRole) {
         return sendError(res, 403, 'Restaurant access required');
     }
 
     try {
-        const doc = await FoodRestaurant.findById(req.user.userId).select('status').lean();
+        const targetId = req.restaurantId || (isSingleVendor() ? getDefaultRestaurantId() : req.user?.userId);
+        const doc = await FoodRestaurant.findById(targetId).select('status').lean();
         if (!doc) {
             return sendError(res, 404, 'Restaurant not found');
         }
@@ -99,7 +107,8 @@ const uploadFields = upload.fields([
     { name: 'menuImages', maxCount: 10 }
 ]);
 
-router.post('/register', uploadFields, registerRestaurantController);
+// Self-registration is a marketplace-only feature; blocked in single_vendor mode
+router.post('/register', marketplaceOnly, uploadFields, registerRestaurantController);
 
 // Public: approved restaurants list (for user app)
 router.get('/restaurants', cacheResponse(300, 'restaurants'), listApprovedRestaurantsController);
@@ -110,6 +119,24 @@ router.get('/under-250', cacheResponse(180, 'under250'), listRestaurantsUnder250
 router.get('/offers', cacheResponse(300, 'offers'), listPublicOffersController);
 // Public: categories list (zone-aware; returns zone categories + global)
 router.get('/categories/public', cacheResponse(600, 'categories'), listCategoriesController);
+
+// Attach restaurant context to all authenticated restaurant routes
+router.use('/current', resolveRestaurantContext);
+router.use('/profile', resolveRestaurantContext);
+router.use('/availability', resolveRestaurantContext);
+router.use('/dining-settings', resolveRestaurantContext);
+router.use('/takeaway-settings', resolveRestaurantContext);
+router.use('/outlet-timings', resolveRestaurantContext);
+router.use('/finance', resolveRestaurantContext);
+router.use('/withdraw', resolveRestaurantContext);
+router.use('/withdrawals', resolveRestaurantContext);
+router.use('/categories', resolveRestaurantContext);
+router.use('/menu', resolveRestaurantContext);
+router.use('/foods', resolveRestaurantContext);
+router.use('/addons', resolveRestaurantContext);
+router.use('/orders', resolveRestaurantContext);
+router.use('/complaints', resolveRestaurantContext);
+router.use('/support/tickets', resolveRestaurantContext);
 
 // Restaurant dashboard/profile (Bearer token + RESTAURANT role)
 router.get('/current', authMiddleware, requireRestaurant, getCurrentRestaurantController);
@@ -144,8 +171,8 @@ router.put('/outlet-timings', authMiddleware, requireApprovedRestaurant, async (
     next();
 }, upsertCurrentRestaurantOutletTimingsController);
 router.get('/finance', authMiddleware, requireApprovedRestaurant, getRestaurantFinanceController);
-router.post('/withdraw', authMiddleware, requireApprovedRestaurant, createWithdrawalRequestController);
-router.get('/withdrawals', authMiddleware, requireApprovedRestaurant, listMyWithdrawalsController);
+router.post('/withdraw', marketplaceOnly, authMiddleware, requireApprovedRestaurant, createWithdrawalRequestController);
+router.get('/withdrawals', marketplaceOnly, authMiddleware, requireApprovedRestaurant, listMyWithdrawalsController);
 router.post(
     '/profile/profile-image',
     authMiddleware,

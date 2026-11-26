@@ -1,19 +1,22 @@
 import { useLocation, useNavigate } from "react-router-dom"
 import { MdDeliveryDining } from "react-icons/md"
-import { IoBag, IoPricetag, IoRestaurant } from "react-icons/io5"
+import { IoBag, IoPricetag, IoRestaurant, IoPerson } from "react-icons/io5"
 import { useState, useEffect, useRef, useCallback } from "react"
 import { motion } from "framer-motion"
 import api from "@food/api"
 import { useProfile } from "@food/context/ProfileContext"
+import { isModuleAuthenticated } from "@food/utils/auth"
 import {
   getCachedUnder250PriceLimit,
   getLandingSettingsPublic,
 } from "@food/utils/foodPageCache"
 import { emitBottomNavVisibility, subscribeBottomNavShow } from "@food/utils/bottomNavEvents"
+import { usePlatformMode } from "@food/hooks/usePlatformMode"
 
 const HIDE_LOCK_MS = 900
 
 export default function BottomNavigation() {
+  const { isSingleVendor } = usePlatformMode()
   const location = useLocation()
   const navigate = useNavigate()
   const pathname = location.pathname
@@ -196,14 +199,18 @@ export default function BottomNavigation() {
       active: isDelivery,
       orderType: "delivery",
     },
-    {
-      id: "takeaway",
-      label: "Takeaway",
-      icon: IoBag,
-      to: "/food/user/takeaway",
-      active: isTakeaway,
-      orderType: "takeaway",
-    },
+    ...(!isSingleVendor
+      ? [
+          {
+            id: "takeaway",
+            label: "Takeaway",
+            icon: IoBag,
+            to: "/food/user/takeaway",
+            active: isTakeaway,
+            orderType: "takeaway",
+          },
+        ]
+      : []),
     {
       id: "under250",
       label: `Under ₹${under250PriceLimit}`,
@@ -218,6 +225,13 @@ export default function BottomNavigation() {
       to: "/food/user/dining",
       active: isDining,
     },
+    {
+      id: "profile",
+      label: "Profile",
+      icon: IoPerson,
+      to: "/food/user/profile",
+      active: isProfile,
+    },
   ]
 
   const handleTabClick = (e, item) => {
@@ -225,6 +239,11 @@ export default function BottomNavigation() {
     e.stopPropagation()
 
     showNavAtTop(HIDE_LOCK_MS)
+
+    if (item.id === "profile" && !isModuleAuthenticated("user")) {
+      window.dispatchEvent(new CustomEvent("show-login-required"))
+      return
+    }
 
     if (item.orderType && setOrderType) {
       setOrderType(item.orderType)

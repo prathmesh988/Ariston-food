@@ -71,6 +71,7 @@ import { isModuleAuthenticated } from "@food/utils/auth"
 import { getRestaurantAvailabilityStatus } from "@food/utils/restaurantAvailability"
 import useAppBackNavigation from "@food/hooks/useAppBackNavigation"
 import { isMongoObjectId, toRestaurantUrlSlug } from "@food/utils/mainTabRoutes"
+import { usePlatformMode } from "@food/hooks/usePlatformMode"
 import {
   buildCartLineId,
   getDefaultFoodVariant,
@@ -301,7 +302,10 @@ function DraggableMenuButton({ windowSize, buttonWidth, buttonHeight, bottom, on
 }
 
 function RestaurantDetailsContent() {
-  const { slug } = useParams()
+  const { slug: routeSlug } = useParams()
+  const { isSingleVendor, defaultRestaurantId } = usePlatformMode()
+  const slug = routeSlug || (isSingleVendor ? defaultRestaurantId : '')
+  const isHomeView = isSingleVendor && !routeSlug
   const navigate = useNavigate()
   const routerLocation = useRouterLocation()
   const goBack = useAppBackNavigation()
@@ -2788,9 +2792,11 @@ function RestaurantDetailsContent() {
       {/* Header - Back, Search, Menu */}
       <View style={s.topBar}>
         {/* Back Button */}
-        <Button variant="outline" size="icon" style={s.roundIconBtn} onPress={goBack}>
-          <ArrowLeft size={20} color={chipText} />
-        </Button>
+        {!isHomeView && (
+          <Button variant="outline" size="icon" style={s.roundIconBtn} onPress={goBack}>
+            <ArrowLeft size={20} color={chipText} />
+          </Button>
+        )}
 
         {/* Right side: Search pill + menu */}
         <View style={{ flexDirection: "row", alignItems: "center", gap: sp(3), flexShrink: 1 }}>

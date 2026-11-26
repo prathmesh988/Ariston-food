@@ -25,6 +25,7 @@ import {
   isVegMenuItem,
   matchesVegRestaurantFilter,
 } from "@food/utils/vegMode"
+import { usePlatformMode } from "@food/hooks/usePlatformMode"
 const CategoryPage = lazy(() => import("../CategoryPage"))
 
 // Helper to resolve media URLs consistently
@@ -58,6 +59,7 @@ export default function ProfessionalSearch() {
   const { location: userCoords } = useGeoLocation()
   const { zoneId } = useZone(userCoords)
   const { vegMode, vegModeOption } = useProfile()
+  const { isSingleVendor } = usePlatformMode()
   const searchMode = searchParams.get("mode") || "delivery"
   const isTakeawaySearch = searchMode === "takeaway"
   
@@ -252,7 +254,7 @@ export default function ProfessionalSearch() {
             <Search className="absolute left-3.5 top-1/2 -translate-y-1/2 w-4 h-4 text-[#DC2626] transition-transform group-focus-within:scale-110" strokeWidth={2.5} />
             <Input 
               autoFocus
-              placeholder={isTakeawaySearch ? "Search takeaway restaurants..." : "Search dishes or restaurants"} 
+              placeholder={isSingleVendor ? "Search dishes..." : (isTakeawaySearch ? "Search takeaway restaurants..." : "Search dishes or restaurants")} 
               value={query}
               onChange={(e) => setQuery(e.target.value)}
               className="pl-10 pr-12 h-10 sm:h-12 bg-gray-50 dark:bg-zinc-800/50 border-gray-100 dark:border-zinc-700 focus:border-[#DC2626] dark:focus:border-[#DC2626] focus:ring-4 focus:ring-[#DC2626]/5 rounded-2xl text-sm sm:text-base transition-all"
@@ -389,7 +391,7 @@ export default function ProfessionalSearch() {
                 </div>
                 <div className="grid grid-cols-1 gap-4">
                   {results.dishes.map((r) => (
-                    <Link to={`/food/user/restaurants/${r.slug || r._id}${r.matchedDishId ? `?dish=${r.matchedDishId}` : ''}`} key={r._id} className="flex gap-4 p-3 bg-white dark:bg-zinc-900 rounded-[24px] shadow-sm border border-gray-100 dark:border-zinc-800 hover:shadow-xl hover:shadow-gray-200/50 dark:hover:shadow-none transition-all group overflow-hidden active:scale-[0.98]">
+                    <Link to={isSingleVendor ? `/food/user${r.matchedDishId ? `?dish=${r.matchedDishId}` : ''}` : `/food/user/restaurants/${r.slug || r._id}${r.matchedDishId ? `?dish=${r.matchedDishId}` : ''}`} key={r._id} className="flex gap-4 p-3 bg-white dark:bg-zinc-900 rounded-[24px] shadow-sm border border-gray-100 dark:border-zinc-800 hover:shadow-xl hover:shadow-gray-200/50 dark:hover:shadow-none transition-all group overflow-hidden active:scale-[0.98]">
                        <div className="w-24 h-24 rounded-2xl overflow-hidden bg-gray-50 dark:bg-zinc-800 flex-shrink-0 relative">
                            <OptimizedImage 
                             src={getMediaUrl(r.matchedDishImage || r.profileImage || r.image || (Array.isArray(r.images) && r.images[0]))} 
@@ -427,8 +429,8 @@ export default function ProfessionalSearch() {
               </section>
             )}
 
-            {/* Restaurant Results Section */}
-            {results.restaurants.length > 0 && (
+            {/* Restaurant Results Section — marketplace only */}
+            {!isSingleVendor && results.restaurants.length > 0 && (
               <section>
                 <div className="flex items-center justify-between mb-5 px-1">
                    <h2 className="text-sm font-black text-gray-400 uppercase tracking-widest">Restaurants</h2>

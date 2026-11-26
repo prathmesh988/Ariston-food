@@ -11,6 +11,7 @@ import {
 import { clearOnboardingFromLocalStorage, clearAllFilesFromDB, checkOnboardingStatus, isRestaurantOnboardingComplete } from "@/modules/Food/utils/onboardingUtils"
 import { collectFcmTokenFast, persistModuleFcmToken } from "@food/utils/firebaseMessaging"
 import { LoginNumberScreen, LoginOtpScreen } from "@/modules/auth/components/PartnerLogin"
+import { usePlatformMode } from "@food/hooks/usePlatformMode"
 
 // Same look as the Restaurant app login (admin images slider + white sheet, then the white "OTP Verification" page).
 const ACCENT = "#B80B3D"
@@ -20,6 +21,7 @@ const LOGIN_FONT = "'Poppins', sans-serif"
 const DEFAULT_COUNTRY_CODE = "+91"
 
 export default function RestaurantLogin() {
+  const { isSingleVendor } = usePlatformMode()
   const navigate = useNavigate()
   const location = useLocation()
   const isOtpStep = location.pathname.endsWith("/otp")
@@ -338,6 +340,12 @@ export default function RestaurantLogin() {
           },
         })
       } else if (data.needsRegistration === true) {
+        if (isSingleVendor) {
+          toast.error("Account not found. In Single-Vendor mode, accounts are created exclusively by the administrator.")
+          setLoading(false)
+          hasSubmittedRef.current = false
+          return
+        }
         isSuccessRef.current = true
         setRestaurantPendingPhone(phoneVal)
         sessionStorage.removeItem("restaurantAuthData")

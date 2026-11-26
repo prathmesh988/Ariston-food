@@ -1,4 +1,4 @@
-﻿import { useState, useEffect, useRef, useMemo, Fragment } from "react"
+import { useState, useEffect, useRef, useMemo, Fragment } from "react"
 import { getNetworkErrorMessage } from "@/shared/utils/networkError"
 import { createPortal } from "react-dom"
 import { Link, useNavigate, useLocation } from "react-router-dom"
@@ -24,9 +24,11 @@ import { useCompanyName } from "@food/hooks/useCompanyName"
 import { getRestaurantAvailabilityStatus } from "@food/utils/restaurantAvailability"
 import useAppBackNavigation from "@food/hooks/useAppBackNavigation"
 import { filterPublicOffers, mapPublicOfferToCartCoupon } from "@food/utils/offerUtils"
+import { usePlatformMode } from "@food/hooks/usePlatformMode"
 import dishFallbackImage from "@food/assets/placeholders/dish_fallback.webp"
 import BogoTag from "@food/components/user/BogoTag"
 import { DIAMOND_BG, DIAMOND_FONT, DiamondGem, diamondTextStyle } from "@food/components/user/diamond/DiamondBrand"
+import { useDiamondEnabled } from "@food/hooks/useCustomizationSettings"
 import { getBogoLimitsLabel, getCartBogoFreeByLine, getCartBogoSavings, isBogoUsedUp } from "@food/utils/bogo"
 const zoopSound = "/zomato_sms.mp3"
 const debugLog = (...args) => { }
@@ -87,6 +89,7 @@ const CART_RECIPIENT_DETAILS_STORAGE_KEY = "food-cart-recipient-details-v1"
 const CART_ORDER_NOTE_STORAGE_KEY = "food-cart-order-note-v1"
 
 export default function Cart() {
+  const { isSingleVendor } = usePlatformMode()
   const companyName = useCompanyName()
   const navigate = useNavigate()
   const location = useLocation()
@@ -121,6 +124,7 @@ export default function Cart() {
   }
 
   const { cart, updateQuantity, addToCart, getCartCount, clearCart, cleanCartForRestaurant } = cartContext;
+  const isDiamondEnabled = useDiamondEnabled()
   const { getDefaultAddress, getDefaultPaymentMethod, setDefaultAddress, addresses, paymentMethods, userProfile, orderType, setOrderType } = useProfile()
   const { createOrder } = useOrders()
   const { openLocationSelector } = useLocationSelector()
@@ -2462,9 +2466,13 @@ export default function Cart() {
             <Utensils className="h-10 w-10 text-gray-400" />
           </div>
           <h2 className="text-lg font-semibold text-gray-800 dark:text-white mb-1">Your cart is empty</h2>
-          <p className="text-sm text-gray-500 dark:text-gray-400 mb-4 text-center">Add items from a restaurant to start a new order</p>
-          <Link to="/user">
-            <Button className="bg-[#DC2626] hover:bg-[#991B1B] text-white">Browse Restaurants</Button>
+          <p className="text-sm text-gray-500 dark:text-gray-400 mb-4 text-center">
+            {isSingleVendor ? "Add items from our menu to start a new order" : "Add items from a restaurant to start a new order"}
+          </p>
+          <Link to="/food/user">
+            <Button className="bg-[#DC2626] hover:bg-[#991B1B] text-white">
+              {isSingleVendor ? "Explore Menu" : "Browse Restaurants"}
+            </Button>
           </Link>
         </div>
       </AnimatedPage>
@@ -3213,7 +3221,7 @@ export default function Cart() {
                 )}
               </div>
 {/* Ariston Cafe Diamond: what a member saves here, or what joining would save */}
-              {!loadingPricing && (diamondSavings?.total > 0 || diamondOffer?.potentialSavings > 0) && (
+              {!loadingPricing && isDiamondEnabled && (diamondSavings?.total > 0 || diamondOffer?.potentialSavings > 0) && (
                 <Link
                   to="/food/user/diamond"
                   className="flex items-center gap-3 rounded-2xl px-4 py-3 shadow-sm active:opacity-90"
@@ -3302,7 +3310,7 @@ export default function Cart() {
                            <span className={deliveryFee === 0 ? "text-[#DC2626] font-medium" : "text-gray-800 dark:text-gray-200 font-medium"}>
                              {loadingPricing ? (
                                <span className="inline-block h-4 w-12 rounded bg-gray-200 dark:bg-gray-700 animate-pulse align-middle" />
-                             ) : deliveryFee === 0 && diamondSavings?.delivery > 0 ? (
+                             ) : deliveryFee === 0 && isDiamondEnabled && diamondSavings?.delivery > 0 ? (
                                <span className="flex items-baseline gap-1.5">
                                  <span className="text-xs text-gray-400 line-through">{RUPEE_SYMBOL}{Number(diamondSavings.delivery).toFixed(2)}</span>
                                  FREE
@@ -3332,7 +3340,7 @@ export default function Cart() {
                     )}
 
                     {/* Removed TAKEAWAY ORDER badge from here */}
-                    {platformFee === 0 && diamondSavings?.platformFee > 0 && (
+                    {platformFee === 0 && isDiamondEnabled && diamondSavings?.platformFee > 0 && (
                       <div className="flex justify-between text-sm">
                         <span className="text-gray-600 dark:text-gray-400 font-medium">Platform Fee</span>
                         <span className="flex items-baseline gap-1.5 text-[#DC2626] font-medium">

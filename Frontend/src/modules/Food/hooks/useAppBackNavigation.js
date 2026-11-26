@@ -1,6 +1,7 @@
 import { useCallback } from "react"
 import { useLocation, useNavigate } from "react-router-dom"
 import { useProfile } from "@food/context/ProfileContext"
+import { usePlatformMode } from "@food/hooks/usePlatformMode"
 
 const toFoodPath = (value) => {
   if (typeof value !== "string") return null
@@ -25,11 +26,11 @@ const pathsMatch = (a, b) => {
   return norm(a) === norm(b)
 }
 
-const resolveBackPath = ({ pathname, search, state, orderType }) => {
+const resolveBackPath = ({ pathname, search, state, orderType, isSingleVendor }) => {
   const normalizedPath = getNormalizedUserPath(pathname)
   const explicitBackPath = toFoodPath(state?.backTo) || toFoodPath(state?.from) || toFoodPath(state?.returnTo)
   const searchParams = new URLSearchParams(search || "")
-  const defaultHomePath = orderType === "takeaway" ? "/food/user/takeaway" : "/food/user"
+  const defaultHomePath = (!isSingleVendor && orderType === "takeaway") ? "/food/user/takeaway" : "/food/user"
 
   if (
     normalizedPath === "/user/profile/payments/new" ||
@@ -156,6 +157,7 @@ export default function useAppBackNavigation() {
   const location = useLocation()
   const profile = useProfile()
   const orderType = profile ? profile.orderType : null
+  const { isSingleVendor } = usePlatformMode()
 
   return useCallback(() => {
     // Restaurant "more info" sheet lives in ?info= — close it first without history pop.
@@ -170,7 +172,7 @@ export default function useAppBackNavigation() {
       return
     }
 
-    const target = resolveBackPath({ ...location, orderType })
+    const target = resolveBackPath({ ...location, orderType, isSingleVendor })
 
     if (target && !pathsMatch(target, location.pathname)) {
       navigate(target, { replace: true })
@@ -182,8 +184,8 @@ export default function useAppBackNavigation() {
       return
     }
 
-    navigate(orderType === "takeaway" ? "/food/user/takeaway" : "/food/user", {
+    navigate((!isSingleVendor && orderType === "takeaway") ? "/food/user/takeaway" : "/food/user", {
       replace: true,
     })
-  }, [location, navigate, orderType])
+  }, [location, navigate, orderType, isSingleVendor])
 }

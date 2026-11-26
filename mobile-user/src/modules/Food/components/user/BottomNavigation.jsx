@@ -16,6 +16,7 @@ import { useProfile } from '@food/context/ProfileContext';
 import { getCachedUnder250PriceLimit, getLandingSettingsPublic } from '@food/utils/foodPageCache';
 import { emitBottomNavVisibility, subscribeBottomNavShow } from '@food/utils/bottomNavEvents';
 import { getBrowseScrollY } from '@food/utils/browseScrollMemory';
+import { usePlatformMode } from '@food/hooks/usePlatformMode';
 
 const HIDE_LOCK_MS = 900;
 
@@ -27,6 +28,7 @@ const ICONS = {
 };
 
 export default function BottomNavigation() {
+  const { isSingleVendor } = usePlatformMode();
   const location = useLocation();
   const navigate = useNavigate();
   const t = useTheme();
@@ -180,7 +182,7 @@ export default function BottomNavigation() {
   const shownTabId = useAnnouncedTab('food', routeTabId);
   const navItems = [
     { id: 'delivery', label: 'Delivery', to: '/food/user', orderType: 'delivery' },
-    { id: 'takeaway', label: 'Takeaway', to: '/food/user/takeaway', orderType: 'takeaway' },
+    ...(!isSingleVendor ? [{ id: 'takeaway', label: 'Takeaway', to: '/food/user/takeaway', orderType: 'takeaway' }] : []),
     { id: 'under250', label: `Under ₹${under250PriceLimit}`, to: '/food/user/under-250' },
     { id: 'dining', label: 'Dining', to: '/food/user/dining' },
   ].map((item) => ({ ...item, active: item.id === shownTabId }));

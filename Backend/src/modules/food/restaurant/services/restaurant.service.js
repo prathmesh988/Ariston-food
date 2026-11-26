@@ -889,6 +889,22 @@ export const updateRestaurantProfile = async (restaurantId, body = {}) => {
         }
     }
 
+    if (body.email !== undefined || body.primaryEmail !== undefined) {
+        const email = String(body.email !== undefined ? body.email : body.primaryEmail || '').trim().toLowerCase();
+        if (email) {
+            const EMAIL_REGEX = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+            if (!EMAIL_REGEX.test(email)) {
+                throw new ValidationError('Email is invalid');
+            }
+            if (email.length > 254) {
+                throw new ValidationError('Email is too long');
+            }
+            update.email = email;
+        } else {
+            update.email = '';
+        }
+    }
+
     // Note: UI keeps phone read-only, but we accept it safely and normalize if sent.
     if (body.ownerPhone !== undefined) {
         const { digits, last10 } = normalizePhone(body.ownerPhone);

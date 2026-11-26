@@ -25,6 +25,7 @@ import { prefetchPolicyContentWhenIdle } from "@/shared/utils/policyPages"
 import { hardNavigate } from "@/shared/utils/nativeShell"
 import { requestPhoneFocus, usePhoneFocusRequest } from "@/shared/utils/loginFocus"
 import { LoginNumberScreen, LoginOtpScreen } from "@/modules/auth/components/PartnerLogin"
+import { usePlatformMode } from "@food/hooks/usePlatformMode"
 
 const DEFAULT_COUNTRY_CODE = "+91"
 // the app theme colour on the login (Continue button, OTP links, banner backdrop)
@@ -48,6 +49,7 @@ const clearOnboardingFileStore = () => {
 }
 
 export default function RestaurantLogin() {
+  const { isSingleVendor } = usePlatformMode()
   const navigate = useNavigate()
   const location = useLocation()
   const isOtpStep = location.pathname.endsWith("/otp")
@@ -389,6 +391,12 @@ export default function RestaurantLogin() {
           },
         })
       } else if (data.needsRegistration === true) {
+        if (isSingleVendor) {
+          toast("In Single-Vendor mode, accounts are created exclusively by the administrator.")
+          setLoading(false)
+          hasSubmittedRef.current = false
+          return
+        }
         isSuccessRef.current = true
         setRestaurantPendingPhone(phoneVal)
         sessionStorage.removeItem("restaurantAuthData")

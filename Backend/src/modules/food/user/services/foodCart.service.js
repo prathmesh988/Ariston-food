@@ -9,6 +9,7 @@ import {
   loadActivePricingRules,
 } from '../../admin/services/otherPrice.service.js';
 import { bogoFreeQuantity, loadActiveBogoOffers } from '../../admin/services/bogoPricing.service.js';
+import { isSingleVendor } from '../../../../config/platformMode.js';
 
 const MAX_QTY = 99;
 
@@ -521,14 +522,20 @@ export async function addFoodCartItem(userId, body = {}) {
   const cart = await getOrCreateCart(userId);
 
   if (cart.restaurantId && String(cart.restaurantId) !== String(itemDoc.restaurantId)) {
-    const existingName = cart.restaurantId
-      ? (await FoodRestaurant.findById(cart.restaurantId).select('restaurantName').lean())
-          ?.restaurantName
-      : '';
-    throw new ValidationError(
-      `Cart already contains items from "${existingName || 'another restaurant'}". Please clear cart or complete order first.`,
-      'RESTAURANT_MISMATCH'
-    );
+    if (isSingleVendor()) {
+      // In single-vendor mode, auto-reset cart to the default restaurant
+      cart.items = [];
+      cart.restaurantId = itemDoc.restaurantId;
+    } else {
+      const existingName = cart.restaurantId
+        ? (await FoodRestaurant.findById(cart.restaurantId).select('restaurantName').lean())
+            ?.restaurantName
+        : '';
+      throw new ValidationError(
+        `Cart already contains items from "${existingName || 'another restaurant'}". Please clear cart or complete order first.`,
+        'RESTAURANT_MISMATCH'
+      );
+    }
   }
 
   const existingIdx = (cart.items || []).findIndex(

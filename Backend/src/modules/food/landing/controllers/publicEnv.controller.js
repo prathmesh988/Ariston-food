@@ -1,4 +1,5 @@
 import { config } from '../../../../config/env.js';
+import { getPlatformMode, getDefaultRestaurantId } from '../../../../config/platformMode.js';
 
 const sanitize = (value) => (value ? String(value).trim().replace(/^['"]|['"]$/g, '') : '');
 
@@ -73,7 +74,11 @@ export const getPublicEnvController = async (_req, res, next) => {
                 FIREBASE_APP_ID: appId,
                 FIREBASE_MEASUREMENT_ID: measurementId,
                 FIREBASE_VAPID_KEY: vapidKey,
-                NODE_ENV: config.nodeEnv || 'development'
+                NODE_ENV: config.nodeEnv || 'development',
+                PLATFORM_MODE: getPlatformMode(),
+                DEFAULT_RESTAURANT_ID: getPlatformMode() === 'single_vendor'
+                    ? getDefaultRestaurantId()
+                    : ''
             }
         });
     } catch (error) {
