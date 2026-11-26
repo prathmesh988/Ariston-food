@@ -5,6 +5,7 @@ import { Button } from "@food/components/ui/button"
 import { Input } from "@food/components/ui/input"
 import { searchAPI } from "@/services/api"
 import { useVoiceSearch } from "@food/hooks/useVoiceSearch"
+import { usePlatformMode } from "@food/hooks/usePlatformMode"
 
 const SEARCH_HISTORY_KEY = "user_recent_searches_v1"
 
@@ -25,6 +26,7 @@ const getImageUrl = (value) => {
 }
 
 export default function SearchOverlay({ isOpen, onClose, searchValue, onSearchChange, autoStartVoice = false }) {
+  const { isSingleVendor } = usePlatformMode()
   const navigate = useNavigate()
   const inputRef = useRef(null)
   const [allFoods, setAllFoods] = useState([])
@@ -186,7 +188,7 @@ export default function SearchOverlay({ isOpen, onClose, searchValue, onSearchCh
                 ref={inputRef}
                 value={searchValue}
                 onChange={(e) => onSearchChange(e.target.value)}
-                placeholder="Search dishes or restaurants"
+                placeholder={isSingleVendor ? "Search menu & dishes" : "Search dishes or restaurants"}
                 className="pl-14 pr-16 h-13 w-full bg-white dark:bg-[#1a1a1a] border-gray-200 dark:border-gray-800 focus:ring-2 focus:ring-[#DC2626]/20 focus:border-[#DC2626] dark:focus:border-[#DC2626] rounded-2xl text-base dark:text-white placeholder:text-gray-400 dark:placeholder:text-gray-500 shadow-sm transition-all duration-200"
               />
               <div className="absolute right-4 top-1/2 transform -translate-y-1/2 flex items-center gap-3">

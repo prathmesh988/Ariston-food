@@ -59,6 +59,11 @@ export const loadBusinessSettings = async () => {
         
         updateFavicon(settings.favicon?.url);
         updateTitle(settings.companyName);
+
+        if (typeof window !== 'undefined') {
+          window.dispatchEvent(new CustomEvent('businessSettingsUpdated', { detail: settings }));
+        }
+
         return settings;
       }
       return cachedSettings;
@@ -117,6 +122,10 @@ export const setCachedSettings = (settings) => {
     
     updateFavicon(settings.favicon?.url);
     updateTitle(settings.companyName);
+
+    if (typeof window !== 'undefined') {
+      window.dispatchEvent(new CustomEvent('businessSettingsUpdated', { detail: settings }));
+    }
   }
 };
 

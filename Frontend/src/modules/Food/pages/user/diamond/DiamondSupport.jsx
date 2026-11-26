@@ -3,6 +3,7 @@ import { useNavigate } from "react-router-dom"
 import { ArrowLeft, Loader2, SendHorizontal } from "lucide-react"
 import { toast } from "sonner"
 import { supportAPI, userAPI } from "@food/api"
+import { useDiamondEnabled } from "@food/hooks/useCustomizationSettings"
 
 const ISSUE_TYPE = "Diamond membership"
 const FONT = "'Lexend', 'Figtree', sans-serif"
@@ -40,7 +41,14 @@ function Bubble({ from, at, children }) {
  */
 export default function DiamondSupport() {
   const navigate = useNavigate()
+  const isDiamondEnabled = useDiamondEnabled()
   const [name, setName] = useState("")
+
+  useEffect(() => {
+    if (isDiamondEnabled === false) {
+      navigate("/food/user", { replace: true })
+    }
+  }, [isDiamondEnabled, navigate])
   const [history, setHistory] = useState(null)
   const [step, setStep] = useState("choose") // choose | write | sent
   const [session, setSession] = useState([]) // messages from this visit

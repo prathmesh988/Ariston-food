@@ -4,6 +4,16 @@ import UserLayout from "./UserLayout"
 import Loader from "@food/components/Loader"
 import ProtectedRoute from "@food/components/ProtectedRoute"
 import AuthRedirect from "@food/components/AuthRedirect"
+import { usePlatformMode } from "@food/hooks/usePlatformMode"
+import { useDiamondEnabled } from "@food/hooks/useCustomizationSettings"
+
+function DiamondRouteGuard({ children }) {
+  const isDiamondEnabled = useDiamondEnabled()
+  if (isDiamondEnabled === false) {
+    return <Navigate to="/food/user" replace />
+  }
+  return children
+}
 
 const SearchResults = lazy(() => import("@food/pages/user/search/ProfessionalSearch"))
 
@@ -144,6 +154,7 @@ const RequireInitialAuth = ({ children }) => {
 }
 
 export default function UserRouter() {
+  const { isSingleVendor } = usePlatformMode()
   return (
     <Suspense fallback={<AppShellSkeleton />}>
       <Routes>
@@ -190,7 +201,7 @@ export default function UserRouter() {
           {/* Home & Discovery — kept alive in UserLayout MainTabKeepAlive */}
           <Route path="" element={<MainTabRoutePlaceholder />} />
           <Route path="home" element={<MainTabRoutePlaceholder />} />
-          <Route path="takeaway" element={<MainTabRoutePlaceholder />} />
+          <Route path="takeaway" element={isSingleVendor ? <Navigate to="/food/user" replace /> : <MainTabRoutePlaceholder />} />
           <Route path="dining" element={<MainTabRoutePlaceholder />} />
           <Route path="dining/:category" element={<DiningCategory />} />
           <Route path="dining/explore/upto50" element={<DiningExplore50 />} />
@@ -200,7 +211,7 @@ export default function UserRouter() {
           <Route path="under-250" element={<MainTabRoutePlaceholder />} />
           <Route path="categories" element={<Categories />} />
           <Route path="category/:category" element={<MainTabRoutePlaceholder />} />
-          <Route path="restaurants" element={<Restaurants />} />
+          <Route path="restaurants" element={isSingleVendor ? <Navigate to="/food/user" replace /> : <Restaurants />} />
           <Route path="restaurants/:slug" element={<RestaurantDetails />} />
           <Route path="search" element={<SearchResults />} />
           <Route path="product/:id" element={<ProductDetail />} />
@@ -256,9 +267,9 @@ export default function UserRouter() {
             <Route path="profile/refer-earn" element={<ReferEarn />} />
 
             {/* Ariston Cafe Diamond membership */}
-            <Route path="diamond" element={<DiamondPage />} />
-            <Route path="diamond/terms" element={<DiamondTerms />} />
-            <Route path="diamond/support" element={<DiamondSupport />} />
+            <Route path="diamond" element={<DiamondRouteGuard><DiamondPage /></DiamondRouteGuard>} />
+            <Route path="diamond/terms" element={<DiamondRouteGuard><DiamondTerms /></DiamondRouteGuard>} />
+            <Route path="diamond/support" element={<DiamondRouteGuard><DiamondSupport /></DiamondRouteGuard>} />
             <Route path="profile/dining-bookings" element={<MyBookings />} />
             <Route path="profile/settings" element={<Suspense fallback={<Loader />}><Settings /></Suspense>} />
 

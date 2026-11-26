@@ -1,7 +1,7 @@
 import { useState, useEffect, useLayoutEffect, useRef, Component, useMemo } from "react"
 import { createPortal } from "react-dom"
 import { motion, AnimatePresence } from "framer-motion"
-import { useParams, useNavigate, useSearchParams, useLocation as useRouterLocation } from "react-router-dom"
+import { useParams, useNavigate, useSearchParams, useLocation as useRouterLocation, Link } from "react-router-dom"
 import { restaurantAPI, diningAPI, orderAPI } from "@food/api"
 import { API_BASE_URL } from "@food/api/config"
 import { toast } from "sonner"
@@ -40,6 +40,7 @@ import {
   Info,
   Phone,
   Store,
+  User,
 } from "lucide-react"
 import { Button } from "@food/components/ui/button"
 import { Badge } from "@food/components/ui/badge"
@@ -53,6 +54,7 @@ import { isModuleAuthenticated } from "@food/utils/auth"
 import { getRestaurantAvailabilityStatus } from "@food/utils/restaurantAvailability"
 import useAppBackNavigation from "@food/hooks/useAppBackNavigation"
 import { isMongoObjectId, toRestaurantUrlSlug } from "@food/utils/mainTabRoutes"
+import { usePlatformMode } from "@food/hooks/usePlatformMode"
 import {
   buildCartLineId,
   getDefaultFoodVariant,
@@ -67,6 +69,16 @@ import BogoTag from "@food/components/user/BogoTag"
 import { isVegMenuItem } from "@food/utils/vegMode"
 import dishFallbackImage from "@food/assets/placeholders/dish_fallback.webp"
 import { useComboOffers } from "@food/components/user/home/ComboOffersRow"
+import {
+  DIAMOND_BG,
+  DIAMOND_FONT,
+  DIAMOND_BUTTON,
+  DiamondGem,
+  DiamondPattern,
+  diamondTextStyle,
+} from "@food/components/user/diamond/DiamondBrand"
+import QuickDeliveryTabsSection from "@food/components/user/home/QuickDeliveryTabsSection"
+import { useDiamondEnabled } from "@food/hooks/useCustomizationSettings"
 
 const fssaiLogo = "/images/fssai.png?v=3"
 
@@ -122,7 +134,11 @@ const ScallopBadge = ({ className = "" }) => (
 
 
 function RestaurantDetailsContent() {
-  const { slug } = useParams()
+  const isDiamondEnabled = useDiamondEnabled()
+  const { slug: routeSlug } = useParams()
+  const { isSingleVendor, defaultRestaurantId } = usePlatformMode()
+  const slug = routeSlug || (isSingleVendor ? defaultRestaurantId : '')
+  const isHomeView = isSingleVendor && !routeSlug
   const navigate = useNavigate()
   const routerLocation = useRouterLocation()
   const goBack = useAppBackNavigation()
@@ -130,7 +146,7 @@ function RestaurantDetailsContent() {
   const showOnlyUnder250 = searchParams.get('under250') === 'true'
   const targetDishId = useMemo(() => String(searchParams.get('dish') || '').trim(), [searchParams])
   const { addToCart, updateQuantity, removeFromCart, getCartItem, cart, itemCount } = useCart()
-  const { vegMode, addDishFavorite, removeDishFavorite, isDishFavorite, getDishFavorites, getFavorites, addFavorite, removeFavorite, isFavorite, orderType } = useProfile()
+  const { vegMode, addDishFavorite, removeDishFavorite, isDishFavorite, getDishFavorites, getFavorites, addFavorite, removeFavorite, isFavorite, orderType, userProfile } = useProfile()
   const seededRestaurant = routerLocation.state?.restaurantData || null
   const seededMongoId = useMemo(() => {
     const candidates = [
@@ -172,9 +188,6 @@ function RestaurantDetailsContent() {
   const [quantities, setQuantities] = useState({})
   const [showManageCollections, setShowManageCollections] = useState(false)
   const [constraintsContainer, setConstraintsContainer] = useState(null)
-  const menuButtonRef = useRef(null)
-  const [menuButtonWidth, setMenuButtonWidth] = useState(120)
-  const [menuButtonHeight, setMenuButtonHeight] = useState(48)
   const [windowSize, setWindowSize] = useState({
     width: typeof window !== 'undefined' ? window.innerWidth : 0,
     height: typeof window !== 'undefined' ? window.innerHeight : 0
@@ -2190,13 +2203,6 @@ function RestaurantDetailsContent() {
     [restaurant?.menuSections, showOnlyUnder250, searchQuery, vegMode, filters, selectedMenuCategory, showCombosOnly, comboItemIds]
   )
 
-  useEffect(() => {
-    if (menuButtonRef.current) {
-      setMenuButtonWidth(menuButtonRef.current.offsetWidth)
-      setMenuButtonHeight(menuButtonRef.current.offsetHeight)
-    }
-  }, [restaurant, filteredSections, windowSize])
-
   // A filter (e.g. Combo Offers) opens only its matching sections. When the last filter is
   // cleared, reopen every section like on page load — otherwise the menu stays collapsed.
   const filtersWereActiveRef = useRef(false)
@@ -2583,15 +2589,17 @@ function RestaurantDetailsContent() {
       <div className="px-4 sm:px-6 md:px-8 lg:px-10 xl:px-12 pt-3 md:pt-4 lg:pt-5 pb-2 md:pb-3 bg-white dark:bg-[#0a0a0a]">
         <div className="max-w-7xl mx-auto flex items-center justify-between">
           {/* Back Button */}
-          <Button
-            type="button"
-            variant="outline"
-            size="icon"
-            className="rounded-full h-10 w-10 border-gray-200 dark:border-gray-800 shadow-sm bg-white dark:bg-[#1a1a1a] relative z-50 touch-manipulation"
-            onClick={goBack}
-          >
-            <ArrowLeft className="h-5 w-5 text-gray-900 dark:text-white" />
-          </Button>
+          {!isHomeView && (
+            <Button
+              type="button"
+              variant="outline"
+              size="icon"
+              className="rounded-full h-10 w-10 border-gray-200 dark:border-gray-800 shadow-sm bg-white dark:bg-[#1a1a1a] relative z-50 touch-manipulation"
+              onClick={goBack}
+            >
+              <ArrowLeft className="h-5 w-5 text-gray-900 dark:text-white" />
+            </Button>
+          )}
 
           {/* Right side: Search pill + menu */}
           <div className="flex items-center gap-3">
@@ -2776,6 +2784,65 @@ function RestaurantDetailsContent() {
             )
           })()}
 
+
+          {/* Table Booking & Dining Entry */}
+          {(isSingleVendor || restaurant?.diningSettings?.isEnabled) && (
+            <div className="flex items-center justify-between border border-amber-200/80 dark:border-amber-900/50 bg-gradient-to-r from-amber-50/90 via-white to-amber-50/60 dark:from-amber-950/20 dark:via-[#1a1a1a] dark:to-amber-950/10 p-3.5 sm:p-4 rounded-2xl mb-3 shadow-sm">
+              <div className="flex items-center gap-3 min-w-0">
+                <div className="w-10 h-10 rounded-xl bg-amber-500/10 text-amber-600 dark:text-amber-400 flex items-center justify-center shrink-0">
+                  <Utensils className="h-5 w-5" />
+                </div>
+                <div className="min-w-0">
+                  <p className="text-sm font-bold text-gray-900 dark:text-white leading-tight">Dine-in & Table Booking</p>
+                  <p className="text-xs text-gray-500 dark:text-gray-400 mt-0.5 truncate">Reserve your table at Ariston Cafe</p>
+                </div>
+              </div>
+              <Button
+                size="sm"
+                className="bg-amber-600 hover:bg-amber-700 text-white font-bold text-xs rounded-xl shadow-sm px-4 shrink-0"
+                onClick={() => navigate(`/food/user/dining/book/${slug || defaultRestaurantId}`)}
+              >
+                Book Table
+              </Button>
+            </div>
+          )}
+
+          {/* Ariston Cafe Diamond Membership Strip */}
+          {isDiamondEnabled && (
+            <div
+              onClick={() => navigate("/food/user/diamond")}
+              className="flex items-center justify-between p-3.5 sm:p-4 rounded-2xl cursor-pointer transition-all duration-300 hover:scale-[1.01] active:scale-[0.99] mb-3 relative overflow-hidden shadow-md"
+              style={{ background: DIAMOND_BG, color: "#ffffff" }}
+            >
+              <DiamondPattern corner />
+              <div className="flex items-center gap-3 relative z-10 min-w-0">
+                <div className="h-10 w-10 rounded-xl flex items-center justify-center bg-white/10 shrink-0 border border-white/10">
+                  <DiamondGem className="h-6 w-6" id="rd-gem" />
+                </div>
+                <div className="min-w-0">
+                  <div className="flex items-center gap-1.5">
+                    <span className="text-sm font-black tracking-wide" style={{ ...diamondTextStyle, fontFamily: DIAMOND_FONT }}>
+                      ARISTON DIAMOND
+                    </span>
+                  </div>
+                  <p className="text-xs text-gray-300 mt-0.5 truncate">
+                    Unlimited free delivery & exclusive dining privileges
+                  </p>
+                </div>
+              </div>
+              <div className="relative z-10 shrink-0 pl-2">
+                <span
+                  className="inline-flex items-center text-xs font-black px-3.5 py-1.5 rounded-full text-[#0B0E13] shadow-sm"
+                  style={{ background: DIAMOND_BUTTON }}
+                >
+                  Join Now
+                </span>
+              </div>
+            </div>
+          )}
+
+          {/* Reorder / Food in 15 mins Dual Tab Carousel (as requested) */}
+          <QuickDeliveryTabsSection restaurant={restaurant} />
 
           {/* Filter/Category Buttons */}
           {restaurant?.menuSections && Array.isArray(restaurant.menuSections) && restaurant.menuSections.length > 0 && (
@@ -3536,50 +3603,6 @@ function RestaurantDetailsContent() {
           </div>
         </div>
       )}
-
-      {/* Floating Menu Button - Rendered via Portal for perfect fixed positioning and instant drag response */}
-      {typeof window !== "undefined" && !showFilterSheet && !showMenuSheet && !showMenuOptionsSheet && restaurant && filteredSections.length > 0 &&
-        createPortal(
-          <motion.div
-            drag
-            dragMomentum={false}
-            dragElastic={0}
-            dragConstraints={{
-              left: 0,
-              right: windowSize.width - menuButtonWidth,
-              top: -(windowSize.height - menuButtonHeight - (itemCount > 0 ? 150 : 80)),
-              bottom: itemCount > 0 ? 150 : 80
-            }}
-            initial={{
-              x: (windowSize.width - menuButtonWidth) / 2,
-              y: 0
-            }}
-            whileDrag={{ scale: 1.02, zIndex: 9998 }}
-            whileHover={{ scale: 1.05 }}
-            style={{
-              position: 'fixed',
-              left: 0,
-              bottom: itemCount > 0 ? 150 : 80,
-              backfaceVisibility: 'hidden',
-              WebkitFontSmoothing: 'antialiased',
-              zIndex: 9998,
-              touchAction: 'none'
-            }}
-            className="pointer-events-auto cursor-grab active:cursor-grabbing"
-          >
-            <Button
-              ref={menuButtonRef}
-              className="bg-[#5a5e66] hover:bg-[#4a4e56] text-white flex items-center gap-2.5 shadow-lg border border-white/10 px-6 py-3 h-auto rounded-[22px] active:scale-95 transition-all group"
-              size="lg"
-              onClick={() => setShowMenuSheet(true)}
-            >
-              <Utensils className="h-5 w-5 text-white group-hover:scale-110 transition-transform" />
-              <span className="text-[17px] font-medium antialiased tracking-wide">Menu</span>
-            </Button>
-          </motion.div>,
-          document.body
-        )
-      }
 
       {/* Menu Categories Bottom Sheet - Rendered via Portal */}
       {typeof window !== "undefined" &&
@@ -4461,6 +4484,36 @@ function RestaurantDetailsContent() {
                       >
                         <Info className="h-5 w-5 text-gray-700 dark:text-gray-300" />
                         <span className="text-base text-gray-900 dark:text-white">See more about this restaurant</span>
+                      </button>
+
+                      {/* Menu Categories */}
+                      {filteredSections.length > 0 && (
+                        <button
+                          className="w-full flex items-center gap-4 px-2 py-3 hover:bg-gray-50 dark:hover:bg-gray-800 rounded-lg transition-colors text-left"
+                          onClick={() => {
+                            setShowMenuOptionsSheet(false)
+                            setShowMenuSheet(true)
+                          }}
+                        >
+                          <Utensils className="h-5 w-5 text-gray-700 dark:text-gray-300" />
+                          <span className="text-base text-gray-900 dark:text-white">Menu Categories</span>
+                        </button>
+                      )}
+
+                      {/* My Profile */}
+                      <button
+                        className="w-full flex items-center gap-4 px-2 py-3 hover:bg-gray-50 dark:hover:bg-gray-800 rounded-lg transition-colors text-left"
+                        onClick={() => {
+                          setShowMenuOptionsSheet(false)
+                          if (!isModuleAuthenticated('user')) {
+                            window.dispatchEvent(new CustomEvent('show-login-required'))
+                          } else {
+                            navigate('/food/user/profile', { state: { from: '/food/user' } })
+                          }
+                        }}
+                      >
+                        <User className="h-5 w-5 text-gray-700 dark:text-gray-300" />
+                        <span className="text-base text-gray-900 dark:text-white">My Profile</span>
                       </button>
 
                     </div>

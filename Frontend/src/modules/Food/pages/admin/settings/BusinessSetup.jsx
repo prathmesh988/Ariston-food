@@ -1,8 +1,8 @@
 import { useState, useRef, useEffect, useMemo } from "react";
-import { Info, Phone, Upload, X, Loader2 } from "lucide-react";
+import { Info, Phone, Upload, X, Loader2, Store, UtensilsCrossed, Layers, CheckCircle2 } from "lucide-react";
 import { toast } from "sonner";
 import { adminAPI } from "@food/api";
-import { setCachedSettings, updateFavicon, updateTitle } from "@food/utils/businessSettings";
+import { setCachedSettings, getCachedSettings, updateFavicon, updateTitle } from "@food/utils/businessSettings";
 import { EMAIL_REGEX } from "@/shared/utils/emailValidation";
 const debugLog = (...args) => {}
 const debugWarn = (...args) => {}
@@ -46,6 +46,8 @@ export default function BusinessSetup() {
   const faviconInputRef = useRef(null);
 
   const [formData, setFormData] = useState(emptyForm);
+  const [platformMode, setPlatformMode] = useState("marketplace");
+  const [switchingMode, setSwitchingMode] = useState(false);
 
   const hasChanges = useMemo(() => {
     const formDirty = Object.keys(emptyForm).some(
@@ -87,6 +89,34 @@ export default function BusinessSetup() {
     setFaviconFile(null);
     if (logoInputRef.current) logoInputRef.current.value = "";
     if (faviconInputRef.current) faviconInputRef.current.value = "";
+    if (settings?.platformMode) {
+      setPlatformMode(settings.platformMode);
+    }
+  };
+
+  const handleTogglePlatformMode = async (targetMode) => {
+    if (switchingMode || targetMode === platformMode) return;
+    try {
+      setSwitchingMode(true);
+      const res = await adminAPI.updatePlatformMode(targetMode);
+      const newMode = res?.data?.data?.platformMode || targetMode;
+      setPlatformMode(newMode);
+      const currentCached = getCachedSettings() || {};
+      setCachedSettings({
+        ...currentCached,
+        platformMode: newMode,
+        defaultRestaurantId: res?.data?.data?.defaultRestaurantId || currentCached.defaultRestaurantId,
+      });
+      toast.success(
+        newMode === "single_vendor"
+          ? "Platform switched to Single-Vendor Mode (Ariston Cafe)"
+          : "Platform switched to Multi-Vendor Marketplace Mode"
+      );
+    } catch (err) {
+      toast.error(err?.response?.data?.message || "Failed to switch platform mode");
+    } finally {
+      setSwitchingMode(false);
+    }
   };
 
   const fetchBusinessSettings = async () => {
@@ -253,6 +283,154 @@ export default function BusinessSetup() {
       </div>
 
       <div className="space-y-4">
+        {/* Platform Operating Mode Toggle Card */}
+        <div className="bg-white rounded-lg shadow-sm border border-slate-200 overflow-hidden">
+          <div className="px-4 py-4 bg-gradient-to-r from-slate-900 via-slate-850 to-slate-900 text-white flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
+            <div className="flex items-center gap-3">
+              <div className="w-10 h-10 rounded-lg bg-blue-500/20 border border-blue-400/30 flex items-center justify-center text-blue-400">
+                <Layers className="w-5 h-5" />
+              </div>
+              <div>
+                <div className="flex items-center gap-2">
+                  <h3 className="text-sm font-semibold text-white">Platform Operating Mode</h3>
+                  <span className={`text-[10px] font-semibold px-2 py-0.5 rounded-full uppercase tracking-wider ${
+                    platformMode === "single_vendor"
+                      ? "bg-amber-400/20 text-amber-300 border border-amber-400/40"
+                      : "bg-emerald-400/20 text-emerald-300 border border-emerald-400/40"
+                  }`}>
+                    {platformMode === "single_vendor" ? "Single Vendor" : "Multi-Vendor"}
+                  </span>
+                </div>
+                <p className="text-xs text-slate-300 mt-0.5">
+                  Control whether the platform operates across multiple restaurants or solely as Ariston Cafe.
+                </p>
+              </div>
+            </div>
+
+            {/* Live Toggle Pill */}
+            <div className="flex items-center gap-2 bg-slate-800/90 p-1 rounded-lg border border-slate-700/60 self-start sm:self-auto">
+              <button
+                type="button"
+                disabled={switchingMode}
+                onClick={() => handleTogglePlatformMode("marketplace")}
+                className={`flex items-center gap-1.5 px-3 py-1.5 rounded-md text-xs font-medium transition-all ${
+                  platformMode === "marketplace"
+                    ? "bg-blue-600 text-white shadow-sm font-semibold"
+                    : "text-slate-400 hover:text-white"
+                } disabled:opacity-50`}
+              >
+                <Store className="w-3.5 h-3.5" />
+                <span>Multi-Vendor</span>
+              </button>
+              <button
+                type="button"
+                disabled={switchingMode}
+                onClick={() => handleTogglePlatformMode("single_vendor")}
+                className={`flex items-center gap-1.5 px-3 py-1.5 rounded-md text-xs font-medium transition-all ${
+                  platformMode === "single_vendor"
+                    ? "bg-amber-500 text-slate-950 font-bold shadow-sm"
+                    : "text-slate-400 hover:text-white"
+                } disabled:opacity-50`}
+              >
+                <UtensilsCrossed className="w-3.5 h-3.5" />
+                <span>Single-Vendor</span>
+              </button>
+            </div>
+          </div>
+
+          <div className="p-4 grid grid-cols-1 md:grid-cols-2 gap-4 bg-slate-50/50">
+            {/* Multi-vendor card option */}
+            <div
+              onClick={() => handleTogglePlatformMode("marketplace")}
+              className={`p-4 rounded-xl border transition-all cursor-pointer relative ${
+                platformMode === "marketplace"
+                  ? "bg-white border-blue-500 ring-2 ring-blue-500/10 shadow-sm"
+                  : "bg-white/60 border-slate-200 hover:border-slate-300 opacity-75 hover:opacity-100"
+              }`}
+            >
+              <div className="flex items-start justify-between mb-2">
+                <div className="flex items-center gap-2.5">
+                  <div className={`w-8 h-8 rounded-lg flex items-center justify-center ${
+                    platformMode === "marketplace" ? "bg-blue-50 text-blue-600" : "bg-slate-100 text-slate-500"
+                  }`}>
+                    <Store className="w-4 h-4" />
+                  </div>
+                  <div>
+                    <h4 className="text-xs font-bold text-slate-900">Multi-Vendor Marketplace</h4>
+                    <p className="text-[11px] text-slate-500">Standard operating model</p>
+                  </div>
+                </div>
+                {platformMode === "marketplace" ? (
+                  <span className="flex items-center gap-1 text-[11px] font-semibold text-blue-600 bg-blue-50 px-2 py-0.5 rounded-full">
+                    <CheckCircle2 className="w-3.5 h-3.5" /> Active
+                  </span>
+                ) : (
+                  <span className="text-[11px] text-slate-400">Click to activate</span>
+                )}
+              </div>
+              <ul className="text-[11px] text-slate-600 space-y-1.5 mt-2.5 pt-2.5 border-t border-slate-100">
+                <li className="flex items-center gap-1.5">
+                  <span className="w-1.5 h-1.5 rounded-full bg-slate-400 shrink-0" />
+                  <span>Restaurants can register, onboard & receive independent orders</span>
+                </li>
+                <li className="flex items-center gap-1.5">
+                  <span className="w-1.5 h-1.5 rounded-full bg-slate-400 shrink-0" />
+                  <span>Vendor commission rules, restaurant approval queue & vendor payouts active</span>
+                </li>
+                <li className="flex items-center gap-1.5 font-medium text-emerald-700 bg-emerald-50/60 px-2 py-1 rounded">
+                  <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 shrink-0" />
+                  <span>Rider (Delivery Partner) approval & registration required from admin</span>
+                </li>
+              </ul>
+            </div>
+
+            {/* Single-vendor card option */}
+            <div
+              onClick={() => handleTogglePlatformMode("single_vendor")}
+              className={`p-4 rounded-xl border transition-all cursor-pointer relative ${
+                platformMode === "single_vendor"
+                  ? "bg-white border-amber-500 ring-2 ring-amber-500/10 shadow-sm"
+                  : "bg-white/60 border-slate-200 hover:border-slate-300 opacity-75 hover:opacity-100"
+              }`}
+            >
+              <div className="flex items-start justify-between mb-2">
+                <div className="flex items-center gap-2.5">
+                  <div className={`w-8 h-8 rounded-lg flex items-center justify-center ${
+                    platformMode === "single_vendor" ? "bg-amber-50 text-amber-600" : "bg-slate-100 text-slate-500"
+                  }`}>
+                    <UtensilsCrossed className="w-4 h-4" />
+                  </div>
+                  <div>
+                    <h4 className="text-xs font-bold text-slate-900">Single-Vendor (Ariston Cafe)</h4>
+                    <p className="text-[11px] text-slate-500">Dedicated brand model</p>
+                  </div>
+                </div>
+                {platformMode === "single_vendor" ? (
+                  <span className="flex items-center gap-1 text-[11px] font-semibold text-amber-700 bg-amber-50 px-2 py-0.5 rounded-full">
+                    <CheckCircle2 className="w-3.5 h-3.5" /> Active
+                  </span>
+                ) : (
+                  <span className="text-[11px] text-slate-400">Click to activate</span>
+                )}
+              </div>
+              <ul className="text-[11px] text-slate-600 space-y-1.5 mt-2.5 pt-2.5 border-t border-slate-100">
+                <li className="flex items-center gap-1.5">
+                  <span className="w-1.5 h-1.5 rounded-full bg-slate-400 shrink-0" />
+                  <span>Ariston Cafe is the sole restaurant (skips restaurant onboarding & approval)</span>
+                </li>
+                <li className="flex items-center gap-1.5">
+                  <span className="w-1.5 h-1.5 rounded-full bg-slate-400 shrink-0" />
+                  <span>0% restaurant commission, vendor payouts disabled, orders route to Ariston Cafe</span>
+                </li>
+                <li className="flex items-center gap-1.5 font-medium text-emerald-700 bg-emerald-50/60 px-2 py-1 rounded">
+                  <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 shrink-0" />
+                  <span>Rider (Delivery Partner) approval & registration remains UNCHANGED & REQUIRED</span>
+                </li>
+              </ul>
+            </div>
+          </div>
+        </div>
+
         {/* Company info */}
         <div className="bg-white rounded-lg shadow-sm border border-slate-200">
           {/* Company information */}

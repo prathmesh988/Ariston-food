@@ -143,5 +143,12 @@ export const config = {
     emailPass: process.env.EMAIL_PASS ? String(process.env.EMAIL_PASS).replace(/\s/g, '') : '',
     emailFrom: String(process.env.EMAIL_FROM || process.env.EMAIL_USER || 'noreply@example.com')
         .replace(/^["']|["']$/g, '')
-        .trim()
+        .trim(),
+
+    // Platform mode — 'marketplace' (default) | 'single_vendor'
+    // In single_vendor mode the platform serves only Ariston Cafe (no multi-vendor).
+    platformMode: String(process.env.PLATFORM_MODE || 'marketplace').trim(),
+    // The pinned restaurant ObjectId used in single_vendor mode.
+    // Must be a valid 24-character MongoDB ObjectId.
+    defaultRestaurantId: String(process.env.DEFAULT_RESTAURANT_ID || '').trim(),
 };

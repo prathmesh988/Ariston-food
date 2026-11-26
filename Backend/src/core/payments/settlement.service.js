@@ -3,12 +3,18 @@ import { Settlement } from './models/settlement.model.js';
 import { Transaction } from './models/transaction.model.js';
 import { debitWallet, unlockWalletAmount } from './wallet.service.js';
 import { logger } from '../../utils/logger.js';
+import { isSingleVendor } from '../../config/platformMode.js';
 
 /**
  * Create a settlement (payout request) for a restaurant or delivery partner.
  * Locks the settlement amount in their wallet until processed.
  */
 export async function createSettlement({ entityType, entityId, amount, notes = '', periodStart, periodEnd }) {
+    if (isSingleVendor() && entityType === 'restaurant') {
+        logger.info('[Settlement] Skipping vendor settlement creation in single_vendor mode');
+        return null;
+    }
+
     if (!['restaurant', 'deliveryBoy'].includes(entityType)) {
         throw new Error('Settlements only for restaurant or deliveryBoy');
     }

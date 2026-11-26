@@ -53,9 +53,10 @@ import {
 } from "lucide-react"
 import { cn } from "@food/utils/utils"
 import { Input } from "@food/components/ui/input"
-import { adminSidebarMenu } from "@food/utils/adminSidebarMenu"
+import { adminSidebarMenu, filterSidebarMenuByMode } from "@food/utils/adminSidebarMenu"
 import { getCachedSettings, loadBusinessSettings } from "@food/utils/businessSettings"
 import { filterSidebarMenuByPermissions } from "@food/utils/subAdminPermissions"
+import { usePlatformMode } from "@food/hooks/usePlatformMode"
 import { getCurrentUser } from "@food/utils/auth"
 import { adminAPI } from "@food/api"
 import { dispatchAdminNotificationsUpdated } from "@food/hooks/useAdminNotifications"
@@ -438,11 +439,13 @@ export default function AdminSidebar({ isOpen = false, onClose, onCollapseChange
 
   // Permission-filtered base menu (full ADMIN sees all; SUB_ADMIN sees allowed only)
   // Do NOT depend on location.pathname — remounting menu on every route break expandable submenus.
+  const { platformMode } = usePlatformMode()
   const adminUser = getCurrentUser("admin")
   const permissionSyncKey = `${adminUser?.role || ""}:${JSON.stringify(adminUser?.permissions || {})}`
   const permissionMenuData = useMemo(() => {
-    return filterSidebarMenuByPermissions(adminSidebarMenu, getCurrentUser("admin"))
-  }, [permissionSyncKey])
+    const modeMenu = filterSidebarMenuByMode(adminSidebarMenu, platformMode)
+    return filterSidebarMenuByPermissions(modeMenu, getCurrentUser("admin"))
+  }, [permissionSyncKey, platformMode])
 
   // Filter menu items based on search query
   const filteredMenuData = useMemo(() => {

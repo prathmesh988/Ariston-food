@@ -19,7 +19,11 @@ import {
   PlusCircle,
   Bell,
   BellOff,
+  Store,
 } from "lucide-react";
+import { toast } from "sonner";
+import { usePlatformMode } from "@food/hooks/usePlatformMode";
+import { setCachedSettings, getCachedSettings, loadBusinessSettings } from "@food/utils/businessSettings";
 import {
   Dialog,
   DialogContent,
@@ -43,7 +47,6 @@ import {
 import { brandIcon } from "@food/constants/brand"
 import { adminAPI } from "@food/api";
 import { clearModuleAuth } from "@food/utils/auth";
-import { getCachedSettings, loadBusinessSettings } from "@food/utils/businessSettings";
 import useAdminNotifications from "@food/hooks/useAdminNotifications";
 const debugLog = (...args) => {}
 const debugWarn = (...args) => {}
@@ -60,6 +63,8 @@ export default function AdminNavbar({ onMenuClick }) {
   const [isSearching, setIsSearching] = useState(false);
   const [adminData, setAdminData] = useState(null);
   const [businessSettings, setBusinessSettings] = useState(() => getCachedSettings() || null);
+  const { isSingleVendor } = usePlatformMode();
+  const [switchingPlatformMode, setSwitchingPlatformMode] = useState(false);
   const searchInputRef = useRef(null);
   const {
     items: adminNotifications,
@@ -96,6 +101,31 @@ export default function AdminNavbar({ onMenuClick }) {
     window.addEventListener('businessSettingsUpdated', handleSettingsUpdate);
     return () => window.removeEventListener('businessSettingsUpdated', handleSettingsUpdate);
   }, []);
+
+  const handleTogglePlatformMode = async () => {
+    if (switchingPlatformMode) return;
+    const targetMode = isSingleVendor ? "marketplace" : "single_vendor";
+    try {
+      setSwitchingPlatformMode(true);
+      const res = await adminAPI.updatePlatformMode(targetMode);
+      const newMode = res?.data?.data?.platformMode || targetMode;
+      const currentCached = getCachedSettings() || {};
+      setCachedSettings({
+        ...currentCached,
+        platformMode: newMode,
+        defaultRestaurantId: res?.data?.data?.defaultRestaurantId || currentCached.defaultRestaurantId,
+      });
+      toast.success(
+        newMode === "single_vendor"
+          ? "Switched to Single-Vendor Mode (Ariston Cafe)"
+          : "Switched to Multi-Vendor Marketplace Mode"
+      );
+    } catch (err) {
+      toast.error(err?.response?.data?.message || "Failed to switch platform mode");
+    } finally {
+      setSwitchingPlatformMode(false);
+    }
+  };
 
   // Load recent searches from localStorage
   useEffect(() => {
@@ -329,6 +359,35 @@ export default function AdminNavbar({ onMenuClick }) {
 
           {/* Right: User Profile */}
           <div className="flex items-center gap-3">
+            {/* Quick Platform Mode Toggle Button */}
+            <button
+              type="button"
+              onClick={handleTogglePlatformMode}
+              disabled={switchingPlatformMode}
+              title={
+                isSingleVendor
+                  ? "Current: Single-Vendor Mode (Ariston Cafe). Click to switch to Marketplace."
+                  : "Current: Multi-Vendor Marketplace. Click to switch to Single-Vendor (Ariston Cafe)."
+              }
+              className={`hidden sm:flex items-center gap-1.5 px-3 py-2 rounded-full text-xs font-semibold border transition-all cursor-pointer shadow-sm ${
+                isSingleVendor
+                  ? "bg-amber-500 hover:bg-amber-600 text-slate-950 border-amber-600 ring-2 ring-amber-400/20"
+                  : "bg-blue-600 hover:bg-blue-700 text-white border-blue-700 ring-2 ring-blue-500/20"
+              } disabled:opacity-50`}
+            >
+              {isSingleVendor ? (
+                <>
+                  <UtensilsCrossed className="w-3.5 h-3.5" />
+                  <span>Single-Vendor</span>
+                </>
+              ) : (
+                <>
+                  <Store className="w-3.5 h-3.5" />
+                  <span>Marketplace</span>
+                </>
+              )}
+            </button>
+
             <Popover open={notificationsOpen} onOpenChange={setNotificationsOpen}>
               <PopoverTrigger asChild>
                 <button

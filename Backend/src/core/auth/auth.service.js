@@ -33,6 +33,7 @@ import { FoodDeliveryWallet } from "../../modules/food/delivery/models/deliveryW
 import { FoodDeliveryCashDeposit } from "../../modules/food/delivery/models/foodDeliveryCashDeposit.model.js";
 import { FoodDeliveryWithdrawal } from "../../modules/food/delivery/models/foodDeliveryWithdrawal.model.js";
 import { DeliverySupportTicket as FoodDeliverySupportTicket } from "../../modules/food/delivery/models/supportTicket.model.js";
+import { isSingleVendor, getDefaultRestaurant } from "../../config/platformMode.js";
 
 const ROLES = {
   USER: "USER",
@@ -345,7 +346,8 @@ export const adminLogin = async (email, password) => {
     throw new ValidationError("Email and password are required");
   }
 
-  const admin = await FoodAdmin.findOne({ email });
+  const normalizedEmail = String(email).trim().toLowerCase();
+  const admin = await FoodAdmin.findOne({ email: normalizedEmail });
   if (!admin) {
     throw new AuthError("Invalid credentials");
   }
@@ -435,10 +437,50 @@ export const getPendingApprovalStatus = async (pendingToken) => {
   };
 };
 
+/**
+ * Checks whether an incoming phone number is authorized for a restaurant document.
+ * Matches against ownerPhone, primaryContactNumber, or any authorizedLogins staff phone.
+ */
+export const isAuthorizedForRestaurant = (restaurantDoc, phone) => {
+  if (!restaurantDoc || !phone) return false;
+  const inputDigits = String(phone).replace(/\D/g, "");
+  const inputLast10 = inputDigits.slice(-10);
+  if (!inputLast10) return false;
+
+  const candidatePhones = [
+    restaurantDoc.ownerPhone,
+    restaurantDoc.primaryContactNumber,
+    ...(Array.isArray(restaurantDoc.authorizedLogins)
+      ? restaurantDoc.authorizedLogins.map((l) => (typeof l === "string" ? l : l?.phone))
+      : []),
+  ].filter(Boolean);
+
+  return candidatePhones.some((candidate) => {
+    const candidateDigits = String(candidate).replace(/\D/g, "");
+    const candidateLast10 = candidateDigits.slice(-10);
+    return Boolean(candidateLast10 && candidateLast10 === inputLast10);
+  });
+};
+
 export const requestRestaurantOtp = async (phone) => {
   if (!phone) {
     throw new ValidationError("Phone is required");
   }
+
+  // In single-vendor mode, only accounts provisioned by admin can request OTP
+  if (isSingleVendor()) {
+    const defaultRest = await getDefaultRestaurant();
+    if (!defaultRest) {
+      throw new AuthError("Restaurant system not initialized. Please contact administrator.");
+    }
+    const isAuth = isAuthorizedForRestaurant(defaultRest, phone);
+    if (!isAuth) {
+      throw new AuthError(
+        "This phone number is not registered for Ariston Cafe. In Single-Vendor mode, accounts are created exclusively by the administrator."
+      );
+    }
+  }
+
   const otp = await createOrUpdateOtp(phone);
   // ONLY expose OTP in response when USE_DEFAULT_OTP=true explicitly.
   // In development with real SMS, OTP must come via SMS, NOT in API response.
@@ -526,7 +568,22 @@ export const verifyRestaurantOtpAndLogin = async (phone, otp, fcmToken, platform
     }
   }
 
+  if (isSingleVendor()) {
+    const defaultRest = await getDefaultRestaurant();
+    if (!defaultRest || !isAuthorizedForRestaurant(defaultRest, phone)) {
+      throw new AuthError(
+        "Unauthorized. In Single-Vendor mode, only administrator-created accounts for Ariston Cafe can access this portal."
+      );
+    }
+    restaurant = defaultRest;
+  }
+
   if (!restaurant) {
+    if (isSingleVendor()) {
+      throw new AuthError(
+        "Unauthorized. In Single-Vendor mode, accounts are created exclusively by the administrator."
+      );
+    }
     // Phone has been successfully verified, but no restaurant exists yet.
     // Frontend will use this to redirect into registration/onboarding.
     return {
