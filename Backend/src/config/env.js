@@ -86,9 +86,11 @@ export const config = {
     assetBaseUrl: String(
         process.env.ASSET_BASE_URL ||
         process.env.API_BASE_URL ||
-        `http://localhost:${process.env.PORT || 5000}`
+        (process.env.NODE_ENV === 'production'
+            ? 'https://aristontheoasis.com'
+            : `http://localhost:${process.env.PORT || 5000}`)
     ).replace(/\/+$/, ''),
-    // Set on a local/dev backend (e.g. https://ariston.org.in) to send every upload
+    // Set on a local/dev backend (e.g. https://aristontheoasis.com) to send every upload
     // and delete to the live server's /api/v1/uploads/internal instead of the
     // local disk. Ignored when NODE_ENV=production.
     uploadRemoteOrigin: String(process.env.UPLOAD_REMOTE_ORIGIN || '').trim().replace(/\/+$/, ''),

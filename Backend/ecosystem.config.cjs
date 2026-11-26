@@ -1,4 +1,5 @@
-﻿/**
+// @ts-nocheck
+/**
  * PM2 ecosystem for ariston API + BullMQ workers.
  *
  * Usage (on live server, from Backend folder):
@@ -24,6 +25,8 @@ module.exports = {
       kill_timeout: 12000,
       env: {
         NODE_ENV: 'production',
+        ASSET_BASE_URL: 'https://aristontheoasis.com',
+        FRONTEND_URL: 'https://aristontheoasis.com',
       },
     },
     {

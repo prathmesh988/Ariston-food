@@ -5,7 +5,7 @@
 // WebView (<PaymentHost /> in the root layout). UPI app intents (upi://, intent://) are handed to Android.
 //
 // openPaymentPage(url, { returnPrefixes }) is for the hosted pages (payment links, PhonePe): it shows the gateway page
-// and resolves with the URL it returns to (e.g. https://ariston.org.in/razorpay/status?...), so the caller can route it.
+// and resolves with the URL it returns to (e.g. https://aristontheoasis.com/razorpay/status?...), so the caller can route it.
 let host = null;
 export const registerPaymentHost = (h) => {
   host = h;
@@ -29,7 +29,7 @@ export class Razorpay {
   }
 }
 
-export function openPaymentPage(url, { returnPrefixes = ['https://ariston.org.in/razorpay/status', 'https://ariston.org.in/phonepe/status'] } = {}) {
+export function openPaymentPage(url, { returnPrefixes = ['https://aristontheoasis.com/razorpay/status', 'https://aristontheoasis.com/phonepe/status'] } = {}) {
   return new Promise((resolve) => {
     if (!host) {
       resolve(null);

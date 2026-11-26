@@ -7,7 +7,7 @@
   (`src/native/AnimatedSplash.jsx`: naam bada hota hai, smile draw hoti hai, food icons pop/float, "ORDER · EAT · REPEAT"). `scripts/make-app-icons.cjs`.
 - Keystore: `C:/Users/Prince/.ariston/ariston-user-upload.jks` (password `USER_KEYSTORE_README.txt` me), Gradle props `FOODIE_USER_*`.
   SHA-1 `B3:37:2B:75:BE:67:FA:B8:B8:F4:2C:2E:A9:72:F6:61:92:5A:05:DD` — Google Maps / Firebase console me add karna.
-- Backend same: `https://ariston.org.in/api/v1` (`.env`).
+- Backend same: `https://aristontheoasis.com/api/v1` (`.env`).
 
 ## Kaise convert kiya
 - Base: Ariston Cafe ke apne `mobile-delivery` ka shell (native/ui, lib, theme, scripts).

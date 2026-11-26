@@ -5,7 +5,7 @@ import React, { useState } from 'react';
 import { Image } from 'expo-image';
 import { ENV } from '@/config/env';
 
-const ASSET_BASE = String(ENV.VITE_ASSET_BASE_URL || 'https://ariston.org.in').replace(/\/$/, '');
+const ASSET_BASE = String(ENV.VITE_ASSET_BASE_URL || 'https://aristontheoasis.com').replace(/\/$/, '');
 
 export function resolveImageSource(src) {
   if (src == null || src === '') return null;

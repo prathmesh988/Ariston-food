@@ -8,7 +8,7 @@
  */
 import { Razorpay, isRazorpayAvailable, loadRazorpayScript as loadNativeCheckout } from '@/lib/razorpay';
 
-const SITE_ORIGIN = String(globalThis.__ENV__?.VITE_PUBLIC_APP_URL || 'https://ariston.org.in').replace(/\/$/, '');
+const SITE_ORIGIN = String(globalThis.__ENV__?.VITE_PUBLIC_APP_URL || 'https://aristontheoasis.com').replace(/\/$/, '');
 
 let razorpayLoaded = false;
 

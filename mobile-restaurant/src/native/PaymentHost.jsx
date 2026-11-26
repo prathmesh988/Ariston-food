@@ -83,7 +83,7 @@ export function PaymentHost() {
   const onRequest = (req) => {
     const url = req.url || '';
     if (isAppIntent(url)) {
-      Linking.openURL(url).catch(() => {});
+      Linking.openURL(url).catch(() => { });
       return false;
     }
     const s = sessionRef.current;
@@ -103,7 +103,7 @@ export function PaymentHost() {
         <WebView
           style={styles.web}
           originWhitelist={['*']}
-          source={isCheckout ? { html: checkoutHtml(serializable(session.rzp.options)), baseUrl: 'https://ariston.org.in' } : { uri: session.url }}
+          source={isCheckout ? { html: checkoutHtml(serializable(session.rzp.options)), baseUrl: 'https://aristontheoasis.com' } : { uri: session.url }}
           javaScriptEnabled
           domStorageEnabled
           setSupportMultipleWindows={false}

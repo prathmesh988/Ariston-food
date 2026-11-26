@@ -72,6 +72,6 @@ Every screen above: **Built, not tested** (the app was not run).
 ## 6. Blocked / notes for the integrator
 
 - **ProfileV2 scrolls itself** (vertical ScrollView, flex 1). DeliveryHomeV2 (home-orders group) should render `<ProfileV2 />` in a flex container for the profile tab, **not** inside another vertical ScrollView (the web had it inside the home's `overflow-y-auto` div with `pt-[120px]`); if home keeps its 120 px top offset, a plain `View` with that paddingTop around ProfileV2 is enough.
-- The default avatar `/assets/images/profile_avatar.webp` is loaded from the asset host (`https://ariston.org.in/...` via AppImage) — mobile-delivery has no bundled copy (mobile-driver has `assets/public/images/profile_avatar.webp`); bundling it would make it offline-safe (shell/assets, not mine).
+- The default avatar `/assets/images/profile_avatar.webp` is loaded from the asset host (`https://aristontheoasis.com/...` via AppImage) — mobile-delivery has no bundled copy (mobile-driver has `assets/public/images/profile_avatar.webp`); bundling it would make it offline-safe (shell/assets, not mine).
 - After a successful OTP verify the web does `navigate("/food/delivery", { replace: true })` from `/otp`; natively the login screen stays under it in the stack (AuthRedirect on it then redirects if reached). Worth a look at integration that Back from the Feed does not land on the login screen.
 - No backend change or credential needed.

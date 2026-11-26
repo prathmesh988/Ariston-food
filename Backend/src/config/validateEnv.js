@@ -1,4 +1,4 @@
-﻿import { config } from './env.js';
+import { config } from './env.js';
 import { logger } from '../utils/logger.js';
 
 /**
@@ -24,13 +24,15 @@ export const validateConfig = () => {
         missing.push('REDIS_ENABLED=true (required when BULLMQ_ENABLED=true)');
     }
 
-    // ASSET_BASE_URL is baked into every stored image URL. If it silently fell
-    // back to localhost in production, new uploads would be written to the
-    // database as http://localhost:5000/... and be unreachable forever.
+    // ASSET_BASE_URL is baked into every stored image URL.
+    // Default to https://aristontheoasis.com in production if unset.
     if (config.nodeEnv === 'production') {
+        if (!process.env.ASSET_BASE_URL && !process.env.API_BASE_URL) {
+            process.env.ASSET_BASE_URL = 'https://aristontheoasis.com';
+        }
         const assetBase = String(process.env.ASSET_BASE_URL || process.env.API_BASE_URL || '').trim();
         if (!assetBase) {
-            missing.push('ASSET_BASE_URL (e.g. https://ariston.org.in — stored in every image URL)');
+            missing.push('ASSET_BASE_URL (e.g. https://aristontheoasis.com — stored in every image URL)');
         } else if (!/^https:\/\//i.test(assetBase)) {
             missing.push(`ASSET_BASE_URL must be an https:// origin (got "${assetBase}")`);
         } else if (/localhost|127\.0\.0\.1/i.test(assetBase)) {

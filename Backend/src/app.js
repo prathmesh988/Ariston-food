@@ -1,4 +1,4 @@
-﻿import express from 'express';
+import express from 'express';
 import cors from 'cors';
 import helmet from 'helmet';
 import morgan from 'morgan';
@@ -49,8 +49,9 @@ app.use(helmet({
     crossOriginResourcePolicy: { policy: 'cross-origin' }
 }));
 const allowedOrigins = [
-    'https://aristontheoasis.in',
-    'https://www.aristontheoasis.in',
+    'https://aristontheoasis.com',
+    'https://www.aristontheoasis.com',
+    'https://api.aristontheoasis.com',
     'https://aristontheoasis.in',
     'https://www.aristontheoasis.in',
     'https://aristontheoasis.cloud',
@@ -58,6 +59,10 @@ const allowedOrigins = [
     'http://localhost:5173',
     'http://localhost:3000'
 ];
+
+if (config.frontendUrl && !allowedOrigins.includes(config.frontendUrl)) {
+    allowedOrigins.push(config.frontendUrl);
+}
 
 app.use(cors({
     origin: function (origin, callback) {

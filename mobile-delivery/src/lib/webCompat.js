@@ -103,7 +103,7 @@ setProp(g, 'localStorage', localStorageShim);
 setProp(g, 'sessionStorage', sessionStorageShim);
 
 // ---------------------------------------------------------------- location (fed by src/lib/router.js)
-const SITE_ORIGIN = String(ENV.VITE_PUBLIC_APP_URL || 'https://ariston.org.in').replace(/\/$/, '');
+const SITE_ORIGIN = String(ENV.VITE_PUBLIC_APP_URL || 'https://aristontheoasis.com').replace(/\/$/, '');
 const route = { pathname: '/', search: '' };
 export const setCompatRoute = (pathname, search = '') => {
   route.pathname = pathname || '/';
